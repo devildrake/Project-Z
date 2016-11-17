@@ -4,16 +4,17 @@ using System.Collections.Generic;
 
 public class VisionRangeScript : MonoBehaviour {
 
-    public int visionRadius;
     public bool enemyInSight = false;
     public GameObject aZombieToAdd;
     public GameObject aZombieToRemove;
     public List<GameObject> _zombiesInRange;
     public GameObject closestZombie;
+    private float closestDistance = 0f;
+    public bool hasCheckedFirst = false;
 
     void Start () {
-        GetComponent<CapsuleCollider>().radius = visionRadius;
         _zombiesInRange = new List<GameObject>();
+        
     }
 
     void OnTriggerEnter(Collider col) {
@@ -32,31 +33,37 @@ public class VisionRangeScript : MonoBehaviour {
         {
             aZombieToRemove = col.gameObject;
             _zombiesInRange.Remove(aZombieToRemove);
-            enemyInSight = false;
-        }
-    }
-
-    void checkClosest() {
-        
-        float closestDistance=0f;
-        Vector3 distance;
-        foreach (GameObject aZombie in _zombiesInRange) {
-            
-            distance = (transform.position-aZombie.transform.position);
-            if (closestDistance < distance.magnitude) {
-                closestZombie = aZombie;
+            if (_zombiesInRange.Count == 0) {
+                enemyInSight = false;
             }
         }
     }
 
-	void Update () {
-        if (_zombiesInRange.Count != 0)
+    GameObject GetClosestZombie(List<GameObject> zombies)
+    {
+        GameObject tMin = null;
+        float minDist = Mathf.Infinity;
+        Vector3 currentPos = transform.position;
+        foreach (GameObject t in zombies)
         {
-            checkClosest();
+            float dist = Vector3.Distance(t.transform.position, currentPos);
+            if (dist < minDist)
+            {
+                tMin = t;
+                minDist = dist;
+            }
+        }
+        return tMin;
+    }
+
+    void Update() {
+        if (_zombiesInRange.Count >0)
+        {
+            closestZombie = GetClosestZombie(_zombiesInRange);
         }
         else {
+            hasCheckedFirst = false;
             closestZombie = null;
         }
-        
 	}
 }
