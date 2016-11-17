@@ -45,5 +45,5 @@ public class ZombieMovement : MonoBehaviour
                 moving = false;
             }
         }
-	}
+	}   
 }

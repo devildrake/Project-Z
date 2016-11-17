@@ -6,7 +6,6 @@ public class GameLogicScript : MonoBehaviour
 {
 	//flag to check if the user has tapped / clicked. 
 	//Set to true on click. Reset to false on reaching destination
-	private bool flag = true;
 	//destination point
 	private Vector3 endPoint;
 	//alter this to change the speed of the movement of player / gameobject
@@ -80,7 +79,7 @@ public class GameLogicScript : MonoBehaviour
 			//Check if the ray hits any collider
 			if (Physics.Raycast (ray, out hit)) {
 				//set a flag to indicate to move the gameobject
-				flag = true;
+
 				//save the click / tap position
 				endPoint = hit.point;
 				//this.gameObject.transform.LookAt(hit.point);

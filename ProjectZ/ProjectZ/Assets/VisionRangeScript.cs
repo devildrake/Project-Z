@@ -9,12 +9,10 @@ public class VisionRangeScript : MonoBehaviour {
     public GameObject aZombieToRemove;
     public List<GameObject> _zombiesInRange;
     public GameObject closestZombie;
-    private float closestDistance = 0f;
     public bool hasCheckedFirst = false;
 
     void Start () {
         _zombiesInRange = new List<GameObject>();
-        
     }
 
     void OnTriggerEnter(Collider col) {

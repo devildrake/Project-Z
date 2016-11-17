@@ -13,8 +13,8 @@ public class VillagerScript : MonoBehaviour {
     public int health;
     public int attack;
     public int defense;
-    public float attackSpeed;
-    public float attackCounter;
+    public float attackSpeed =1.5f;
+    
     public bool canMove;
 
     VillagerMovement villagerMovement;
@@ -56,15 +56,4 @@ public class VillagerScript : MonoBehaviour {
         }
 	}
 
-    void AttackEnemy(GameObject enemy)
-    {
-        attackCounter += Time.deltaTime;
-        if (attackCounter >= attackSpeed)
-        {
-            ZombieScript enemyScript = enemy.GetComponent<ZombieScript>();
-            enemyScript.health -= attack;
-            Debug.Log("I attacked");
-            attackCounter = 0;
-        }
-    }
 }

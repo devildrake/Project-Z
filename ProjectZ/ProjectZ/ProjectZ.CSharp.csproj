@@ -72,10 +72,12 @@
     <Compile Include="Assets\Scripts\Static.cs" />
     <Compile Include="Assets\Scripts\ZombieMTest.cs" />
     <Compile Include="Assets\Scripts\ZombieMovement.cs" />
+    <Compile Include="Assets\SoldierScript.cs" />
     <Compile Include="Assets\VillagerAttack.cs" />
     <Compile Include="Assets\VillagerMovement.cs" />
     <Compile Include="Assets\VillagerScript.cs" />
     <Compile Include="Assets\VisionRangeScript.cs" />
+    <Compile Include="Assets\ZombieAttack.cs" />
     <Compile Include="Assets\ZombieScript.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />

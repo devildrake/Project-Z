@@ -25,7 +25,7 @@ public class ZombieScript : MonoBehaviour {
 
         if (!isAlive)
         {
-            Debug.Log("I died");
+            //INTRODUCIR CÓDIGO PARA QUE EL ZOMBIE DESAPAREZCA
         }
 	}
 
