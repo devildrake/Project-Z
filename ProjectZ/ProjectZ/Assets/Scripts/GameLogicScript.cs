@@ -17,7 +17,7 @@ public class GameLogicScript : MonoBehaviour
 
     InputHandlerScript _input;
    // public GameObject zombie;
-    //Listas de cazas
+    //Listas de zombies
     public List<GameObject> _zombies;
     public List<GameObject> _selectedZombies;
     public List<GameObject> _keptSelectedZombies;

@@ -22,6 +22,8 @@ public class CameraScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
         //Declaramos un vector velocidad de la Cámara
         Vector3 cameraVector;
 
