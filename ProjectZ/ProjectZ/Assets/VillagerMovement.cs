@@ -18,7 +18,7 @@ public class VillagerMovement : MonoBehaviour
         {
           
 
-            Debug.DrawLine(targetPosition,targetPosition+Vector3.up*10);
+            
 
             Vector3 currentGroundPosition = transform.position;
             currentGroundPosition.y = 0;
@@ -28,26 +28,19 @@ public class VillagerMovement : MonoBehaviour
 
             Vector3 direction = groundTargetPosition - currentGroundPosition;
             float remainingDistance = direction.magnitude;
-            Debug.Log(remainingDistance);
+            
             direction.Normalize();
 
             Vector3 nextMovement = direction * movementLinearSpeedVillager * Time.deltaTime;
 
-            Debug.Log("direction");
-            Debug.Log(direction);
-            Debug.Log("DeltaTime");
-            Debug.Log(Time.deltaTime);
-            Debug.Log("LinearSpeed");
-            Debug.Log(movementLinearSpeedVillager);
-
-            Debug.Log(nextMovement);
+            
             float movementDistance = nextMovement.magnitude;
 
             if (movementDistance < remainingDistance)
             {
-                Debug.Log(nextMovement);
+               
                 transform.position += nextMovement;
-                Debug.Log("SHOULDMOVE");
+              
             }
             else
             {

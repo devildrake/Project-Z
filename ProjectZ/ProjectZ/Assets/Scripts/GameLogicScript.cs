@@ -62,7 +62,7 @@ public class GameLogicScript : MonoBehaviour
     {
         DrawSelectionBox();
         UpdateSelection();
-
+        UpdateSelection2();
 		if ((Input.GetMouseButtonDown (1))) {
 			//declare a variable of RaycastHit struct
 			RaycastHit hit;
@@ -89,25 +89,35 @@ public class GameLogicScript : MonoBehaviour
                 int i = 0;
                 foreach (GameObject zombie in _keptSelectedZombies)
                 {
-                    Vector3 desplazamientoFinal = Vector3.zero;
-                    if (i >= 1)
+                    if (zombie != null)
                     {
-                        float angle = 45 * i;
-                        Quaternion rotacion = Quaternion.AngleAxis(angle, Vector3.up);
-                        Vector3 distancia = Vector3.right * (1f * (1+( (i - 1) / 8)));
-                        desplazamientoFinal = rotacion * distancia;
-                        //  Debug.Log(endPoint);
+                        Vector3 desplazamientoFinal = Vector3.zero;
+                        if (i >= 1)
+                        {
+                            float angle = 45 * i;
+                            Quaternion rotacion = Quaternion.AngleAxis(angle, Vector3.up);
+                            Vector3 distancia = Vector3.right * (1f * (1 + ((i - 1) / 8)));
+                            desplazamientoFinal = rotacion * distancia;
+                            //  Debug.Log(endPoint);
+                        }
+                        MoveZombies(zombie, endPoint + desplazamientoFinal);
+
+                        i++;
                     }
-                    MoveZombies(zombie, endPoint + desplazamientoFinal);
-      
-                    i++;
                 }
-				
 			}
 
 		}
 
 
+    }
+    bool IsNotAlive(GameObject z)
+    {
+        return !z.GetComponent<ZombieScript>().isAlive;
+    }
+    void UpdateSelection2() {
+        _selectedZombies.RemoveAll(IsNotAlive);
+        _keptSelectedZombies.RemoveAll(IsNotAlive);
     }
 
     void DrawSelectionBox()
@@ -174,9 +184,12 @@ public class GameLogicScript : MonoBehaviour
                     //Desmarcamos los cazas
                     foreach (GameObject zombie in _selectedZombies)
                     {
-                        Component[] renders = zombie.GetComponentsInChildren(typeof(Renderer));
-                        foreach (Renderer render in renders)
-                            render.material.color -= Color.yellow;
+                        if (zombie != null)
+                        {
+                            Component[] renders = zombie.GetComponentsInChildren(typeof(Renderer));
+                            foreach (Renderer render in renders)
+                                render.material.color -= Color.yellow;
+                        }
                     }
 
                     //Limpiamos las listas de cazas seleccionados
@@ -194,8 +207,10 @@ public class GameLogicScript : MonoBehaviour
             {
                 //Guardamos la lista actual de cazas seleccionados
                 foreach (GameObject zombie in _selectedZombies)
-                    _keptSelectedZombies.Add(zombie);
-
+                    if (zombie != null)
+                    {
+                        _keptSelectedZombies.Add(zombie);
+                    }
                 //Indicamos que hemos finalizado nuestra selección
                 _selecting = false;
             }
@@ -240,10 +255,10 @@ public class GameLogicScript : MonoBehaviour
                         zombiesInSelectionBox.Add(hit.collider.gameObject.transform.parent.gameObject);
                     }
 
-                    //Agregamos a la lista los cazas que se encuentran dentro del cuadro de selección
+                    //Agregamos a la lista los zombies que se encuentran dentro del cuadro de selección
                     foreach (GameObject zombie in this._zombies)
                     {
-                        if (!zombiesInSelectionBox.Contains(zombie) && (zombie.transform.position.x >= selectionPlane.xMin && zombie.transform.position.x <= selectionPlane.xMax && zombie.transform.position.z >= selectionPlane.yMin && zombie.transform.position.z <= selectionPlane.yMax))
+                        if (zombie != null&&!zombiesInSelectionBox.Contains(zombie) && (zombie.transform.position.x >= selectionPlane.xMin && zombie.transform.position.x <= selectionPlane.xMax && zombie.transform.position.z >= selectionPlane.yMin && zombie.transform.position.z <= selectionPlane.yMax))
                         {
                             zombiesInSelectionBox.Add(zombie);
                         }
@@ -252,13 +267,18 @@ public class GameLogicScript : MonoBehaviour
 
                 foreach (GameObject zombies in zombiesInSelectionBox)
                 {
-                    if (!_input._invertSelection)
+                    if (zombies != null)
                     {
-                        //Si no está pulsada la tecla de invertSelection seleccionamos los cazas del cuadro
-                        if (!_selectedZombies.Contains(zombies))
+                        if (!_input._invertSelection)
                         {
-                            zombiesToAdd.Add(zombies);
-							zombiesToMove.Add(zombies);
+                            //Si no está pulsada la tecla de invertSelection seleccionamos los cazas del cuadro
+                            if (!_selectedZombies.Contains(zombies))
+                            {
+                                {
+                                    zombiesToAdd.Add(zombies);
+                                    zombiesToMove.Add(zombies);
+                                }
+                            }
                         }
                     }
                     else
@@ -275,11 +295,13 @@ public class GameLogicScript : MonoBehaviour
                 {
                     foreach (GameObject zombie in _keptSelectedZombies)
                     {
-                        if (!_input._invertSelection)
-                        {
-                            if (!zombiesInSelectionBox.Contains(zombie) && _selectedZombies.Contains(zombie))
+                        if (zombie != null) {
+                            if (!_input._invertSelection)
                             {
-                                zombiesToRemove.Add(zombie);
+                                if (!zombiesInSelectionBox.Contains(zombie) && _selectedZombies.Contains(zombie))
+                                {
+                                    zombiesToRemove.Add(zombie);
+                                }
                             }
                         }
                         else
@@ -296,12 +318,18 @@ public class GameLogicScript : MonoBehaviour
 
                 foreach (GameObject zombie in zombiesToAdd)
                 {
-                    SelectZombie(zombie);
+                    if (zombie != null)
+                    {
+                        SelectZombie(zombie);
+                    }
                 }
 
                 foreach (GameObject zombie in zombiesToRemove)
                 {
-                    DeselectZombie(zombie);
+                    if (zombie != null)
+                    {
+                        DeselectZombie(zombie);
+                    }
                 }
 
 				/*foreach (GameObject zombie in zombiesToMove) 

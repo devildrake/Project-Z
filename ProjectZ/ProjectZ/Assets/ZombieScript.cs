@@ -9,10 +9,11 @@ public class ZombieScript : MonoBehaviour {
     public int attack;
     public int defense;
     public float attackSpeed;
+    bool confirmAlive;
 
     // Use this for initialization
     void Start () {
-        isAlive = true;
+        confirmAlive = isAlive = true;
         health = 100;
         attack = 10;
         defense = 10;
@@ -21,19 +22,28 @@ public class ZombieScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        checkAlive();
+        confirmAlive = CheckAlive();
 
-        if (!isAlive)
+        if (confirmAlive)
         {
+            //Código de que hace el zombie normalmente
+        }
+        else {
             //INTRODUCIR CÓDIGO PARA QUE EL ZOMBIE DESAPAREZCA
+            Destroy(this.gameObject, 0.3f);
         }
 	}
 
-    void checkAlive() {
-        if (health <= 0)
+    bool CheckAlive()
+    {
+        if (isAlive)
         {
-            isAlive = false;
+            if (health <= 0)
+            {
+                isAlive = false;
+            }
         }
+        return isAlive;
     }
 
 }

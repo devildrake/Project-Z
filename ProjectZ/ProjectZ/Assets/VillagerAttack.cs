@@ -13,8 +13,14 @@ public class VillagerAttack : MonoBehaviour {
 	}
 
     public void Attack(GameObject aZombie) {
-        attacking = true;
-        zombieToAttack = aZombie.GetComponent<ZombieScript>();
+        if (aZombie.GetComponent<ZombieScript>().isAlive && aZombie != null)
+        {
+            attacking = true;
+            zombieToAttack = aZombie.GetComponent<ZombieScript>();
+        }else
+        {
+            attacking = false;
+        }
     }
 	// Update is called once per frame
 	void Update () {

@@ -44,19 +44,37 @@ public class VisionRangeScript : MonoBehaviour {
         Vector3 currentPos = transform.position;
         foreach (GameObject t in zombies)
         {
-            float dist = Vector3.Distance(t.transform.position, currentPos);
-            if (dist < minDist)
+            if (t != null)
             {
-                tMin = t;
-                minDist = dist;
+                float dist = Vector3.Distance(t.transform.position, currentPos);
+                if (dist < minDist)
+                {
+                    tMin = t;
+                    minDist = dist;
+                }
             }
         }
         return tMin;
     }
 
+    bool IsNotAlive(GameObject z) { 
+        return !z.GetComponent<ZombieScript>().isAlive;
+    }
+
+    void CheckZombieAlive() {
+        _zombiesInRange.RemoveAll(IsNotAlive);
+        foreach (GameObject zombie in _zombiesInRange)
+        {
+            if (!zombie.GetComponent<ZombieScript>().isAlive && zombie != null)
+            {
+                _zombiesInRange.Remove(zombie);
+            }
+        }
+    }
     void Update() {
         if (_zombiesInRange.Count >0)
         {
+            CheckZombieAlive();
             closestZombie = GetClosestZombie(_zombiesInRange);
         }
         else {
