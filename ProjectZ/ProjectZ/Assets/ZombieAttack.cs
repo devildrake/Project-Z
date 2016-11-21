@@ -4,7 +4,7 @@ using System.Collections;
 public class ZombieAttack : MonoBehaviour {
 
     public bool attacking = false;
-    public ZombieScript enemyToAttack;
+    public VillagerScript enemyToAttack;
     public ZombieScript theZombie;
     public float attackTimer = 0;
     // Use this for initialization
@@ -12,12 +12,13 @@ public class ZombieAttack : MonoBehaviour {
     {
         enemyToAttack = null;
         theZombie = GetComponent<ZombieScript>();
+       
     }
 
-    public void Attack(GameObject aZombie)
+    public void Attack(GameObject anEnemy)
     {
         attacking = true;
-        enemyToAttack = aZombie.GetComponent<ZombieScript>();
+        enemyToAttack = anEnemy.GetComponent<VillagerScript>();
     }
     // Update is called once per frame
     void Update()
@@ -30,7 +31,7 @@ public class ZombieAttack : MonoBehaviour {
             }
             else
             {
-                theZombie.health -= theZombie.attack;
+                enemyToAttack.health -= enemyToAttack.attack;
                 attackTimer = 0;
             }
         }

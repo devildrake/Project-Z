@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class VillagerScript : MonoBehaviour {
-
+    public enum humanClass { villager, soldier }
     VisionRangeScript laVision;
     AttackRangeScript elAtaque;
     public bool moving = false;
@@ -15,7 +15,7 @@ public class VillagerScript : MonoBehaviour {
     public int defense;
     public float attackSpeed = 1.5f;
     bool confirmAlive;
-
+    public humanClass tipo;
     public bool canMove;
 
     VillagerMovement villagerMovement;
@@ -26,6 +26,7 @@ public class VillagerScript : MonoBehaviour {
 
     void Start()
     {
+        tipo = humanClass.villager;
         confirmAlive = isAlive = true;
         health = 100;
         attack = 10;
@@ -74,7 +75,6 @@ public class VillagerScript : MonoBehaviour {
         else
         {
             Destroy(gameObject, 0.3f);
-            Debug.Log("FUCK");
         }
     }
 }

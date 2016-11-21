@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\AttackRangeScript.cs" />
+    <Compile Include="Assets\AttackRangeZombie.cs" />
     <Compile Include="Assets\DesertFortressPack\Scripts\open_door.cs" />
     <Compile Include="Assets\Scripts\CameraScript.cs" />
     <Compile Include="Assets\Scripts\GameLogicScript.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Assets\VillagerMovement.cs" />
     <Compile Include="Assets\VillagerScript.cs" />
     <Compile Include="Assets\VisionRangeScript.cs" />
+    <Compile Include="Assets\VisionRangeZombie.cs" />
     <Compile Include="Assets\ZombieAttack.cs" />
     <Compile Include="Assets\ZombieScript.cs" />
   </ItemGroup>

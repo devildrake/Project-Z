@@ -4,10 +4,11 @@ using System.Collections.Generic;
 
 public class GameLogicScript : MonoBehaviour
 {
-	//flag to check if the user has tapped / clicked. 
-	//Set to true on click. Reset to false on reaching destination
-	//destination point
-	private Vector3 endPoint;
+
+    //flag to check if the user has tapped / clicked. 
+    //Set to true on click. Reset to false on reaching destination
+    //destination point
+    private Vector3 endPoint;
 	//alter this to change the speed of the movement of player / gameobject
 	public float duration = 50.0f;
 	//vertical position of the gameobject
