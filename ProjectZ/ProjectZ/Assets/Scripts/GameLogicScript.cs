@@ -14,7 +14,7 @@ public class GameLogicScript : MonoBehaviour
 	//vertical position of the gameobject
 	private float yAxis;
 
-
+    public LayerMask mask = 8;
     InputHandlerScript _input;
    // public GameObject zombie;
     //Listas de zombies
@@ -31,6 +31,10 @@ public class GameLogicScript : MonoBehaviour
     //Con esta variable sabemos si hemos comenzado una selección
     public bool _selecting;
 
+    public Vector3 position1;
+    public Vector3 position2;
+    public Vector3 position3;
+
     // Use this for initialization
     void Start()
     {
@@ -46,9 +50,9 @@ public class GameLogicScript : MonoBehaviour
         //Vamos a crear 3 zombies
         GameObject zombie = Resources.Load("ZombieObject") as GameObject;
      
-        GameObject zombie1 = GameObject.Instantiate(zombie, new Vector3(245, 0.5f, 61), Quaternion.identity) as GameObject;
-        GameObject zombie2 = GameObject.Instantiate(zombie, new Vector3(250, 0.5f, 61), Quaternion.identity) as GameObject;
-        GameObject zombie3 = GameObject.Instantiate(zombie, new Vector3(240, 0.5f, 61), Quaternion.identity) as GameObject;
+        GameObject zombie1 = GameObject.Instantiate(zombie, /*new Vector3(245, 0.5f, 61)*/position1, Quaternion.identity) as GameObject;
+        GameObject zombie2 = GameObject.Instantiate(zombie,/* new Vector3(250, 0.5f, 61)*/position2, Quaternion.identity) as GameObject;
+        GameObject zombie3 = GameObject.Instantiate(zombie,/* new Vector3(240, 0.5f, 61)*/position3, Quaternion.identity) as GameObject;
 
 
 
@@ -61,6 +65,8 @@ public class GameLogicScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+       
         DrawSelectionBox();
         UpdateSelection();
         UpdateSelection2();
@@ -72,20 +78,24 @@ public class GameLogicScript : MonoBehaviour
 			//for unity editor
 			#if UNITY_EDITOR
 			ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-			//for touch device
-			/*		#elif (UNITY_ANDROID || UNITY_IPHONE || UNITY_WP8)
+            
+            //for touch device
+            /*		#elif (UNITY_ANDROID || UNITY_IPHONE || UNITY_WP8)
 			ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);*/
-			#endif
+#endif
 
-			//Check if the ray hits any collider
-			if (Physics.Raycast (ray, out hit)) {
-				//set a flag to indicate to move the gameobject
-
-				//save the click / tap position
-				endPoint = hit.point;
+            //Check if the ray hits any collider
+            if (Physics.Raycast (ray, out hit,100,mask)) {
+                //set a flag to indicate to move the gameobject
+               
+                Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
+                //save the click / tap position
+                endPoint = hit.point;
 				//this.gameObject.transform.LookAt(hit.point);
 				//as we do not want to change the y axis value based on touch position, reset it to original y axis value
 				endPoint.y = yAxis;
+
+               
 
                 int i = 0;
                 foreach (GameObject zombie in _keptSelectedZombies)
@@ -133,7 +143,10 @@ public class GameLogicScript : MonoBehaviour
 
                 //Lanzamos un rayo desde la pantalla de nuestra cámara, tomando como punto la posición de nuestro puntero
                 ray = Camera.main.ScreenPointToRay(_input._mousePosition);
-
+                
+                
+                
+                //AQUI ESTA EL PROBLEMA DEL RAYO DE SELECCION
                 if (Physics.Raycast(ray, out hit))
                 {
                     //Guardamos el punto tridimensional en el que colisiona nuestro rayo.
@@ -193,7 +206,7 @@ public class GameLogicScript : MonoBehaviour
                         }
                     }
 
-                    //Limpiamos las listas de cazas seleccionados
+                    //Limpiamos las listas de zombies seleccionados
                     _selectedZombies.Clear(); //Esta no es necesario limpiarla ya
                     _keptSelectedZombies.Clear();
                 }
@@ -206,7 +219,7 @@ public class GameLogicScript : MonoBehaviour
         {
             if (_input._selectingEnds)
             {
-                //Guardamos la lista actual de cazas seleccionados
+                //Guardamos la lista actual de zombies seleccionados
                 foreach (GameObject zombie in _selectedZombies)
                     if (zombie != null)
                     {
@@ -226,10 +239,10 @@ public class GameLogicScript : MonoBehaviour
                 //Dado que no se puede modificar una lista mientras la estás recorriendo,
                 //es mejor utilizar listas alternaticas para agregar y remover
 
-                //Lista de cazas que añadiremos a la selección
+                //Lista de zombies que añadiremos a la selección
                 List<GameObject> zombiesToAdd = new List<GameObject>();
 
-                //Lista de cazas que removeremos de la selección
+                //Lista de zombies que removeremos de la selección
                 List<GameObject> zombiesToRemove = new List<GameObject>();
 
 				List<GameObject> zombiesToMove = new List<GameObject> ();
@@ -247,13 +260,15 @@ public class GameLogicScript : MonoBehaviour
 
                     //Comprobamos que el rayo no golpea directamente en una unidad
 
-                    //if (this._fighters.Contains(hit.collider.gameObject)) //Si el collider estuviera en el propio objeto
+                    if (_zombies.Contains(hit.collider.gameObject))
+                    {//Si el collider estuviera en el propio objeto
 
-                    //En nuestro caso los colider están en los componentes hijos del FighterObject, por lo que debemos acceder al padre
-                    if (hit.collider.gameObject.transform.parent != null && this._zombies.Contains(hit.collider.gameObject.transform.parent.gameObject))
-                    {
-                        //Esta comprobación es necesaria, ya que al coger un único punto de referencia de los cazas, si éste punto no está dentro del cuadro, no lo seleccionaría
-                        zombiesInSelectionBox.Add(hit.collider.gameObject.transform.parent.gameObject);
+                        //En nuestro caso los colider están en los componentes hijos del FighterObject, por lo que debemos acceder al padre
+                        // if (hit.collider.gameObject.transform.parent != null && this._zombies.Contains(hit.collider.gameObject.transform.parent.gameObject))
+                        {
+                            //Esta comprobación es necesaria, ya que al coger un único punto de referencia de los cazas, si éste punto no está dentro del cuadro, no lo seleccionaría
+                            zombiesInSelectionBox.Add(hit.collider.gameObject.transform.parent.gameObject);
+                        }
                     }
 
                     //Agregamos a la lista los zombies que se encuentran dentro del cuadro de selección

@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Assets\AttackRangeScript.cs" />
     <Compile Include="Assets\AttackRangeZombie.cs" />
+    <Compile Include="Assets\CameraTryScript.cs" />
     <Compile Include="Assets\DesertFortressPack\Scripts\open_door.cs" />
     <Compile Include="Assets\Scripts\CameraScript.cs" />
     <Compile Include="Assets\Scripts\GameLogicScript.cs" />
