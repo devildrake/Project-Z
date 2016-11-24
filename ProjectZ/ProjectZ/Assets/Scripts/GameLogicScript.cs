@@ -15,6 +15,7 @@ public class GameLogicScript : MonoBehaviour
 	private float yAxis;
 
     public LayerMask mask = 8;
+    public LayerMask mask2 = 9;
     InputHandlerScript _input;
    // public GameObject zombie;
     //Listas de zombies
@@ -88,7 +89,7 @@ public class GameLogicScript : MonoBehaviour
             if (Physics.Raycast (ray, out hit,100,mask)) {
                 //set a flag to indicate to move the gameobject
                
-                Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
+                Debug.DrawRay(ray.origin, ray.direction * 20, Color.yellow);
                 //save the click / tap position
                 endPoint = hit.point;
 				//this.gameObject.transform.LookAt(hit.point);
@@ -253,11 +254,15 @@ public class GameLogicScript : MonoBehaviour
                 {
                     //Este es el plano tridimensional de selección
                     Rect selectionPlane = new Rect();
+                    
                     selectionPlane.xMin = Mathf.Min(_selectionOrigin.x, hit.point.x);
                     selectionPlane.yMin = Mathf.Min(_selectionOrigin.z, hit.point.z);
                     selectionPlane.xMax = Mathf.Max(_selectionOrigin.x, hit.point.x);
                     selectionPlane.yMax = Mathf.Max(_selectionOrigin.z, hit.point.z);
-
+                    Debug.Log("Min");
+                    Debug.Log(selectionPlane.xMin);
+                    Debug.Log("Max");
+                    Debug.Log(selectionPlane.xMax);
                     //Comprobamos que el rayo no golpea directamente en una unidad
 
                     if (_zombies.Contains(hit.collider.gameObject))
@@ -266,15 +271,15 @@ public class GameLogicScript : MonoBehaviour
                         //En nuestro caso los colider están en los componentes hijos del FighterObject, por lo que debemos acceder al padre
                         // if (hit.collider.gameObject.transform.parent != null && this._zombies.Contains(hit.collider.gameObject.transform.parent.gameObject))
                         {
-                            //Esta comprobación es necesaria, ya que al coger un único punto de referencia de los cazas, si éste punto no está dentro del cuadro, no lo seleccionaría
-                            zombiesInSelectionBox.Add(hit.collider.gameObject.transform.parent.gameObject);
+                            //Esta comprobación es necesaria, ya que al coger un único punto de referencia de los zombies, si éste punto no está dentro del cuadro, no lo seleccionaría
+                            zombiesInSelectionBox.Add(hit.collider.gameObject);
                         }
                     }
 
                     //Agregamos a la lista los zombies que se encuentran dentro del cuadro de selección
                     foreach (GameObject zombie in this._zombies)
                     {
-                        if (zombie != null&&!zombiesInSelectionBox.Contains(zombie) && (zombie.transform.position.x >= selectionPlane.xMin && zombie.transform.position.x <= selectionPlane.xMax && zombie.transform.position.z >= selectionPlane.yMin && zombie.transform.position.z <= selectionPlane.yMax))
+                        if (!zombiesInSelectionBox.Contains(zombie) && (zombie.transform.position.x >= selectionPlane.xMin && zombie.transform.position.x <= selectionPlane.xMax && zombie.transform.position.z >= selectionPlane.yMin && zombie.transform.position.z <= selectionPlane.yMax))
                         {
                             zombiesInSelectionBox.Add(zombie);
                         }
