@@ -51,7 +51,7 @@ public class VillagerScript : MonoBehaviour {
 
     void Update()
     {
-        confirmAlive = isAlive;
+        confirmAlive = CheckAlive();
         if (confirmAlive) { 
             if (laVision.enemyInSight)
             {

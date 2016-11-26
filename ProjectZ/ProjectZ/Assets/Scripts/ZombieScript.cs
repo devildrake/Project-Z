@@ -13,8 +13,17 @@ public class ZombieScript : MonoBehaviour {
     public float attackSpeed;
     bool confirmAlive;
     public bool beingAttacked;
+
+    ZombieMovement elMovimiento;
+    VisionRangeZombie laVision;
+    AttackRangeZombie elAtaque;
+
     // Use this for initialization
     void Start () {
+        elMovimiento = gameObject.GetComponent<ZombieMovement>();
+        laVision = gameObject.GetComponent<VisionRangeZombie>();
+        elAtaque = gameObject.GetComponent<AttackRangeZombie>();
+
         tipo = zombieClass.walker;
         confirmAlive = isAlive = true;
         health = 100;
@@ -26,6 +35,12 @@ public class ZombieScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        if (!elMovimiento.wasCommanded && laVision.enemyInSight) {
+            elMovimiento.MoveTo(laVision.closestEnemy.transform.position);
+        }
+
+
         confirmAlive = CheckAlive();
 
         if (confirmAlive)

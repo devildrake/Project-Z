@@ -51,11 +51,11 @@ public class GameLogicScript : MonoBehaviour
 
         //Vamos a crear 3 zombies
         GameObject zombie = Resources.Load("ZombieObject") as GameObject;
-     
+        GameObject villager = Resources.Load("VillagerObject") as GameObject;
         GameObject zombie1 = GameObject.Instantiate(zombie, /*new Vector3(245, 0.5f, 61)*/position1, Quaternion.identity) as GameObject;
         GameObject zombie2 = GameObject.Instantiate(zombie,/* new Vector3(250, 0.5f, 61)*/position2, Quaternion.identity) as GameObject;
         GameObject zombie3 = GameObject.Instantiate(zombie,/* new Vector3(240, 0.5f, 61)*/position3, Quaternion.identity) as GameObject;
-
+        GameObject villager1 = GameObject.Instantiate(villager, new Vector3(2,1,10), Quaternion.identity) as GameObject;
 
 
         //Añadimos los zombies a la lista
@@ -130,6 +130,7 @@ public class GameLogicScript : MonoBehaviour
         return !z.GetComponent<ZombieScript>().isAlive;
     }
     void UpdateSelection2() {
+        _zombies.RemoveAll(IsNotAlive);
         _selectedZombies.RemoveAll(IsNotAlive);
         _keptSelectedZombies.RemoveAll(IsNotAlive);
     }
@@ -265,15 +266,6 @@ public class GameLogicScript : MonoBehaviour
                     */
                     selectionPlane = _selectionBox.GetComponent<GUITexture>().pixelInset;
 
-                    Debug.Log(selectionPlane.xMax);
-                    Debug.Log(selectionPlane.yMax);
-                    Debug.Log(selectionPlane.xMin);
-                    Debug.Log(selectionPlane.yMin);
-
-                   Debug.Log("Z" + Camera.main.WorldToScreenPoint( _zombies[1].transform.position));
-
-
-
                     //Comprobamos que el rayo no golpea directamente en una unidad
 
                     if (_zombies.Contains(hit.collider.gameObject))
@@ -315,7 +307,7 @@ public class GameLogicScript : MonoBehaviour
                     }
                     else
                     {
-                        //Si está pulsada la tecla de invertSelection removemos los cazas del cuadro
+                        //Si está pulsada la tecla de invertSelection removemos los zombies del cuadro
                         if (_selectedZombies.Contains(zombies))
                         {
                             zombiesToRemove.Add(zombies);
@@ -412,9 +404,9 @@ public class GameLogicScript : MonoBehaviour
 
             ZombieMovement zombieMovement = zombie.GetComponent<ZombieMovement>();
 
-
+            zombieMovement.wasCommanded = true;
             zombieMovement.MoveTo(desiredPosition);
-
+            
 
         }
 

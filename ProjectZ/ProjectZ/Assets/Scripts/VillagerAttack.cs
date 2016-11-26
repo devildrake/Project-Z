@@ -15,14 +15,19 @@ public class VillagerAttack : MonoBehaviour {
         theVillager = GetComponent<VillagerScript>();
 	}
 
-    public void Attack(GameObject aZombie) {
-        if (aZombie.GetComponent<ZombieScript>().isAlive && aZombie != null)
+    public void Attack(GameObject aZombie)
+    {
+        if (aZombie != null)
         {
-            attacking = true;
-            zombieToAttack = aZombie.GetComponent<ZombieScript>();
-        }else
-        {
-            attacking = false;
+            if (aZombie.GetComponent<ZombieScript>().isAlive)
+            {
+                attacking = true;
+                zombieToAttack = aZombie.GetComponent<ZombieScript>();
+            }
+            else
+            {
+                attacking = false;
+            }
         }
     }
     // Update is called once per frame
@@ -45,15 +50,19 @@ public class VillagerAttack : MonoBehaviour {
 
 	void Update () {
         if (attacking) {
-            zombieToAttack.GetComponent<ZombieScript>().beingAttacked = true;
-            if (attackTimer < theVillager.attackSpeed)
+            if (zombieToAttack != null)
             {
-                attackTimer += Time.deltaTime;
-            }
-            else {
-                zombieToAttack.health -= theVillager.attack;
-                attackTimer = 0;
-       
+                zombieToAttack.GetComponent<ZombieScript>().beingAttacked = true;
+                if (attackTimer < theVillager.attackSpeed)
+                {
+                    attackTimer += Time.deltaTime;
+                }
+                else
+                {
+                    zombieToAttack.health -= theVillager.attack;
+                    attackTimer = 0;
+
+                }
             }
         }
 	}

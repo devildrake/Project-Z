@@ -6,6 +6,12 @@ public class ZombieMovement : MonoBehaviour
     public bool moving;
     public Vector3 targetPosition;
     public float movementLinearSpeed;
+    public bool wasCommanded;
+
+    void Start() {
+        wasCommanded = false;
+    }
+
     public void MoveTo(Vector3 newTargetPosition)
     {
         targetPosition = newTargetPosition;
@@ -43,6 +49,7 @@ public class ZombieMovement : MonoBehaviour
                 transform.position = targetPosition;
              //   transform.position += Vector3.up * oldY;
                 moving = false;
+                wasCommanded = false;
             }
         }
 	}   

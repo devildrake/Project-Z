@@ -7,7 +7,6 @@ public class VisionRangeZombie : MonoBehaviour
 
     public bool enemyInSight = false;
     public GameObject anEnemyToAdd;
-    public GameObject anEnemyToRemove;
     public List<GameObject> _enemiesInRange;
     public GameObject closestEnemy;
     public bool hasCheckedFirst = false;
@@ -19,8 +18,6 @@ public class VisionRangeZombie : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
-
-
         if (col.tag == "Enemy")
         {
             anEnemyToAdd = col.gameObject;
@@ -34,8 +31,7 @@ public class VisionRangeZombie : MonoBehaviour
     {
         if (col.tag == "Enemy")
         {
-            anEnemyToRemove = col.gameObject;
-            _enemiesInRange.Remove(anEnemyToRemove);
+            _enemiesInRange.Remove(col.gameObject);
             if (_enemiesInRange.Count == 0)
             {
                 enemyInSight = false;
@@ -45,22 +41,28 @@ public class VisionRangeZombie : MonoBehaviour
 
     GameObject GetClosestEnemy(List<GameObject> enemies)
     {
-        GameObject tMin = null;
-        float minDist = Mathf.Infinity;
-        Vector3 currentPos = transform.position;
-        foreach (GameObject t in enemies)
+        if (enemies.Count > 0)
         {
-            if (t != null)
+            GameObject tMin = null;
+            float minDist = Mathf.Infinity;
+            Vector3 currentPos = transform.position;
+            foreach (GameObject t in enemies)
             {
-                float dist = Vector3.Distance(t.transform.position, currentPos);
-                if (dist < minDist)
+                if (t != null)
                 {
-                    tMin = t;
-                    minDist = dist;
+                    float dist = Vector3.Distance(t.transform.position, currentPos);
+                    if (dist < minDist)
+                    {
+                        tMin = t;
+                        minDist = dist;
+                    }
                 }
             }
+            return tMin;
         }
-        return tMin;
+        else {
+            return null;
+        }
     }
 
     bool IsNotAlive(GameObject z)
@@ -71,13 +73,7 @@ public class VisionRangeZombie : MonoBehaviour
     void CheckEnemyAlive()
     {
         _enemiesInRange.RemoveAll(IsNotAlive);
-        foreach (GameObject enemy in _enemiesInRange)
-        {
-            if (!enemy.GetComponent<VillagerScript>().isAlive && enemy != null)
-            {
-                _enemiesInRange.Remove(enemy);
-            }
-        }
+       
     }
     void Update()
     {
