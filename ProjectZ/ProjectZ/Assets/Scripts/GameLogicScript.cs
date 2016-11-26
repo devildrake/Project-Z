@@ -39,6 +39,7 @@ public class GameLogicScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        
 		yAxis = gameObject.transform.position.y;
         //Guardamos la referencia al input en nuestra clase
         _input = this.GetComponent<InputHandlerScript>();
@@ -61,6 +62,7 @@ public class GameLogicScript : MonoBehaviour
         _zombies.Add(zombie1);
         _zombies.Add(zombie2);
         _zombies.Add(zombie3);
+        Debug.Log(Camera.main.WorldToScreenPoint(zombie1.transform.position));
     }
 
     // Update is called once per frame
@@ -86,7 +88,7 @@ public class GameLogicScript : MonoBehaviour
 #endif
 
             //Check if the ray hits any collider
-            if (Physics.Raycast (ray, out hit,100,mask)) {
+            if (Physics.Raycast (ray, out hit,80,mask)) {
                 //set a flag to indicate to move the gameobject
                
                 Debug.DrawRay(ray.origin, ray.direction * 20, Color.yellow);
@@ -187,6 +189,7 @@ public class GameLogicScript : MonoBehaviour
         }
     }
 
+
     void UpdateSelection()
     {
         if (!_selecting)
@@ -255,14 +258,22 @@ public class GameLogicScript : MonoBehaviour
                     //Este es el plano tridimensional de selección
                     Rect selectionPlane = new Rect();
                     
-                    selectionPlane.xMin = Mathf.Min(_selectionOrigin.x, hit.point.x);
-                    selectionPlane.yMin = Mathf.Min(_selectionOrigin.z, hit.point.z);
-                    selectionPlane.xMax = Mathf.Max(_selectionOrigin.x, hit.point.x);
-                    selectionPlane.yMax = Mathf.Max(_selectionOrigin.z, hit.point.z);
-                    Debug.Log("Min");
-                    Debug.Log(selectionPlane.xMin);
-                    Debug.Log("Max");
+               /*     selectionPlane.xMin = Mathf.Min(_selectionOrigin.x, _input._mousePosition.x);
+                    selectionPlane.yMin = Mathf.Min(_selectionOrigin.z, _input._mousePosition.z);
+                    selectionPlane.xMax = Mathf.Max(_selectionOrigin.x, _input._mousePosition.x);
+                    selectionPlane.yMax = Mathf.Max(_selectionOrigin.z, _input._mousePosition.z);
+                    */
+                    selectionPlane = _selectionBox.GetComponent<GUITexture>().pixelInset;
+
                     Debug.Log(selectionPlane.xMax);
+                    Debug.Log(selectionPlane.yMax);
+                    Debug.Log(selectionPlane.xMin);
+                    Debug.Log(selectionPlane.yMin);
+
+                   Debug.Log("Z" + Camera.main.WorldToScreenPoint( _zombies[1].transform.position));
+
+
+
                     //Comprobamos que el rayo no golpea directamente en una unidad
 
                     if (_zombies.Contains(hit.collider.gameObject))
@@ -279,7 +290,7 @@ public class GameLogicScript : MonoBehaviour
                     //Agregamos a la lista los zombies que se encuentran dentro del cuadro de selección
                     foreach (GameObject zombie in this._zombies)
                     {
-                        if (!zombiesInSelectionBox.Contains(zombie) && (zombie.transform.position.x >= selectionPlane.xMin && zombie.transform.position.x <= selectionPlane.xMax && zombie.transform.position.z >= selectionPlane.yMin && zombie.transform.position.z <= selectionPlane.yMax))
+                        if (!zombiesInSelectionBox.Contains(zombie) && (Camera.main.WorldToScreenPoint(zombie.transform.position).x >= selectionPlane.xMin && Camera.main.WorldToScreenPoint(zombie.transform.position).x <= selectionPlane.xMax && Camera.main.WorldToScreenPoint(zombie.transform.position).y >= selectionPlane.yMin && Camera.main.WorldToScreenPoint(zombie.transform.position).y <= selectionPlane.yMax))
                         {
                             zombiesInSelectionBox.Add(zombie);
                         }
