@@ -3,6 +3,13 @@ using System.Collections;
 
 public class InputHandlerScript : MonoBehaviour
 {
+    /*Este código maneja todas las Inputs de Teclado que interesan al juego
+     *No se hace ninguna referencia desde este Script a ningún otro*/
+
+
+
+
+
     //ACCESOS DE TECLADO
     //Camera
    /* KeyCode _cameraUpKey1 = KeyCode.UpArrow;
