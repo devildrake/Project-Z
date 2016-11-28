@@ -6,6 +6,7 @@ public class VillagerAttack : MonoBehaviour {
     public bool attacking = false;
     public ZombieScript zombieToAttack;
     public VillagerScript theVillager;
+    public AttackRangeScript elRango;
     public float attackTimer = 0;
 
 	// Use this for initialization
@@ -13,13 +14,14 @@ public class VillagerAttack : MonoBehaviour {
         
         zombieToAttack = null;
         theVillager = GetComponent<VillagerScript>();
+        elRango = gameObject.GetComponentInChildren<AttackRangeScript>();
 	}
 
     public void Attack(GameObject aZombie)
     {
         if (aZombie != null)
         {
-            if (aZombie.GetComponent<ZombieScript>().isAlive)
+            if (aZombie.GetComponent<ZombieScript>().isAlive&&elRango.enemyInRange)
             {
                 attacking = true;
                 zombieToAttack = aZombie.GetComponent<ZombieScript>();
@@ -48,11 +50,11 @@ public class VillagerAttack : MonoBehaviour {
         }
     }
 
-	void Update () {
-        if (attacking) {
+    void Update() {
+        if (attacking)
+        {
             if (zombieToAttack != null)
             {
-                zombieToAttack.GetComponent<ZombieScript>().beingAttacked = true;
                 if (attackTimer < theVillager.attackSpeed)
                 {
                     attackTimer += Time.deltaTime;
@@ -64,6 +66,10 @@ public class VillagerAttack : MonoBehaviour {
 
                 }
             }
+        }
+
+        if (!elRango.enemyInRange) {
+            attacking = false;
         }
 	}
 }

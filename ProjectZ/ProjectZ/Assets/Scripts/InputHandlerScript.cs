@@ -5,7 +5,7 @@ public class InputHandlerScript : MonoBehaviour
 {
     //ACCESOS DE TECLADO
     //Camera
-    KeyCode _cameraUpKey1 = KeyCode.UpArrow;
+   /* KeyCode _cameraUpKey1 = KeyCode.UpArrow;
     KeyCode _cameraUpKey2 = KeyCode.W;
     KeyCode _cameraDownKey1 = KeyCode.DownArrow;
     KeyCode _cameraDownKey2 = KeyCode.S;
@@ -13,7 +13,7 @@ public class InputHandlerScript : MonoBehaviour
     KeyCode _cameraLeftKey2 = KeyCode.A;
     KeyCode _cameraRightKey1 = KeyCode.RightArrow;
     KeyCode _cameraRightKey2 = KeyCode.D;
-
+    */
     //Control
     KeyCode _selectionKey1 = KeyCode.Mouse0;
     KeyCode _selectionKey2 = KeyCode.Return;
@@ -21,15 +21,18 @@ public class InputHandlerScript : MonoBehaviour
     KeyCode _keepSelectionKey2 = KeyCode.RightShift;
     KeyCode _invertSelectionKey1 = KeyCode.LeftControl;
     KeyCode _invertSelectionKey2 = KeyCode.RightControl;
-
+    KeyCode _dontAttack = KeyCode.S;
+    KeyCode _Attack = KeyCode.A;
     //Input State
     public Vector3 _mousePosition;
-
+    /*
     public bool _cameraUp;
     public bool _cameraDown;
     public bool _cameraLeft;
-    public bool _cameraRight;
+    public bool _cameraRight;*/
 
+    public bool _mustNotAttack;
+    public bool _mustAttack;
     public bool _selectingBegins;
     public bool _selectingEnds;
     public bool _keepSelection;
@@ -55,10 +58,10 @@ public class InputHandlerScript : MonoBehaviour
         //Guardamos la posición del ratón, por si alguien hace uso de ella
         this._mousePosition = Input.mousePosition;
 
-        this._cameraUp = false;
+        /*this._cameraUp = false;
         this._cameraRight = false;
         this._cameraDown = false;
-        this._cameraLeft = false;
+        this._cameraLeft = false;*/
 
         this._selectingBegins = false;
         this._selectingEnds = false;
@@ -70,6 +73,7 @@ public class InputHandlerScript : MonoBehaviour
     void CheckInput()
     {
         #region Camera
+        /*
         if (Input.GetKey(_cameraUpKey1)
             || Input.GetKey(_cameraUpKey2))
         {
@@ -92,7 +96,7 @@ public class InputHandlerScript : MonoBehaviour
                   || Input.GetKey(_cameraRightKey2))
         {
             this._cameraRight = true;
-        }
+        }*/
         #endregion
 
         #region Control
@@ -130,6 +134,18 @@ public class InputHandlerScript : MonoBehaviour
             || Input.GetKeyUp(_invertSelectionKey2))
         {
             this._invertSelection = false;
+        }
+
+        else if (Input.GetKeyDown(_Attack))
+        {
+            _mustNotAttack = false;
+            _mustAttack = true;
+            
+        }
+        else if (Input.GetKeyDown(_dontAttack)) {
+            _mustAttack = false;
+            _mustNotAttack = true;
+            
         }
         #endregion
     }

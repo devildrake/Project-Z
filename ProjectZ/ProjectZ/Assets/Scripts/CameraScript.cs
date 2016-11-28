@@ -15,13 +15,13 @@ public class CameraScript : MonoBehaviour
     void Start()
     {
         //Guardamos la referencia al input en nuestra clase
-        _input = GameObject.Find("GameLogic").GetComponent<InputHandlerScript>();
+        //_input = GameObject.Find("GameLogic").GetComponent<InputHandlerScript>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+/*
 
         //Declaramos un vector velocidad de la Cámara
         Vector3 cameraVector;
@@ -40,10 +40,10 @@ public class CameraScript : MonoBehaviour
             cameraVector.x = -CAMERA_SPEED;
 
         //Movemos la cámara en el vector que hemos especificado
-        transform.Translate(cameraVector * Time.deltaTime, Space.World);
+        transform.Translate(cameraVector * Time.deltaTime, Space.World);*/
     }
 
-    void CheckMousePosition(out Vector3 cameraVector)
+    /*void CheckMousePosition(out Vector3 cameraVector)
     {
         cameraVector = new Vector3();
 
@@ -64,5 +64,5 @@ public class CameraScript : MonoBehaviour
         {
             cameraVector.z = CAMERA_SPEED;
         }
-    }
+    }*/
 }

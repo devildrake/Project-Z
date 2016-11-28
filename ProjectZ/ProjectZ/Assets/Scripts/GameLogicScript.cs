@@ -71,8 +71,20 @@ public class GameLogicScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-       
+        if (_input._mustAttack && _keptSelectedZombies.Count > 0)
+        {
+            foreach (GameObject t in _keptSelectedZombies)
+            {
+                t.GetComponent<ZombieScript>().canAttack = true;
+            }
+        }
+        else if (_input._mustNotAttack && _keptSelectedZombies.Count > 0)
+        {
+            foreach (GameObject t in _keptSelectedZombies)
+            {
+                t.GetComponent<ZombieScript>().canAttack = false;
+            }
+        }
         DrawSelectionBox();
         UpdateSelection();
         UpdateSelection2();

@@ -17,9 +17,9 @@ public class AttackRangeZombie : MonoBehaviour
     bool CheckAttack()
     {
         bool a = false;
-        foreach (GameObject enemy in laVision._enemiesInRange)
+        if (laVision.closestEnemy != null)
         {
-            if ((laVision.closestEnemy.transform.position - gameObject.transform.position).magnitude <= attackRange && enemy != null && laVision.closestEnemy.GetComponent<VillagerScript>().isAlive && laVision.closestEnemy != null)
+            if ((laVision.closestEnemy.transform.position - gameObject.transform.position).magnitude <= attackRange && laVision.closestEnemy.GetComponent<VillagerScript>().isAlive)
             {
                 a = true;
             }
@@ -30,5 +30,9 @@ public class AttackRangeZombie : MonoBehaviour
     {
         attackRange = gameObject.GetComponentInParent<ZombieScript>().theAttackRange;
         enemyInRange = CheckAttack();
+        if (enemyInRange && gameObject.GetComponentInParent<ZombieScript>().canAttack)
+        {
+            gameObject.GetComponentInParent<ZombieAttack>().Attack(laVision.closestEnemy);
+        }
     }
 }

@@ -3,16 +3,14 @@ using System.Collections;
 
 public class ZombieAttack : MonoBehaviour {
 
-    public bool attacking = false;
+    public bool attacking;
     public VillagerScript enemyToAttack;
-    public ZombieScript theZombie;
     public float attackTimer = 0;
     // Use this for initialization
     void Start()
     {
         enemyToAttack = null;
-        theZombie = GetComponent<ZombieScript>();
-       
+        attacking = false;
     }
 
     public void Attack(GameObject anEnemy)
@@ -33,7 +31,7 @@ public class ZombieAttack : MonoBehaviour {
         {
             if (enemyToAttack != null)
             {
-                if (attackTimer < theZombie.attackSpeed)
+                if (attackTimer < GetComponent<ZombieScript>().attackSpeed)
                 {
                     attackTimer += Time.deltaTime;
                 }

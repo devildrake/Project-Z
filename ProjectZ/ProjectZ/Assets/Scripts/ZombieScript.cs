@@ -15,9 +15,8 @@ public class ZombieScript : MonoBehaviour
     public float movSpeed;
     public float theAttackRange;
     bool confirmAlive;
-    public bool beingAttacked;
     public bool canMove;
-
+    public bool canAttack;
     ZombieMovement elMovimiento;
     VisionRangeZombie laVision;
     AttackRangeZombie elAtaque;
@@ -37,11 +36,11 @@ public class ZombieScript : MonoBehaviour
 
     void Start()
     {
-        canMove = true;
+        canMove = canAttack = true;
         elMovimiento = gameObject.GetComponent<ZombieMovement>();
         laVision = gameObject.GetComponentInChildren<VisionRangeZombie>();
         elAtaque = gameObject.GetComponentInChildren<AttackRangeZombie>();
-        confirmAlive = isAlive = true; beingAttacked = false;
+        confirmAlive = isAlive = true;
 
         switch (tipo) {
             case zombieClass.walker:
@@ -79,7 +78,7 @@ public class ZombieScript : MonoBehaviour
         confirmAlive = CheckAlive();
         if (!elMovimiento.wasCommanded)
         {
-            if (laVision.enemyInSight && !elAtaque.enemyInRange)
+            if (laVision.enemyInSight && !elAtaque.enemyInRange&&canAttack)
             {
                 if (laVision.closestEnemy != null)
                 {
@@ -91,14 +90,11 @@ public class ZombieScript : MonoBehaviour
                 if (confirmAlive)
                 {
                     //Código de que hace el zombie normalmente
-                    if (beingAttacked)
-                    {
-                        GetComponent<ZombieAttack>().Attack(GetComponentInChildren<VisionRangeZombie>().closestEnemy);
-                    }
+
                 }
                 else
                 {
-                    Destroy(this.gameObject, 0.3f);
+                    Destroy(gameObject, 0.3f);
                 }
             }
 
