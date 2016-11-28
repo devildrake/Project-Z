@@ -5,7 +5,7 @@ public class VillagerMovement : MonoBehaviour
 {
     public bool moving;
     public Vector3 targetPosition;
-    public float movementLinearSpeedVillager = 10;
+    private float movementLinearSpeedVillager;
     public void MoveTo(Vector3 newTargetPosition)
     {
         targetPosition = newTargetPosition;
@@ -14,6 +14,7 @@ public class VillagerMovement : MonoBehaviour
     }
     void Update()
     {
+        movementLinearSpeedVillager = gameObject.GetComponent<VillagerScript>().movSpeed;
         if (moving)
         {
           

@@ -4,17 +4,13 @@ using System.Collections.Generic;
 
 public class AttackRangeZombie : MonoBehaviour
 {
-
-
     public bool enemyInRange = false;
-    public float triggerRad;
-    public VisionRangeZombie laVision;
+    private float attackRange;
+    private VisionRangeZombie laVision;
 
     void Start()
     {
         laVision = gameObject.GetComponentInParent<VisionRangeZombie>();
-        triggerRad = 1.5f;
-        GetComponent<CapsuleCollider>().radius = triggerRad;
     }
     // Update is called once per frame
 
@@ -23,7 +19,7 @@ public class AttackRangeZombie : MonoBehaviour
         bool a = false;
         foreach (GameObject enemy in laVision._enemiesInRange)
         {
-            if ((laVision.closestEnemy.transform.position - gameObject.transform.position).magnitude <= triggerRad && enemy != null && laVision.closestEnemy.GetComponent<VillagerScript>().isAlive && laVision.closestEnemy != null)
+            if ((laVision.closestEnemy.transform.position - gameObject.transform.position).magnitude <= attackRange && enemy != null && laVision.closestEnemy.GetComponent<VillagerScript>().isAlive && laVision.closestEnemy != null)
             {
                 a = true;
             }
@@ -32,6 +28,7 @@ public class AttackRangeZombie : MonoBehaviour
     }
     void Update()
     {
+        attackRange = gameObject.GetComponentInParent<ZombieScript>().theAttackRange;
         enemyInRange = CheckAttack();
     }
 }

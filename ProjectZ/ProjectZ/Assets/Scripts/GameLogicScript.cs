@@ -53,8 +53,11 @@ public class GameLogicScript : MonoBehaviour
         GameObject zombie = Resources.Load("ZombieObject") as GameObject;
         GameObject villager = Resources.Load("VillagerObject") as GameObject;
         GameObject zombie1 = GameObject.Instantiate(zombie, /*new Vector3(245, 0.5f, 61)*/position1, Quaternion.identity) as GameObject;
+        zombie1.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.runner;
         GameObject zombie2 = GameObject.Instantiate(zombie,/* new Vector3(250, 0.5f, 61)*/position2, Quaternion.identity) as GameObject;
+        zombie2.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.mutank;
         GameObject zombie3 = GameObject.Instantiate(zombie,/* new Vector3(240, 0.5f, 61)*/position3, Quaternion.identity) as GameObject;
+        zombie3.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.walker;
         GameObject villager1 = GameObject.Instantiate(villager, new Vector3(2,1,10), Quaternion.identity) as GameObject;
 
 

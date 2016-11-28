@@ -7,7 +7,7 @@ public class VillagerAttack : MonoBehaviour {
     public ZombieScript zombieToAttack;
     public VillagerScript theVillager;
     public float attackTimer = 0;
-    
+
 	// Use this for initialization
 	void Start () {
         

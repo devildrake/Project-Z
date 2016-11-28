@@ -10,6 +10,7 @@ public class ZombieMovement : MonoBehaviour
 
     void Start() {
         wasCommanded = false;
+        
     }
 
     public void MoveTo(Vector3 newTargetPosition)
@@ -20,7 +21,8 @@ public class ZombieMovement : MonoBehaviour
     }
 	void Update ()
     {
-	    if (moving)
+        movementLinearSpeed = gameObject.GetComponent<ZombieScript>().movSpeed;
+        if (moving)
         {
             //Debug.DrawLine(targetPosition,targetPosition+Vector3.up*10);
 

@@ -13,7 +13,9 @@ public class VillagerScript : MonoBehaviour {
     public int health;
     public int attack;
     public int defense;
-    public float attackSpeed = 1.5f;
+    public float movSpeed;
+    public float attackSpeed;
+    public float theAttackRange;
     bool confirmAlive;
     public humanClass tipo;
     public bool canMove;
@@ -26,16 +28,30 @@ public class VillagerScript : MonoBehaviour {
 
     void Start()
     {
-        tipo = humanClass.villager;
         confirmAlive = isAlive = true;
-        health = 100;
-        attack = 10;
-        defense = 10;
-        attackSpeed = 0.5f;
         laVision = GetComponentInChildren<VisionRangeScript>();
         elAtaque = GetComponentInChildren<AttackRangeScript>();
         villagerMovement = GetComponent<VillagerMovement>();
         villagerAttack = GetComponent<VillagerAttack>();
+
+        switch (tipo){
+            case humanClass.villager:
+                theAttackRange = 1;
+                health = 100;
+                attack = 10;
+                defense = 10;
+                attackSpeed = 0.5f;
+                movSpeed = 1;
+                break;
+            case humanClass.soldier:
+                theAttackRange = 2;
+                health = 100;
+                attack = 10;
+                defense = 10;
+                attackSpeed = 1.5f;
+                movSpeed = 2;
+                break;
+        }
     }
 
     bool CheckAlive() {
