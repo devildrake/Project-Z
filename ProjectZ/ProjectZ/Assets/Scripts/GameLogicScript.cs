@@ -493,10 +493,8 @@ public class GameLogicScript : MonoBehaviour
                 */
         }
     }
-
-    //Función llama a la función que mueve a los zombies al punto establecido con el parámetro desiredPosition y 
-    //Pone en true wasCommanded
-
+    //Función del movimiento
+    #region movimiento
     void MoveZombies(GameObject zombie, Vector3 desiredPosition)
     {
         Debug.Log("Hi");
@@ -504,7 +502,6 @@ public class GameLogicScript : MonoBehaviour
         //En caso de que existan zombies en la lista de _keptSelectedZombies
         if (_keptSelectedZombies.Contains(zombie))
         {
-
             //Agregamos el zombie a la lista
             _selectedZombies.Add(zombie);
 
@@ -520,4 +517,5 @@ public class GameLogicScript : MonoBehaviour
         }
 
     }
+    #endregion
 }

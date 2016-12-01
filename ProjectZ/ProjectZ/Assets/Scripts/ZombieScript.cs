@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public class ZombieScript : MonoBehaviour
 {
     public enum zombieClass { walker, runner, mutank }
-
+    private SpriteRenderer elSprite;
+    private GameObject elCirculo;
     public zombieClass tipo;
     public bool isAlive;
     public bool isSelected;
@@ -18,7 +19,10 @@ public class ZombieScript : MonoBehaviour
     bool confirmAlive;
     public bool canMove;
     public bool canAttack;
-    ZombieMovement elMovimiento;
+    public bool moving;
+    public Vector3 targetPosition;
+    public float movementLinearSpeed;
+    public bool wasCommanded;
     VisionRangeZombie laVision;
     AttackRangeZombie elAtaque;
 
@@ -37,8 +41,11 @@ public class ZombieScript : MonoBehaviour
 
     void Start()
     {
+        elSprite = GetComponentInChildren<SpriteRenderer>();
+        elCirculo = elSprite.gameObject;
+
+
         canMove = canAttack = true;
-        elMovimiento = gameObject.GetComponent<ZombieMovement>();
         laVision = gameObject.GetComponentInChildren<VisionRangeZombie>();
         elAtaque = gameObject.GetComponentInChildren<AttackRangeZombie>();
         confirmAlive = isAlive = true;
@@ -73,17 +80,25 @@ public class ZombieScript : MonoBehaviour
 
     }
 
+    public void MoveTo(Vector3 newTargetPosition)
+    {
+        targetPosition = newTargetPosition;
+        moving = true;
+
+    }
     // Update is called once per frame
     void Update()
     {
+
+
         confirmAlive = CheckAlive();
-        if (!elMovimiento.wasCommanded)
+        if (!wasCommanded)
         {
             if (laVision.enemyInSight && !elAtaque.enemyInRange&&canAttack)
             {
                 if (laVision.closestEnemy != null)
                 {
-                    elMovimiento.MoveTo(laVision.closestEnemy.transform.position);
+                    MoveTo(laVision.closestEnemy.transform.position);
                     
                 }
             }
@@ -93,12 +108,17 @@ public class ZombieScript : MonoBehaviour
                     //Código de que hace el zombie normalmente
                     if (isSelected)
                     {
-                        Renderer theRenderer = gameObject.GetComponentInChildren<Renderer>();
-                        theRenderer.material.color = Color.yellow;
+                        /*Renderer theRenderer = gameObject.GetComponentInChildren<Renderer>();
+                        theRenderer.material.color = Color.yellow;*/
+                        elCirculo.SetActive(true);    
+
                     }
                     else {
+                        /*
                         Renderer theRenderer = gameObject.GetComponentInChildren<Renderer>();
-                        theRenderer.material.color = Color.grey;
+                        theRenderer.material.color = Color.grey;*/
+                        elCirculo.SetActive(false);
+
                     }
                 }
                 else
