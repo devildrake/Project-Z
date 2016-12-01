@@ -10,6 +10,7 @@ public class VillagerScript : MonoBehaviour {
     public Vector3 targetPosition;
     public float movementLinearSpeed;
     public bool isAlive;
+    public bool hasTransformed;
     public int health;
     public int attack;
     public int defense;
@@ -33,6 +34,7 @@ public class VillagerScript : MonoBehaviour {
         elAtaque = GetComponentInChildren<AttackRangeScript>();
         villagerMovement = GetComponent<VillagerMovement>();
         villagerAttack = GetComponent<VillagerAttack>();
+        hasTransformed = false;
 
         switch (tipo){
             case humanClass.villager:
@@ -90,6 +92,7 @@ public class VillagerScript : MonoBehaviour {
         }
         else
         {
+            gameObject.SetActive(false);
             Destroy(gameObject, 0.3f);
         }
     }

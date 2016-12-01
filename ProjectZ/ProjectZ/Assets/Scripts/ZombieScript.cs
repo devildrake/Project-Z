@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 
 public class ZombieScript : MonoBehaviour
 {
@@ -8,6 +8,7 @@ public class ZombieScript : MonoBehaviour
 
     public zombieClass tipo;
     public bool isAlive;
+    public bool isSelected;
     public int health;
     public int attack;
     public int defense;
@@ -90,7 +91,15 @@ public class ZombieScript : MonoBehaviour
                 if (confirmAlive)
                 {
                     //Código de que hace el zombie normalmente
-
+                    if (isSelected)
+                    {
+                        Renderer theRenderer = gameObject.GetComponentInChildren<Renderer>();
+                        theRenderer.material.color = Color.yellow;
+                    }
+                    else {
+                        Renderer theRenderer = gameObject.GetComponentInChildren<Renderer>();
+                        theRenderer.material.color = Color.grey;
+                    }
                 }
                 else
                 {

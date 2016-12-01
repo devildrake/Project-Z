@@ -53,7 +53,7 @@ public class GameLogicScript : MonoBehaviour
     public Vector3 position1;
     public Vector3 position2;
     public Vector3 position3;
-
+    GameObject zombie;
 
     void Start()
     {
@@ -71,7 +71,7 @@ public class GameLogicScript : MonoBehaviour
         //Se crean 3 zombies y un villager
 
         //Cargando los prefabs
-        GameObject zombie = Resources.Load("ZombieObject") as GameObject;
+        zombie = Resources.Load("ZombieObject") as GameObject;
         GameObject villager = Resources.Load("VillagerObject") as GameObject;
 
         //Se crea  el primer zombie y se establece el tipo de zombie del que se trata para que luego el zombie haga lo que tenga que hacer
@@ -212,7 +212,14 @@ public class GameLogicScript : MonoBehaviour
         _zombies.RemoveAll(IsNotAlive);
         _selectedZombies.RemoveAll(IsNotAlive);
         _keptSelectedZombies.RemoveAll(IsNotAlive);
-
+        foreach (GameObject v in _villagers) {
+            if (!v.GetComponent<VillagerScript>().isAlive && !v.GetComponent<VillagerScript>().hasTransformed) {
+                GameObject aZombie = GameObject.Instantiate(zombie, v.transform.position, Quaternion.identity) as GameObject;
+                aZombie.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.runner;
+                _zombies.Add(aZombie);
+            }
+            
+        }
         _villagers.RemoveAll(IsNotAlive);
     }
     //Funcion que dibuja la caja de seleccion
@@ -286,15 +293,19 @@ public class GameLogicScript : MonoBehaviour
                     {
                         if (zombie != null)
                         {
-                            Component[] renders = zombie.GetComponentsInChildren(typeof(Renderer));
+                           /* Component[] renders = zombie.GetComponentsInChildren(typeof(Renderer));
                             foreach (Renderer render in renders)
-                                render.material.color -= Color.yellow;
+                                render.material.color -= Color.yellow;*/
                         }
                     }
 
                     //Limpiamos las listas de zombies seleccionados
                     _selectedZombies.Clear(); //Esta no es necesario limpiarla ya
+                    foreach (GameObject z in _keptSelectedZombies) {
+                        z.GetComponent<ZombieScript>().isSelected = false;
+                    }
                     _keptSelectedZombies.Clear();
+                    
                 }
 
                 //Indicamos que hemos empezado una selección
@@ -310,6 +321,7 @@ public class GameLogicScript : MonoBehaviour
                     if (zombie != null)
                     {
                         _keptSelectedZombies.Add(zombie);
+                        zombie.GetComponent<ZombieScript>().isSelected = true;
                     }
                 //Indicamos que hemos finalizado nuestra selección
                 _selecting = false;
@@ -361,6 +373,14 @@ public class GameLogicScript : MonoBehaviour
                         if (!zombiesInSelectionBox.Contains(zombie) && (Camera.main.WorldToScreenPoint(zombie.transform.position).x >= selectionPlane.xMin && Camera.main.WorldToScreenPoint(zombie.transform.position).x <= selectionPlane.xMax && Camera.main.WorldToScreenPoint(zombie.transform.position).y >= selectionPlane.yMin && Camera.main.WorldToScreenPoint(zombie.transform.position).y <= selectionPlane.yMax))
                         {
                             zombiesInSelectionBox.Add(zombie);
+                            zombie.GetComponent<ZombieScript>().isSelected = true;
+                            Debug.Log("OnBox");
+                        }
+                        else
+                        {
+                                _selectedZombies.Remove(zombie);
+                                zombie.GetComponent<ZombieScript>().isSelected = false;
+                                Debug.Log("BURH");                    
                         }
                     }
                 }
@@ -444,12 +464,17 @@ public class GameLogicScript : MonoBehaviour
         {
             //Agregamos el zombie a la lista
             _selectedZombies.Add(zombie);
+
+            foreach (GameObject z in _selectedZombies) {
+                z.GetComponent<ZombieScript>().isSelected = true;
+
+            }
             //Marcamos el zombie de color amarillo
-            Component[] renders = zombie.GetComponentsInChildren(typeof(Renderer));
+            /*Component[] renders = zombie.GetComponentsInChildren(typeof(Renderer));
             foreach (Renderer render in renders)
             {
                 render.material.color += Color.yellow;
-            }
+            }*/
         }
     }
 
@@ -462,10 +487,10 @@ public class GameLogicScript : MonoBehaviour
             //Removemos el zombie de la lista
             _selectedZombies.Remove(zombie);
             //Desmarcamos el zombie
-            Component[] renders = zombie.GetComponentsInChildren(typeof(Renderer));
+            /*Component[] renders = zombie.GetComponentsInChildren(typeof(Renderer));
             foreach (Renderer render in renders)
                 render.material.color -= Color.yellow;
-
+                */
         }
     }
 
