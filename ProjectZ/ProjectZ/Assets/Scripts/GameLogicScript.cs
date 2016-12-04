@@ -40,6 +40,7 @@ public class GameLogicScript : MonoBehaviour
     public List<GameObject> _villagers;
 
 
+
     //Objeto de cuadro de selección
     public GameObject _selectionBox;
 
@@ -68,6 +69,7 @@ public class GameLogicScript : MonoBehaviour
         _keptSelectedZombies = new List<GameObject>();
         _villagers = new List<GameObject>();
 
+
         //Se crean 3 zombies y un villager
 
         //Cargando los prefabs
@@ -89,12 +91,16 @@ public class GameLogicScript : MonoBehaviour
         //Se crea un villager y se establece el tipo de villager del que se trata para que haga lo que deba hacer
         GameObject villager1 = GameObject.Instantiate(villager, new Vector3(2, 1, 10), Quaternion.identity) as GameObject;
         villager1.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.villager;
+		//soldier
+		GameObject villager2 = GameObject.Instantiate(villager, new Vector3(4, 1, 10), Quaternion.identity) as GameObject;
+		villager2.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.soldier;
 
         //Añadimos los zombies a la lista
         _zombies.Add(zombie1);
         _zombies.Add(zombie2);
         _zombies.Add(zombie3);
         _villagers.Add(villager1);
+		_villagers.Add(villager2);
     }
 
 

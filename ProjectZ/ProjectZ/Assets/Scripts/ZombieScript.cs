@@ -43,6 +43,7 @@ public class ZombieScript : MonoBehaviour
     {
         elSprite = GetComponentInChildren<SpriteRenderer>();
         elCirculo = elSprite.gameObject;
+		elCirculo.gameObject.GetComponent<SpriteRenderer> ().color = Color.green;
 
 
         canMove = canAttack = true;
@@ -78,6 +79,7 @@ public class ZombieScript : MonoBehaviour
         }
 
 
+
     }
 
     public void MoveTo(Vector3 newTargetPosition)
@@ -110,7 +112,8 @@ public class ZombieScript : MonoBehaviour
                     {
                         /*Renderer theRenderer = gameObject.GetComponentInChildren<Renderer>();
                         theRenderer.material.color = Color.yellow;*/
-                        elCirculo.SetActive(true);    
+                        elCirculo.SetActive(true); 
+
 
                     }
                     else {
@@ -128,5 +131,16 @@ public class ZombieScript : MonoBehaviour
             }
 
         }
+		//color vida
+		/*if (health <= 49) {
+
+			elCirculo.gameObject.GetComponent<SpriteRenderer> ().color = Color.yellow;
+		}
+
+		if (health <= 25) {
+
+			elCirculo.gameObject.GetComponent<SpriteRenderer> ().color = Color.red;
+		}*/
+	
     }
 }
