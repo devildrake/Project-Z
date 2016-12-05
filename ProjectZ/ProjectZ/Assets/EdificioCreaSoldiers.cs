@@ -10,7 +10,7 @@ public class EdificioCreaSoldiers : MonoBehaviour {
     public GameLogicScript elGameLogicScript;
     public GameObject spawnPointObject;
     public Vector3 spawnPoint;
-    public int cuantosSoldados;
+    public int amount;
 
     // Use this for initialization
     void Start () {
@@ -27,10 +27,11 @@ public class EdificioCreaSoldiers : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         
-        if (alert) {
+        if (alert && amount > 0) {
             spawnTimer += Time.deltaTime;
             if (spawnTime <= spawnTimer) {
                 spawn(Random.Range(0, 1));
+                amount--;
                 spawnTimer = 0;
             }
         }
@@ -42,11 +43,13 @@ public class EdificioCreaSoldiers : MonoBehaviour {
         switch (tipo) {
             case 0: //VILLAGER
                 GameObject villager2 = GameObject.Instantiate(villager, spawnPoint, Quaternion.identity) as GameObject;
-                villager2.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.soldier;
+                villager2.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.villager;
+                elGameLogicScript._villagers.Add(villager2);
                 break;
             case 1: //SOLDADO
                 GameObject soldier = GameObject.Instantiate(villager, spawnPoint, Quaternion.identity) as GameObject;
                 soldier.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.soldier;
+                elGameLogicScript._villagers.Add(soldier);
                 break;
         }
     }

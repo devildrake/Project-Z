@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class ZombieNoBlock : MonoBehaviour {
 
 	private GameObject pj;
-	private NavMeshAgent nav;
+	private UnityEngine.AI.NavMeshAgent nav;
 	private float distance;
 	public float rangoView;
 	private GameObject passGameObject;
@@ -21,7 +21,7 @@ public class ZombieNoBlock : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		pj = GameObject.FindWithTag("Player");
-		nav = GetComponent<NavMeshAgent>();
+		nav = GetComponent<UnityEngine.AI.NavMeshAgent>();
 	}
 	
 	// Update is called once per frame
