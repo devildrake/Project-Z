@@ -10,7 +10,8 @@ public class ZombieScript : MonoBehaviour
     public zombieClass tipo;
     public bool isAlive;
     public bool isSelected;
-    public int health;
+    public float health;
+    public float maxHealth;
     public int attack;
     public int defense;
     public float attackSpeed;
@@ -77,7 +78,7 @@ public class ZombieScript : MonoBehaviour
                 theAttackRange = 1f;
                 break;
         }
-
+        maxHealth = health;
 
 
     }
@@ -86,7 +87,6 @@ public class ZombieScript : MonoBehaviour
     {
         targetPosition = newTargetPosition;
         moving = true;
-
     }
     // Update is called once per frame
     void Update()
@@ -101,7 +101,6 @@ public class ZombieScript : MonoBehaviour
                 if (laVision.closestEnemy != null)
                 {
                     MoveTo(laVision.closestEnemy.transform.position);
-                    
                 }
             }
             {
@@ -117,9 +116,7 @@ public class ZombieScript : MonoBehaviour
 
                     }
                     else {
-                        /*
-                        Renderer theRenderer = gameObject.GetComponentInChildren<Renderer>();
-                        theRenderer.material.color = Color.grey;*/
+
                         elCirculo.SetActive(false);
 
                     }
@@ -131,16 +128,19 @@ public class ZombieScript : MonoBehaviour
             }
 
         }
-		//color vida
-		/*if (health <= 49) {
+        //color vida
+        if (health / maxHealth * 100 <= 20)
+        {
+
+            elCirculo.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+            Debug.Log(health/maxHealth);
+        }
+        else if (health/maxHealth*100 <= 50) {
 
 			elCirculo.gameObject.GetComponent<SpriteRenderer> ().color = Color.yellow;
 		}
 
-		if (health <= 25) {
 
-			elCirculo.gameObject.GetComponent<SpriteRenderer> ().color = Color.red;
-		}*/
 	
     }
 }

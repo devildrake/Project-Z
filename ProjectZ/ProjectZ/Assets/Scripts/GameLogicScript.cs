@@ -509,7 +509,7 @@ public class GameLogicScript : MonoBehaviour
         if (_keptSelectedZombies.Contains(zombie))
         {
             //Agregamos el zombie a la lista
-            _selectedZombies.Add(zombie);
+            //_selectedZombies.Add(zombie);
 
             //Se hace una referencia al script de movimiento de cada zombie a cada iteración
             ZombieMovement zombieMovement = zombie.GetComponent<ZombieMovement>();

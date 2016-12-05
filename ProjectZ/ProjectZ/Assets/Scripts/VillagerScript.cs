@@ -46,7 +46,7 @@ public class VillagerScript : MonoBehaviour {
                 movSpeed = 1;
                 break;
             case humanClass.soldier:
-                theAttackRange = 2;
+                theAttackRange = 3;
                 health = 100;
                 attack = 10;
                 defense = 10;
