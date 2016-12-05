@@ -36,6 +36,10 @@ public class VillagerScript : MonoBehaviour {
         villagerAttack = GetComponent<VillagerAttack>();
         hasTransformed = false;
 
+         Renderer render = this.gameObject.GetComponentInChildren<Renderer>();
+                
+                    
+
         switch (tipo){
             case humanClass.villager:
                 theAttackRange = 1;
@@ -44,6 +48,7 @@ public class VillagerScript : MonoBehaviour {
                 defense = 10;
                 attackSpeed = 0.5f;
                 movSpeed = 1;
+                render.material.color += Color.yellow;
                 break;
             case humanClass.soldier:
                 theAttackRange = 3;
@@ -52,6 +57,7 @@ public class VillagerScript : MonoBehaviour {
                 defense = 10;
                 attackSpeed = 1.5f;
                 movSpeed = 2;
+                render.material.color += Color.green;
                 break;
         }
     }
