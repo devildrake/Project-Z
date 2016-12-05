@@ -89,10 +89,10 @@ public class GameLogicScript : MonoBehaviour
         zombie3.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.walker;
 
         //Se crea un villager y se establece el tipo de villager del que se trata para que haga lo que deba hacer
-        GameObject villager1 = GameObject.Instantiate(villager, new Vector3(2, 1, 10), Quaternion.identity) as GameObject;
+        GameObject villager1 = GameObject.Instantiate(villager, new Vector3(2, 0.4f, 10), Quaternion.identity) as GameObject;
         villager1.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.villager;
 		//soldier
-		GameObject villager2 = GameObject.Instantiate(villager, new Vector3(4, 1, 10), Quaternion.identity) as GameObject;
+		GameObject villager2 = GameObject.Instantiate(villager, new Vector3(4, 0.4f, 10), Quaternion.identity) as GameObject;
 		villager2.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.soldier;
 
         //Añadimos los zombies a la lista
@@ -380,13 +380,11 @@ public class GameLogicScript : MonoBehaviour
                         {
                             zombiesInSelectionBox.Add(zombie);
                             zombie.GetComponent<ZombieScript>().isSelected = true;
-                            Debug.Log("OnBox");
                         }
                         else
                         {
                                 _selectedZombies.Remove(zombie);
                                 zombie.GetComponent<ZombieScript>().isSelected = false;
-                                Debug.Log("BURH");                    
                         }
                     }
                 }
@@ -503,8 +501,6 @@ public class GameLogicScript : MonoBehaviour
     #region movimiento
     void MoveZombies(GameObject zombie, Vector3 desiredPosition)
     {
-        Debug.Log("Hi");
-
         //En caso de que existan zombies en la lista de _keptSelectedZombies
         if (_keptSelectedZombies.Contains(zombie))
         {
@@ -513,9 +509,10 @@ public class GameLogicScript : MonoBehaviour
 
             //Se hace una referencia al script de movimiento de cada zombie a cada iteración
             ZombieMovement zombieMovement = zombie.GetComponent<ZombieMovement>();
-
+            ZombieScript elZombieScript = zombie.GetComponent<ZombieScript>();
             //El booleano wasCommanded se pone en true, ya que se les ha ordenador moverse
             zombieMovement.wasCommanded = true;
+            elZombieScript.wasCommanded = true;
 
             //Función que mueve a los zombies
             zombieMovement.MoveTo(desiredPosition);

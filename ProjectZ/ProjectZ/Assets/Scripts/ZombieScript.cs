@@ -26,6 +26,7 @@ public class ZombieScript : MonoBehaviour
     public bool wasCommanded;
     VisionRangeZombie laVision;
     AttackRangeZombie elAtaque;
+    ZombieMovement elMovimiento;
 
     // Use this for initialization
     bool CheckAlive()
@@ -42,6 +43,7 @@ public class ZombieScript : MonoBehaviour
 
     void Start()
     {
+        elMovimiento = this.gameObject.GetComponent<ZombieMovement>();
         elSprite = GetComponentInChildren<SpriteRenderer>();
         elCirculo = elSprite.gameObject;
 		elCirculo.gameObject.GetComponent<SpriteRenderer> ().color = Color.green;
@@ -83,16 +85,14 @@ public class ZombieScript : MonoBehaviour
 
     }
 
-    public void MoveTo(Vector3 newTargetPosition)
+    /*public void MoveTo(Vector3 newTargetPosition)
     {
         targetPosition = newTargetPosition;
         moving = true;
-    }
+    }*/
     // Update is called once per frame
     void Update()
     {
-
-
         confirmAlive = CheckAlive();
         if (!wasCommanded)
         {
@@ -100,7 +100,7 @@ public class ZombieScript : MonoBehaviour
             {
                 if (laVision.closestEnemy != null)
                 {
-                    MoveTo(laVision.closestEnemy.transform.position);
+                    elMovimiento.MoveTo(laVision.closestEnemy.transform.position);
                 }
             }
             {
@@ -133,7 +133,6 @@ public class ZombieScript : MonoBehaviour
         {
 
             elCirculo.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
-            Debug.Log(health/maxHealth);
         }
         else if (health/maxHealth*100 <= 50) {
 

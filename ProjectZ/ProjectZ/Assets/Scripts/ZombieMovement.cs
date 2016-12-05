@@ -52,7 +52,9 @@ public class ZombieMovement : MonoBehaviour
              //   transform.position += Vector3.up * oldY;
                 moving = false;
                 wasCommanded = false;
+                gameObject.GetComponent<ZombieScript>().wasCommanded = false;
             }
         }
 	}   
+    
 }
