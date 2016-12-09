@@ -17,7 +17,9 @@ public class IAPersonaje : MonoBehaviour {
     public GameObject objetivoJugador;
     private Vector3 prevObj;
     private Seeker buscador;
-	// Use this for initialization
+
+
+
 	void Start () {
         buscador = GetComponent<Seeker>();
         controlador = GetComponent<CharacterController>();
