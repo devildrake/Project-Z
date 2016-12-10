@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Pathfinding;
+using Pathfinding.RVO;
 
 public class ZombieMovement : MonoBehaviour
 {
@@ -11,22 +12,25 @@ public class ZombieMovement : MonoBehaviour
     private Seeker buscador;
     public float distanciaSiguientePunto = 0.5f;
     private int puntoActual = 0;
-    private bool startedMoving;
+    //private bool startedMoving;
+    private float distance;
+
 
     //IEnumerator Start()
     void Start()
     {
-        startedMoving = false;
+
+        //startedMoving = false;
         buscador = gameObject.GetComponent<Seeker>();
         wasCommanded = false;
-       // yield return StartCoroutine(buscarCamino(1));
+        // yield return StartCoroutine(buscarCamino(1));
     }
 
     public void MoveTo(Vector3 newTargetPosition)
     {
-        if (!startedMoving)
+        //if (!startedMoving)
         {
-            startedMoving = true;
+          //  startedMoving = true;
             targetPosition = newTargetPosition;
             buscador.StartPath(transform.position, targetPosition, MetodoCamino);
         }
@@ -43,6 +47,7 @@ public class ZombieMovement : MonoBehaviour
         }
     }
 
+    
     /*IEnumerator buscarCamino(float tiempo) {
         while (true) {
             yield return new WaitForSeconds(tiempo);
@@ -51,14 +56,36 @@ public class ZombieMovement : MonoBehaviour
 
     }*/
 
-    void FixedUpdate()
+
+        
+
+    void Update()
     {
+        
+
         if (moving)
-        {
+        { 
+
+            distance = (gameObject.transform.position-targetPosition).magnitude;
+
+            if (!gameObject.GetComponent<ZombieScript>().isSelected)
+            {
+                gameObject.GetComponent<ZombieScript>().elCirculo.SetActive(false);
+            }
+            else {
+                gameObject.GetComponent<ZombieScript>().elCirculo.SetActive(true);
+            }
+           
+
+
             if (camino == null)
                 return;
             if (puntoActual >= camino.vectorPath.Count)
             {
+                moving = false;
+                wasCommanded = false;
+                gameObject.GetComponent<ZombieScript>().startedMovingToAnEnemy = false;
+                //startedMoving = false;
                 return;
             }
 
@@ -66,22 +93,25 @@ public class ZombieMovement : MonoBehaviour
 
             direccion *= gameObject.GetComponent<ZombieScript>().movSpeed * Time.fixedDeltaTime;
 
-            gameObject.transform.position += direccion*0.5f;
+            gameObject.transform.position += direccion * 0.5f;
 
             if (Vector3.Distance(transform.position, camino.vectorPath[puntoActual]) < distanciaSiguientePunto)
             {
                 puntoActual++;
                 return;
             }
+
+
+
             else {
-                startedMoving = false;
+                
             }
 
         }
-    }
+    } }
 
-    void Update()
-    {/*
+   /* void Update()
+    {
         movementLinearSpeed = gameObject.GetComponent<ZombieScript>().movSpeed;
         if (moving)
         {
@@ -118,6 +148,6 @@ public class ZombieMovement : MonoBehaviour
             }
         }
 	}   
-    */
     }
-}
+    */
+  //  }

@@ -6,10 +6,11 @@ public class ZombieScript : MonoBehaviour
 {
     public enum zombieClass { walker, runner, mutank }
     private SpriteRenderer elSprite;
-    private GameObject elCirculo;
+    public GameObject elCirculo;
     public zombieClass tipo;
     public bool isAlive;
     public bool isSelected;
+    public bool startedMovingToAnEnemy;
     public float health;
     public float maxHealth;
     public int attack;
@@ -27,6 +28,8 @@ public class ZombieScript : MonoBehaviour
     VisionRangeZombie laVision;
     AttackRangeZombie elAtaque;
     ZombieMovement elMovimiento;
+    Vector3 originalPos;
+    Vector3 groundPos;
 
     // Use this for initialization
     bool CheckAlive()
@@ -43,6 +46,10 @@ public class ZombieScript : MonoBehaviour
 
     void Start()
     {
+         startedMovingToAnEnemy = false;
+    originalPos = gameObject.transform.position;
+        groundPos.y = originalPos.y;
+
         elMovimiento = this.gameObject.GetComponent<ZombieMovement>();
         elSprite = GetComponentInChildren<SpriteRenderer>();
         elCirculo = elSprite.gameObject;
@@ -60,7 +67,7 @@ public class ZombieScript : MonoBehaviour
                 attack = 10;
                 defense = 10;
                 attackSpeed = 1f;
-                movSpeed = 0.5f;
+                movSpeed = 1;
                 theAttackRange = 0.8f;
                 break;
             case zombieClass.runner:
@@ -68,7 +75,7 @@ public class ZombieScript : MonoBehaviour
                 attack = 5;
                 defense = 10;
                 attackSpeed = 1.5f;
-                movSpeed = 1f;
+                movSpeed = 4;
                 theAttackRange = 0.8f;
                 break;
             case zombieClass.mutank:
@@ -76,7 +83,7 @@ public class ZombieScript : MonoBehaviour
                 attack = 20;
                 defense = 10;
                 attackSpeed = 0.5f;
-                movSpeed = 0.25f;
+                movSpeed = 0.75f;
                 theAttackRange = 1f;
                 break;
         }
@@ -91,41 +98,65 @@ public class ZombieScript : MonoBehaviour
         moving = true;
     }*/
     // Update is called once per frame
+    void heightCheck() {
+        if (gameObject.transform.position.y > originalPos.y) {
+
+            gameObject.transform.position = groundPos;
+
+        }
+
+
+    }
+
+
+
     void Update()
     {
+
+        heightCheck();
+
+        groundPos.x = gameObject.transform.position.x;
+        groundPos.z = gameObject.transform.position.z;
         confirmAlive = CheckAlive();
+        if (confirmAlive)
+        {
+            
+            //Código de que hace el zombie normalmente
+            if (isSelected)
+            {
+                /*Renderer theRenderer = gameObject.GetComponentInChildren<Renderer>();
+                theRenderer.material.color = Color.yellow;*/
+                elCirculo.SetActive(true);
+
+
+            }
+            else
+            {
+
+                elCirculo.SetActive(false);
+
+            }
+        }
+        else
+        {
+            Destroy(gameObject, 0.3f);
+        }
+
         if (!wasCommanded)
         {
-            if (laVision.enemyInSight && !elAtaque.enemyInRange&&canAttack)
+            if (laVision.enemyInSight && !elAtaque.enemyInRange && canAttack && canMove)
             {
                 if (laVision.closestEnemy != null)
                 {
-                    elMovimiento.MoveTo(laVision.closestEnemy.transform.position);
-                }
-            }
-            {
-                if (confirmAlive)
-                {
-                    //Código de que hace el zombie normalmente
-                    if (isSelected)
+                    Debug.Log("SHould Move");
+                    if (!startedMovingToAnEnemy)
                     {
-                        /*Renderer theRenderer = gameObject.GetComponentInChildren<Renderer>();
-                        theRenderer.material.color = Color.yellow;*/
-                        elCirculo.SetActive(true); 
-
-
+                        elMovimiento.MoveTo(laVision.closestEnemy.transform.position);
+                        startedMovingToAnEnemy = true;
                     }
-                    else {
-
-                        elCirculo.SetActive(false);
-
-                    }
-                }
-                else
-                {
-                    Destroy(gameObject, 0.3f);
                 }
             }
+           
 
         }
         //color vida
