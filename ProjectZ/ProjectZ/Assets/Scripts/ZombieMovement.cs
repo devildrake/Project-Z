@@ -1,30 +1,92 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Pathfinding;
 
 public class ZombieMovement : MonoBehaviour
 {
     public bool moving;
     public Vector3 targetPosition;
-    public float movementLinearSpeed;
     public bool wasCommanded;
+    private Path camino;
+    private Seeker buscador;
+    public float distanciaSiguientePunto = 0.5f;
+    private int puntoActual = 0;
+    private bool startedMoving;
 
-    void Start() {
+    //IEnumerator Start()
+    void Start()
+    {
+        startedMoving = false;
+        buscador = gameObject.GetComponent<Seeker>();
         wasCommanded = false;
-        
+       // yield return StartCoroutine(buscarCamino(1));
     }
 
     public void MoveTo(Vector3 newTargetPosition)
     {
-        targetPosition = newTargetPosition;
+        if (!startedMoving)
+        {
+            startedMoving = true;
+            targetPosition = newTargetPosition;
+            buscador.StartPath(transform.position, targetPosition, MetodoCamino);
+        }
         moving = true;
-        
+
     }
-	void Update ()
+
+    void MetodoCamino(Path path)
     {
+        if (!path.error)
+        {
+            camino = path;
+            puntoActual = 0;
+        }
+    }
+
+    /*IEnumerator buscarCamino(float tiempo) {
+        while (true) {
+            yield return new WaitForSeconds(tiempo);
+            buscador.StartPath(transform.position, targetPosition, MetodoCamino);
+        }
+
+    }*/
+
+    void FixedUpdate()
+    {
+        if (moving)
+        {
+            if (camino == null)
+                return;
+            if (puntoActual >= camino.vectorPath.Count)
+            {
+                return;
+            }
+
+            Vector3 direccion = (camino.vectorPath[puntoActual] - gameObject.transform.position).normalized;
+
+            direccion *= gameObject.GetComponent<ZombieScript>().movSpeed * Time.fixedDeltaTime;
+
+            gameObject.transform.position += direccion*0.5f;
+
+            if (Vector3.Distance(transform.position, camino.vectorPath[puntoActual]) < distanciaSiguientePunto)
+            {
+                puntoActual++;
+                return;
+            }
+            else {
+                startedMoving = false;
+            }
+
+        }
+    }
+
+    void Update()
+    {/*
         movementLinearSpeed = gameObject.GetComponent<ZombieScript>().movSpeed;
         if (moving)
         {
             //Debug.DrawLine(targetPosition,targetPosition+Vector3.up*10);
+            buscador.StartPath(gameObject.transform.position, targetPosition, MetodoCamino);
 
             Vector3 currentGroundPosition = transform.position;
             currentGroundPosition.y = 0;
@@ -56,5 +118,6 @@ public class ZombieMovement : MonoBehaviour
             }
         }
 	}   
-    
+    */
+    }
 }
