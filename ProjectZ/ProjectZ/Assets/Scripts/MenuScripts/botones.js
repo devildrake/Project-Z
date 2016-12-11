@@ -1,6 +1,13 @@
 ﻿public function BotonJugar(){
 	
-	Application.LoadLevel("Desert");
+	Application.LoadLevel("AlphaLevel");
+	
+}
+
+public function BotonMenu(){
+	
+    Debug.Log("Change");
+    Application.LoadLevel("AlphaMenu");
 	
 }
 

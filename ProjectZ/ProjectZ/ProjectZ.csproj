@@ -161,6 +161,7 @@
     <Compile Include="Assets\AstarPathfindingProject\changelog.cs" />
     <Compile Include="Assets\DesertFortressPack\Scripts\open_door.cs" />
     <Compile Include="Assets\EdificioCreaSoldiers.cs" />
+    <Compile Include="Assets\PausaCanvasScript.cs" />
     <Compile Include="Assets\Scripts\AttackRangeScript.cs" />
     <Compile Include="Assets\Scripts\AttackRangeZombie.cs" />
     <Compile Include="Assets\Scripts\CameraScript.cs" />

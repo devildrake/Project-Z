@@ -13,9 +13,11 @@ public class GameLogicScript : MonoBehaviour
                                *Que genera el movimiento
                                */
 
-
+    public bool isPaused;
+    public PausaCanvasScript elPausaScript;
     //Vector que en su momento representara el punto destino de los zombies que se mueven
     private Vector3 endPoint;
+
 
     //vertical position of the gameobject
     private float yAxis;
@@ -58,6 +60,9 @@ public class GameLogicScript : MonoBehaviour
 
     void Start()
     {
+        isPaused = false;
+        elPausaScript = GameObject.FindObjectOfType<PausaCanvasScript>();   
+
 
         yAxis = gameObject.transform.position.y;
         //Guardamos la referencia al input en nuestra clase
@@ -106,97 +111,112 @@ public class GameLogicScript : MonoBehaviour
 
     void Update()
     {
-        //Se hace true el booleano canAtack en cada zombie seleccionado al pulsar la tecla A
-        if (_input._mustAttack && _keptSelectedZombies.Count > 0)
-        {
-            foreach (GameObject t in _keptSelectedZombies)
-            {
-                t.GetComponent<ZombieScript>().canAttack = true;
-            }
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            changePause();
         }
-
-        //O Se hace false en los zombies seleccionados al pulsar la tecla S
-        else if (_input._mustNotAttack && _keptSelectedZombies.Count > 0)
+        if (!isPaused)
         {
-            foreach (GameObject t in _keptSelectedZombies)
+
+            //Se hace true el booleano canAtack en cada zombie seleccionado al pulsar la tecla A
+            if (_input._mustAttack && _keptSelectedZombies.Count > 0)
             {
-                t.GetComponent<ZombieScript>().canAttack = false;
-            }
-        }
-        //Funcion que dibuja la caja de seleccion
-        DrawSelectionBox();
-
-        //Funcion que actualiza la seleccion
-        UpdateSelection();
-
-        //Funcion de apoyo para actualizar la seleccion cuando los zombies mueren
-        UpdateSelection2();
-
-        //Al pulsar el boton derecho del ratón, se genera un rayo en el mundo
-
-        if ((Input.GetMouseButtonDown(1)))
-        {
-            //Se declara una variable del struct RayCastHit
-            RaycastHit hit;
-
-            //Se crea la variable de rayo
-            Ray ray;
-
-            //Al ser el editor de unity se utiliza esta funcion para el Rayo
-
-#if UNITY_EDITOR
-            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-#endif
-
-            //Esto sería en caso de que estuveiramos hablando de un aparato tactil (smartphone)
-            /*		#elif (UNITY_ANDROID || UNITY_IPHONE || UNITY_WP8)
-			ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-                    */
-
-
-            //Se comprueba si choca con algun collider, teniendo en cuenta solo los objetos que pertenecen a la mascara mask1 "Ground"
-            if (Physics.Raycast(ray, out hit, 80, mask1))
-            {
-
-                //Se guarda la posicion clicada 
-                endPoint = hit.point;
-
-                //Como no nos interesa que cambie la Y del zombie que se esta moviendo la restauramos a la original
-                endPoint.y = yAxis;
-
-                //Aqui se intenta que el zombie mire a la posicion a la que se esta moviendo
-                this.gameObject.transform.LookAt(hit.point);
-
-                //Esta i se utiliza de contador para repartir a los zombies alrededor del punto elegido como destino
-                int i = 0;
-
-                //Por cada zombie en la lista de zombies seleccionados, se establece el movimiento final en funcion de la 
-                //Cantidad de zombies que se han movido ya hacia el punto y van rotando en un angulo de 45 grados alrededor del punto
-                foreach (GameObject zombie in _keptSelectedZombies)
+                foreach (GameObject t in _keptSelectedZombies)
                 {
-                    if (zombie != null)
-                    {
-                        Vector3 desplazamientoFinal = Vector3.zero;
-                        if (i >= 1)
-                        {
-                            float angle = 45 * i;
-                            Quaternion rotacion = Quaternion.AngleAxis(angle, Vector3.up);
-                            Vector3 distancia = Vector3.right * (1f * (1 + ((i - 1) / 8)));
-                            desplazamientoFinal = rotacion * distancia;
-
-                        }
-
-                        //Esta funcion hace a los zombies moverse hacia el punto deseado pero teniendo en cuenta el desplazamiento final 
-                        //Para cada zombie
-                        MoveZombies(zombie, endPoint + desplazamientoFinal);
-                        i++;
-                    }
+                    t.GetComponent<ZombieScript>().canAttack = true;
                 }
             }
 
+            //O Se hace false en los zombies seleccionados al pulsar la tecla S
+            else if (_input._mustNotAttack && _keptSelectedZombies.Count > 0)
+            {
+                foreach (GameObject t in _keptSelectedZombies)
+                {
+                    t.GetComponent<ZombieScript>().canAttack = false;
+                }
+            }
+            //Funcion que dibuja la caja de seleccion
+            DrawSelectionBox();
+
+            //Funcion que actualiza la seleccion
+            UpdateSelection();
+
+            //Funcion de apoyo para actualizar la seleccion cuando los zombies mueren
+            UpdateSelection2();
+
+            //Al pulsar el boton derecho del ratón, se genera un rayo en el mundo
+
+            if ((Input.GetMouseButtonDown(1)))
+            {
+                //Se declara una variable del struct RayCastHit
+                RaycastHit hit;
+
+                //Se crea la variable de rayo
+                Ray ray;
+
+                //Al ser el editor de unity se utiliza esta funcion para el Rayo
+
+#if UNITY_EDITOR
+                ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+#endif
+
+                //Esto sería en caso de que estuveiramos hablando de un aparato tactil (smartphone)
+                /*		#elif (UNITY_ANDROID || UNITY_IPHONE || UNITY_WP8)
+                ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                        */
+
+
+                //Se comprueba si choca con algun collider, teniendo en cuenta solo los objetos que pertenecen a la mascara mask1 "Ground"
+                if (Physics.Raycast(ray, out hit, 80, mask1))
+                {
+
+                    //Se guarda la posicion clicada 
+                    endPoint = hit.point;
+
+                    //Como no nos interesa que cambie la Y del zombie que se esta moviendo la restauramos a la original
+                    endPoint.y = yAxis;
+
+                    //Aqui se intenta que el zombie mire a la posicion a la que se esta moviendo
+                    this.gameObject.transform.LookAt(hit.point);
+
+                    //Esta i se utiliza de contador para repartir a los zombies alrededor del punto elegido como destino
+                    int i = 0;
+
+                    //Por cada zombie en la lista de zombies seleccionados, se establece el movimiento final en funcion de la 
+                    //Cantidad de zombies que se han movido ya hacia el punto y van rotando en un angulo de 45 grados alrededor del punto
+                    foreach (GameObject zombie in _keptSelectedZombies)
+                    {
+                        if (zombie != null)
+                        {
+                            Vector3 desplazamientoFinal = Vector3.zero;
+                            if (i >= 1)
+                            {
+                                float angle = 45 * i;
+                                Quaternion rotacion = Quaternion.AngleAxis(angle, Vector3.up);
+                                Vector3 distancia = Vector3.right * (1f * (1 + ((i - 1) / 8)));
+                                desplazamientoFinal = rotacion * distancia;
+
+                            }
+
+                            //Esta funcion hace a los zombies moverse hacia el punto deseado pero teniendo en cuenta el desplazamiento final 
+                            //Para cada zombie
+                            MoveZombies(zombie, endPoint + desplazamientoFinal);
+                            i++;
+                        }
+                    }
+                }
+
+            }
+        }
+        else
+        {
+            Time.timeScale = 0;
+            Debug.Log("Pause");
         }
 
+    }
 
+    public void changePause() {
+            isPaused = !isPaused;  
     }
 
     //Una funcion booleana ineficiente para no tener que escribir todo el codigo de negación
