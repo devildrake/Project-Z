@@ -67,7 +67,7 @@ public class ZombieScript : MonoBehaviour
                 attack = 10;
                 defense = 10;
                 attackSpeed = 1f;
-                movSpeed = 1;
+                movSpeed = 2.5f;
                 theAttackRange = 0.8f;
                 break;
             case zombieClass.runner:
@@ -83,13 +83,11 @@ public class ZombieScript : MonoBehaviour
                 attack = 20;
                 defense = 10;
                 attackSpeed = 0.5f;
-                movSpeed = 0.75f;
+                movSpeed = 1.5f;
                 theAttackRange = 1f;
                 break;
         }
         maxHealth = health;
-
-
     }
 
     /*public void MoveTo(Vector3 newTargetPosition)
@@ -144,20 +142,32 @@ public class ZombieScript : MonoBehaviour
 
         if (!wasCommanded)
         {
-            if (laVision.enemyInSight && !elAtaque.enemyInRange && canAttack && canMove)
+            if (laVision.enemyInSight)
             {
-                if (laVision.closestEnemy != null)
+                Debug.Log("B");
+                if (!elAtaque.enemyInRange)
                 {
-                    Debug.Log("SHould Move");
-                    if (!startedMovingToAnEnemy)
-                    {
-                        elMovimiento.MoveTo(laVision.closestEnemy.transform.position);
-                        startedMovingToAnEnemy = true;
+                    Debug.Log("C");
+                    if (canAttack) {
+
+                        Debug.Log("D");
+                        if (canMove) { 
+                    Debug.Log("E");
+
+                            if (laVision.closestEnemy != null)
+                            {
+                                Debug.Log("F");
+                                if (!startedMovingToAnEnemy)
+                                {
+                                    Debug.Log("SHould Move");
+                                    elMovimiento.MoveTo(laVision.closestEnemy.transform.position);
+                                    startedMovingToAnEnemy = true;
+                                }
+                            }
+                        }
                     }
                 }
             }
-           
-
         }
         //color vida
         if (health / maxHealth * 100 <= 20)

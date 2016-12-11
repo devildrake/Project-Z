@@ -82,7 +82,9 @@ public class ZombieMovement : MonoBehaviour
                 return;
             if (puntoActual >= camino.vectorPath.Count)
             {
+                //LlegaAlFinal
                 moving = false;
+                gameObject.GetComponent<ZombieScript>().wasCommanded = false;
                 wasCommanded = false;
                 gameObject.GetComponent<ZombieScript>().startedMovingToAnEnemy = false;
                 //startedMoving = false;

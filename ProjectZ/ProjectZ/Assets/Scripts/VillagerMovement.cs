@@ -5,6 +5,7 @@ public class VillagerMovement : MonoBehaviour
 {
     public bool moving;
     public Vector3 targetPosition;
+    public Vector3 prevTargetPos;
     public bool wasCommanded;
     private Path camino;
     private Seeker buscador;
@@ -13,10 +14,14 @@ public class VillagerMovement : MonoBehaviour
     private bool startedMoving;
     private float distance;
     public float lindarDistancia;
+    public float temporizador;
+    public float tiempoParaBuscar;
+    private bool hasChanged = false;
 
     //IEnumerator Start()
     void Start()
     {
+        temporizador = 0;
         lindarDistancia = 3.3f;
         startedMoving = false;
         buscador = gameObject.GetComponent<Seeker>();
@@ -53,10 +58,24 @@ public class VillagerMovement : MonoBehaviour
 
     }*/
 
+    void Change() {
+        hasChanged = false;
+        buscador.StartPath(transform.position, targetPosition, MetodoCamino);
+    }
+
     void Update()
     {
+
         if (moving)
         {
+
+            if (targetPosition != prevTargetPos) {
+                hasChanged = true;
+            }
+
+            if (hasChanged) {
+                Invoke("Change", 1);
+            }
 
             distance = (gameObject.transform.position - targetPosition).magnitude;
 
@@ -64,6 +83,9 @@ public class VillagerMovement : MonoBehaviour
                 return;
             if (puntoActual >= camino.vectorPath.Count)
             {
+                startedMoving = false;
+                moving = false;
+
                 return;
             }
 
@@ -80,9 +102,14 @@ public class VillagerMovement : MonoBehaviour
             }
             else
             {
-                startedMoving = false;
+                
             }
 
+        }
+
+        if (targetPosition != null)
+        {
+            prevTargetPos = targetPosition;
         }
     }
 }
