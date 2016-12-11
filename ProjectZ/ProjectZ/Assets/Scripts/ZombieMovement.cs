@@ -16,14 +16,14 @@ public class ZombieMovement : MonoBehaviour
     private float distance;
 
 
-    //IEnumerator Start()
-    void Start()
+    IEnumerator Start()
+    //void Start()
     {
 
         //startedMoving = false;
         buscador = gameObject.GetComponent<Seeker>();
         wasCommanded = false;
-        // yield return StartCoroutine(buscarCamino(1));
+        yield return StartCoroutine(buscarCamino(1));
     }
 
     public void MoveTo(Vector3 newTargetPosition)
@@ -48,13 +48,13 @@ public class ZombieMovement : MonoBehaviour
     }
 
     
-    /*IEnumerator buscarCamino(float tiempo) {
+    IEnumerator buscarCamino(float tiempo) {
         while (true) {
             yield return new WaitForSeconds(tiempo);
             buscador.StartPath(transform.position, targetPosition, MetodoCamino);
         }
 
-    }*/
+    }
 
 
         
@@ -86,7 +86,7 @@ public class ZombieMovement : MonoBehaviour
                 moving = false;
                 gameObject.GetComponent<ZombieScript>().wasCommanded = false;
                 wasCommanded = false;
-                gameObject.GetComponent<ZombieScript>().startedMovingToAnEnemy = false;
+
                 //startedMoving = false;
                 return;
             }

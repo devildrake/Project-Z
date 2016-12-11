@@ -10,7 +10,6 @@ public class ZombieScript : MonoBehaviour
     public zombieClass tipo;
     public bool isAlive;
     public bool isSelected;
-    public bool startedMovingToAnEnemy;
     public float health;
     public float maxHealth;
     public int attack;
@@ -23,11 +22,13 @@ public class ZombieScript : MonoBehaviour
     public bool canAttack;
     public bool moving;
     public Vector3 targetPosition;
+    public Vector3 prevTargetPos;
     public float movementLinearSpeed;
     public bool wasCommanded;
     VisionRangeZombie laVision;
     AttackRangeZombie elAtaque;
     ZombieMovement elMovimiento;
+    bool movingToEnemy = false;
     Vector3 originalPos;
     Vector3 groundPos;
 
@@ -46,7 +47,6 @@ public class ZombieScript : MonoBehaviour
 
     void Start()
     {
-         startedMovingToAnEnemy = false;
     originalPos = gameObject.transform.position;
         groundPos.y = originalPos.y;
 
@@ -110,11 +110,9 @@ public class ZombieScript : MonoBehaviour
 
     void Update()
     {
-
-        heightCheck();
-
         groundPos.x = gameObject.transform.position.x;
         groundPos.z = gameObject.transform.position.z;
+        heightCheck();
         confirmAlive = CheckAlive();
         if (confirmAlive)
         {
@@ -125,14 +123,10 @@ public class ZombieScript : MonoBehaviour
                 /*Renderer theRenderer = gameObject.GetComponentInChildren<Renderer>();
                 theRenderer.material.color = Color.yellow;*/
                 elCirculo.SetActive(true);
-
-
             }
             else
             {
-
                 elCirculo.SetActive(false);
-
             }
         }
         else
@@ -157,11 +151,16 @@ public class ZombieScript : MonoBehaviour
                             if (laVision.closestEnemy != null)
                             {
                                 Debug.Log("F");
-                                if (!startedMovingToAnEnemy)
+                                Debug.Log("SHould Move");
+                                if (laVision.closestEnemy.transform.position != prevTargetPos) {
+                                    movingToEnemy = false;
+                                }
+                                    prevTargetPos = laVision.closestEnemy.transform.position;
+                                if (!movingToEnemy)
                                 {
-                                    Debug.Log("SHould Move");
+                                    
+                                    movingToEnemy = true;
                                     elMovimiento.MoveTo(laVision.closestEnemy.transform.position);
-                                    startedMovingToAnEnemy = true;
                                 }
                             }
                         }

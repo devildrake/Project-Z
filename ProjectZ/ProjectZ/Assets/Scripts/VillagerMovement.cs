@@ -18,15 +18,15 @@ public class VillagerMovement : MonoBehaviour
     public float tiempoParaBuscar;
     private bool hasChanged = false;
 
-    //IEnumerator Start()
-    void Start()
+    IEnumerator Start()
+   // void Start()
     {
         temporizador = 0;
         lindarDistancia = 3.3f;
         startedMoving = false;
         buscador = gameObject.GetComponent<Seeker>();
         wasCommanded = false;
-        // yield return StartCoroutine(buscarCamino(1));
+        yield return StartCoroutine(buscarCamino(1));
     }
 
     public void MoveTo(Vector3 newTargetPosition)
@@ -50,13 +50,13 @@ public class VillagerMovement : MonoBehaviour
         }
     }
 
-    /*IEnumerator buscarCamino(float tiempo) {
+    IEnumerator buscarCamino(float tiempo) {
         while (true) {
             yield return new WaitForSeconds(tiempo);
             buscador.StartPath(transform.position, targetPosition, MetodoCamino);
         }
 
-    }*/
+    }
 
     void Change() {
         hasChanged = false;

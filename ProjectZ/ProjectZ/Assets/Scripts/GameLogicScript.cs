@@ -534,6 +534,7 @@ public class GameLogicScript : MonoBehaviour
             zombieMovement.wasCommanded = true;
             elZombieScript.wasCommanded = true;
 
+            Debug.Log("IsCommanded");
             //Función que mueve a los zombies
             zombieMovement.MoveTo(desiredPosition);
 
