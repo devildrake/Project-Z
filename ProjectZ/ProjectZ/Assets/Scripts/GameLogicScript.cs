@@ -36,12 +36,11 @@ public class GameLogicScript : MonoBehaviour
     public List<GameObject> _zombies;
     public List<GameObject> _selectedZombies;
     public List<GameObject> _keptSelectedZombies;
+    public List<GameObject> _bases;
 
     //Lista de villagers
 
     public List<GameObject> _villagers;
-
-
 
     //Objeto de cuadro de selección
     public GameObject _selectionBox;
@@ -56,13 +55,21 @@ public class GameLogicScript : MonoBehaviour
     public Vector3 position1;
     public Vector3 position2;
     public Vector3 position3;
+
+    public GameObject elPathfinder;
+
+    public Vector3 posicionBase1;
+
     GameObject zombie;
+    GameObject villager;
+    GameObject baseHumana;
 
     void Start()
     {
+        elPathfinder = GameObject.FindGameObjectWithTag("A*");
         isPaused = false;
         elPausaScript = GameObject.FindObjectOfType<PausaCanvasScript>();   
-
+        posicionBase1 = new Vector3(0.69f,0.05f,13.72f);
 
         yAxis = gameObject.transform.position.y;
         //Guardamos la referencia al input en nuestra clase
@@ -79,7 +86,10 @@ public class GameLogicScript : MonoBehaviour
 
         //Cargando los prefabs
         zombie = Resources.Load("ZombieObject") as GameObject;
-        GameObject villager = Resources.Load("VillagerObject") as GameObject;
+        villager = Resources.Load("VillagerObject") as GameObject;
+        baseHumana = Resources.Load("OriginadorSoldados") as GameObject;
+
+        GameObject base1 = GameObject.Instantiate(baseHumana, posicionBase1, Quaternion.identity) as GameObject;
 
         //Se crea  el primer zombie y se establece el tipo de zombie del que se trata para que luego el zombie haga lo que tenga que hacer
         GameObject zombie1 = GameObject.Instantiate(zombie, position1, Quaternion.identity) as GameObject;
@@ -106,6 +116,10 @@ public class GameLogicScript : MonoBehaviour
         _zombies.Add(zombie3);
         _villagers.Add(villager1);
 		_villagers.Add(villager2);
+
+        _bases.Add(base1);
+
+        elPathfinder.GetComponent<AstarPath>().Scan();
     }
 
 
@@ -241,7 +255,20 @@ public class GameLogicScript : MonoBehaviour
         foreach (GameObject v in _villagers) {
             if (!v.GetComponent<VillagerScript>().isAlive && !v.GetComponent<VillagerScript>().hasTransformed) {
                 GameObject aZombie = GameObject.Instantiate(zombie, v.transform.position, Quaternion.identity) as GameObject;
-                aZombie.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.runner;
+                int que = Random.Range(0, 20);
+
+                if (que < 10)
+                {
+                    aZombie.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.runner;
+                }
+                else if (que < 16)
+                {
+                    aZombie.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.walker;
+                }
+                else {
+                    aZombie.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.mutank;
+                }
+
                 _zombies.Add(aZombie);
             }
             
@@ -534,7 +561,6 @@ public class GameLogicScript : MonoBehaviour
             zombieMovement.wasCommanded = true;
             elZombieScript.wasCommanded = true;
 
-            Debug.Log("IsCommanded");
             //Función que mueve a los zombies
             zombieMovement.MoveTo(desiredPosition);
 

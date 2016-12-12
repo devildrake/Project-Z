@@ -17,9 +17,20 @@ public class VillagerScript : MonoBehaviour {
     public float movSpeed;
     public float attackSpeed;
     public float theAttackRange;
+
+
+    public bool goingToPat;
+    public bool goingBack;
+
     bool confirmAlive;
     public humanClass tipo;
     public bool canMove;
+    public Vector3 groundPos;
+
+    public Vector3 originalPos;
+    public Vector3 patrolPoint;
+    public bool freeRoam;
+    public int patrolType;
 
     VillagerMovement villagerMovement;
     VillagerAttack villagerAttack;
@@ -29,6 +40,9 @@ public class VillagerScript : MonoBehaviour {
 
     void Start()
     {
+        freeRoam = true;
+        originalPos = transform.position;
+        groundPos.y = originalPos.y;
         confirmAlive = isAlive = true;
         laVision = GetComponentInChildren<VisionRangeScript>();
         elAtaque = GetComponentInChildren<AttackRangeScript>();
@@ -38,7 +52,6 @@ public class VillagerScript : MonoBehaviour {
 
          Renderer render = this.gameObject.GetComponentInChildren<Renderer>();
                 
-                    
 
         switch (tipo){
             case humanClass.villager:
@@ -60,6 +73,17 @@ public class VillagerScript : MonoBehaviour {
                 render.material.color += Color.green;
                 break;
         }
+
+        switch (patrolType)
+        {
+            case 0:
+                patrolPoint = originalPos + new Vector3(3,0,0);
+                break;
+            case 1:
+                patrolPoint = originalPos + new Vector3(0, 3, 0);
+                break;
+        }
+
     }
 
     bool CheckAlive() {
@@ -72,13 +96,57 @@ public class VillagerScript : MonoBehaviour {
         }
         return isAlive;
     }
+    void heightCheck()
+    {
+        if (gameObject.transform.position.y > originalPos.y)
+        {
 
+            gameObject.transform.position = groundPos;
+
+        }
+
+
+    }
+    void Patrol() {
+
+        if (!goingToPat && !goingBack) {
+            goingToPat = true;
+        }
+
+        if (goingToPat)
+        {
+            villagerMovement.MoveTo(patrolPoint);
+            
+            if ((patrolPoint-gameObject.transform.position).magnitude < 0.3f) {
+                goingToPat = false;
+                goingBack = true;
+            }
+
+            
+        }
+        else if (goingBack) {
+            villagerMovement.MoveTo(originalPos);
+            if ((originalPos - gameObject.transform.position).magnitude < 0.3f)
+            {
+                goingToPat = true;
+                goingBack = false;
+            }
+                
+        }
+
+
+    }
     void Update()
     {
+        groundPos.x = transform.position.x;
+        groundPos.z = transform.position.z;
+        heightCheck();
         confirmAlive = CheckAlive();
-        if (confirmAlive) { 
+        if (confirmAlive) {
             if (laVision.enemyInSight)
             {
+                freeRoam = false;
+
                 if (canMove&&laVision.closestZombie!=null)
                 {
                     villagerMovement.MoveTo(laVision.closestZombie.transform.position);
@@ -91,9 +159,14 @@ public class VillagerScript : MonoBehaviour {
                 villagerMovement.moving = false;
                 // AttackEnemy();
             }
-            else
+            else if(!laVision.enemyInSight)
             {
+                freeRoam = true;
                 canMove = true;
+            }
+            if (canMove&&freeRoam) {
+                Patrol();
+
             }
         }
         else

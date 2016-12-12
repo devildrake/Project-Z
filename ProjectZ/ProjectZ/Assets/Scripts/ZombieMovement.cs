@@ -12,6 +12,8 @@ public class ZombieMovement : MonoBehaviour
     private Seeker buscador;
     public float distanciaSiguientePunto = 0.5f;
     private int puntoActual = 0;
+    public float contador;
+    public float tiempoAContar;
     //private bool startedMoving;
     private float distance;
 
@@ -19,7 +21,7 @@ public class ZombieMovement : MonoBehaviour
     IEnumerator Start()
     //void Start()
     {
-
+        tiempoAContar = 1;
         //startedMoving = false;
         buscador = gameObject.GetComponent<Seeker>();
         wasCommanded = false;
@@ -30,12 +32,20 @@ public class ZombieMovement : MonoBehaviour
     {
         //if (!startedMoving)
         {
-          //  startedMoving = true;
+            //  startedMoving = true;
+            if (targetPosition != newTargetPosition)
+            {
+                contador += Time.deltaTime;
+                if (contador > tiempoAContar)
+                {
+                    buscador.StartPath(transform.position, newTargetPosition, MetodoCamino);
+                    contador = 0;
+                }
+            }
             targetPosition = newTargetPosition;
-            buscador.StartPath(transform.position, targetPosition, MetodoCamino);
+            
         }
         moving = true;
-
     }
 
     void MetodoCamino(Path path)

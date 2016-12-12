@@ -9,20 +9,32 @@ public class VisionRangeScript : MonoBehaviour {
     public GameObject aZombieToRemove;
     public List<GameObject> _zombiesInRange;
     public GameObject closestZombie;
-    public bool hasCheckedFirst = false;
+    public GameLogicScript gameLogic;
 
     void Start () {
         _zombiesInRange = new List<GameObject>();
+        gameLogic = GameObject.FindObjectOfType<GameLogicScript>();
+        
+
     }
 
     void OnTriggerEnter(Collider col) {
 
-      
         if (col.tag == "Zn") {
             aZombieToAdd = col.gameObject;
             _zombiesInRange.Add(aZombieToAdd);
 
             enemyInSight = true;
+        }
+    }
+
+    void OnTriggerStay(Collider col) {
+        if (col.tag == "Zn")
+        {
+            if (!_zombiesInRange.Contains(col.gameObject))
+            {
+                _zombiesInRange.Add(col.gameObject);
+            }
         }
     }
 
@@ -57,8 +69,13 @@ public class VisionRangeScript : MonoBehaviour {
         return tMin;
     }
 
-    bool IsNotAlive(GameObject z) { 
-        return !z.GetComponent<ZombieScript>().isAlive;
+    bool IsNotAlive(GameObject z)
+    {
+        if (z != null)
+        {
+            return !z.GetComponent<ZombieScript>().isAlive;
+        }
+        else return true;
     }
 
     void CheckZombieAlive() {
@@ -72,13 +89,20 @@ public class VisionRangeScript : MonoBehaviour {
         }
     }
     void Update() {
+
+        if (enemyInSight) {
+            foreach (GameObject unaBase in gameLogic._bases)
+            {
+                unaBase.GetComponent<EdificioCreaSoldiers>().alert = true;
+            }
+        }
+
         if (_zombiesInRange.Count >0)
         {
             CheckZombieAlive();
             closestZombie = GetClosestZombie(_zombiesInRange);
         }
         else {
-            hasCheckedFirst = false;
             closestZombie = null;
         }
 	}

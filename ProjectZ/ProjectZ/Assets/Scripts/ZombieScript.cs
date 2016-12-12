@@ -138,20 +138,19 @@ public class ZombieScript : MonoBehaviour
         {
             if (laVision.enemyInSight)
             {
-                Debug.Log("B");
+
                 if (!elAtaque.enemyInRange)
                 {
-                    Debug.Log("C");
+
                     if (canAttack) {
 
-                        Debug.Log("D");
+
                         if (canMove) { 
-                    Debug.Log("E");
+
 
                             if (laVision.closestEnemy != null)
                             {
-                                Debug.Log("F");
-                                Debug.Log("SHould Move");
+
                                 if (laVision.closestEnemy.transform.position != prevTargetPos) {
                                     movingToEnemy = false;
                                 }

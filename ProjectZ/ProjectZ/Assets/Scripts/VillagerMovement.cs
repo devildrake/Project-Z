@@ -12,10 +12,10 @@ public class VillagerMovement : MonoBehaviour
     public float distanciaSiguientePunto = 0.5f;
     private int puntoActual = 0;
     private bool startedMoving;
-    private float distance;
     public float lindarDistancia;
     public float temporizador;
     public float tiempoParaBuscar;
+    public bool hasToCharge = false;
     private bool hasChanged = false;
 
     IEnumerator Start()
@@ -31,14 +31,31 @@ public class VillagerMovement : MonoBehaviour
 
     public void MoveTo(Vector3 newTargetPosition)
     {
+
+        if (!gameObject.GetComponent<VillagerScript>().freeRoam&&gameObject.GetComponent<VillagerScript>().canMove) {
+
+            if (!hasToCharge)
+            {
+                hasToCharge = true;
+                startedMoving = false;
+            }
+            else hasToCharge = false;
+        }
+
         if (!startedMoving)
         {
             startedMoving = true;
-            targetPosition = newTargetPosition;
-            buscador.StartPath(transform.position, targetPosition, MetodoCamino);
+
+            if (targetPosition != newTargetPosition)
+            {
+                if (temporizador > tiempoParaBuscar)
+                {
+                    buscador.StartPath(transform.position, newTargetPosition, MetodoCamino);
+                    targetPosition = newTargetPosition;
+                }
+            }
         }
         moving = true;
-
     }
 
     void MetodoCamino(Path path)
@@ -76,8 +93,6 @@ public class VillagerMovement : MonoBehaviour
             if (hasChanged) {
                 Invoke("Change", 1);
             }
-
-            distance = (gameObject.transform.position - targetPosition).magnitude;
 
             if (camino == null)
                 return;
