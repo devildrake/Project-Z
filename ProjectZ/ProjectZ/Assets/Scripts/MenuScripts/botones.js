@@ -1,6 +1,6 @@
 ﻿public function BotonJugar(){
 	
-	Application.LoadLevel("AlphaLevel");
+	Application.LoadLevel("ProbandoQuads");
 	
 }
 
