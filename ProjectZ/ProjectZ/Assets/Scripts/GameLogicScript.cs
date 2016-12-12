@@ -104,7 +104,7 @@ public class GameLogicScript : MonoBehaviour
         zombie3.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.walker;
 
         //Se crea un villager y se establece el tipo de villager del que se trata para que haga lo que deba hacer
-        GameObject villager1 = GameObject.Instantiate(villager, new Vector3(2, 0.4f, 10), Quaternion.identity) as GameObject;
+        GameObject villager1 = GameObject.Instantiate(villager, new Vector3(2, 0.4f, 13), Quaternion.identity) as GameObject;
         villager1.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.villager;
 		//soldier
 		GameObject villager2 = GameObject.Instantiate(villager, new Vector3(4, 0.4f, 10), Quaternion.identity) as GameObject;

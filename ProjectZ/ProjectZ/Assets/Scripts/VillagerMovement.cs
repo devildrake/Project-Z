@@ -3,7 +3,7 @@ using System.Collections;
 using Pathfinding;
 public class VillagerMovement : MonoBehaviour
 {
-    public bool moving;
+    /*public bool moving;
     public Vector3 targetPosition;
     public Vector3 prevTargetPos;
     public bool wasCommanded;
@@ -48,7 +48,7 @@ public class VillagerMovement : MonoBehaviour
 
             if (targetPosition != newTargetPosition)
             {
-                if (temporizador > tiempoParaBuscar)
+                //if (temporizador > tiempoParaBuscar)
                 {
                     buscador.StartPath(transform.position, newTargetPosition, MetodoCamino);
                     targetPosition = newTargetPosition;
@@ -129,8 +129,112 @@ public class VillagerMovement : MonoBehaviour
     }
 }
 
+    */
+    public bool moving;
+    public Vector3 targetPosition;
+    private Path camino;
+    private Seeker buscador;
+    public float distanciaSiguientePunto = 0.5f;
+    private int puntoActual = 0;
+    public float contador;
+    public float tiempoAContar;
+    //private bool startedMoving;
+    private float distance;
 
 
+    IEnumerator Start()
+    //void Start()
+    {
+        tiempoAContar = 1;
+        //startedMoving = false;
+        buscador = gameObject.GetComponent<Seeker>();
+        yield return StartCoroutine(buscarCamino(1));
+    }
+
+    public void MoveTo(Vector3 newTargetPosition)
+    {
+        //if (!startedMoving)
+        {
+            //  startedMoving = true;
+            if (targetPosition != newTargetPosition)
+            {
+                contador += Time.deltaTime;
+                if (contador > tiempoAContar)
+                {
+                    buscador.StartPath(transform.position, newTargetPosition, MetodoCamino);
+                    contador = 0;
+                }
+            }
+            targetPosition = newTargetPosition;
+
+        }
+        moving = true;
+    }
+
+    void MetodoCamino(Path path)
+    {
+        if (!path.error)
+        {
+            camino = path;
+            puntoActual = 0;
+        }
+    }
+
+
+    IEnumerator buscarCamino(float tiempo)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(tiempo);
+            buscador.StartPath(transform.position, targetPosition, MetodoCamino);
+        }
+
+    }
+
+
+
+
+    void Update()
+    {
+
+
+        if (moving)
+        {
+
+            distance = (gameObject.transform.position - targetPosition).magnitude;
+
+            if (camino == null)
+                return;
+            if (puntoActual >= camino.vectorPath.Count)
+            {
+                //LlegaAlFinal
+                moving = false;
+
+                //startedMoving = false;
+                return;
+            }
+
+            Vector3 direccion = (camino.vectorPath[puntoActual] - gameObject.transform.position).normalized;
+
+            direccion *= gameObject.GetComponent<VillagerScript>().movSpeed * Time.fixedDeltaTime;
+
+            gameObject.transform.position += direccion * 0.5f;
+
+            if (Vector3.Distance(transform.position, camino.vectorPath[puntoActual]) < distanciaSiguientePunto)
+            {
+                puntoActual++;
+                return;
+            }
+
+
+            else
+            {
+
+            }
+
+        }
+    }
+}
 
 /*
 public bool moving;

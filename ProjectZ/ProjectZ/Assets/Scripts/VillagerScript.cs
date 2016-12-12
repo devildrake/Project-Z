@@ -166,7 +166,7 @@ public class VillagerScript : MonoBehaviour {
             }
             if (canMove&&freeRoam) {
                 Patrol();
-
+             //   villagerMovement.MoveTo(patrolPoint);
             }
         }
         else
