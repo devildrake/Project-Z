@@ -17,6 +17,18 @@ public class ZombieMovement : MonoBehaviour
     //private bool startedMoving;
     private float distance;
 
+	//array
+	private int suma;
+	//array casa
+	int[] InsideH = new int[2];
+
+	private GameObject posC1;
+	private GameObject posC2;
+	private GameObject posC3;
+
+	private int posC1Y;
+	private int posC2Y;
+	private int posC3Y;
 
     IEnumerator Start()
     //void Start()
@@ -27,6 +39,22 @@ public class ZombieMovement : MonoBehaviour
         wasCommanded = false;
         yield return StartCoroutine(buscarCamino(1));
     }
+	void start()
+	{
+		posC1 = GameObject.FindGameObjectsWithTag("posC1");
+		posC2 = GameObject.FindGameObjectsWithTag("posC2");
+		posC3 = GameObject.FindGameObjectsWithTag("posC3");
+
+		posC1Y = posC1.transform.position.y;
+		posC2Y = posC2.transform.position.y;
+		posC3Y = posC3.transform.position.y;
+
+
+		InsideH [0] = posC1Y;
+		InsideH [1] = posC2Y;
+		InsideH [2] = posC3Y;
+
+	}
 
     public void MoveTo(Vector3 newTargetPosition)
     {
@@ -120,7 +148,26 @@ public class ZombieMovement : MonoBehaviour
             }
 
         }
-    } }
+
+		//array limite
+
+		if (suma > 3) 
+		{
+			suma = 3;
+		}
+
+
+    }
+
+	void IntriggerEnter(Collision other)
+	{
+
+		if (this.gameObject.tag == "EntradaCasaZ") 
+		{
+			suma++;
+		}
+	}
+}
 
    /* void Update()
     {
