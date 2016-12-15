@@ -9,8 +9,6 @@ public class VillagerScript : MonoBehaviour {
     public bool moving = false;
     public Vector3 targetPosition;
     public float movementLinearSpeed;
-    public bool isAlive;
-    public bool hasTransformed;
     public int health;
     public int attack;
     public int defense;
@@ -18,13 +16,15 @@ public class VillagerScript : MonoBehaviour {
     public float attackSpeed;
     public float theAttackRange;
 
-
+    public bool isAlive;
+    public bool hasTransformed;
+    public bool canMove;
     public bool goingToPat;
     public bool goingBack;
 
     bool confirmAlive;
     public humanClass tipo;
-    public bool canMove;
+
     public Vector3 groundPos;
 
     public Vector3 originalPos;
@@ -162,6 +162,10 @@ public class VillagerScript : MonoBehaviour {
             else if(!laVision.enemyInSight)
             {
                 freeRoam = true;
+                canMove = true;
+            }
+            else
+            {
                 canMove = true;
             }
             if (canMove&&freeRoam) {

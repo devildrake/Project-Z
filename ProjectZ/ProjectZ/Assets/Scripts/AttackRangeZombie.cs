@@ -16,11 +16,13 @@ public class AttackRangeZombie : MonoBehaviour
 
     bool CheckAttack()
     {
+        
         bool a = false;
         if (laVision.closestEnemy != null)
         {
             if ((laVision.closestEnemy.transform.position - gameObject.transform.position).magnitude <= attackRange && laVision.closestEnemy.GetComponent<VillagerScript>().isAlive)
             {
+
                 a = true;
             }
         }

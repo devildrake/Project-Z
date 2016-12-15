@@ -52,6 +52,15 @@ ModelImporter:
     4300012: Puerta
     4300014: Marco_Garaje
     4300016: Puerta_Garaje
+    6400000: Box001
+    6400002: Cristal_Derecho
+    6400004: Cristal_Izquierdo
+    6400006: Marco_Garaje
+    6400008: Marco_Puerta
+    6400010: Puerta
+    6400012: Puerta_Garaje
+    6400014: Ventana_Derecha
+    6400016: Ventana_Izquierda
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -79,7 +88,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     importBlendShapes: 1
     swapUVChannels: 0
     generateSecondaryUV: 0

@@ -196,8 +196,6 @@ public class VillagerMovement : MonoBehaviour
 
     void Update()
     {
-
-
         if (moving)
         {
 
@@ -225,8 +223,6 @@ public class VillagerMovement : MonoBehaviour
                 puntoActual++;
                 return;
             }
-
-
             else
             {
 

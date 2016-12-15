@@ -20,30 +20,31 @@ public class ZombieMovement : MonoBehaviour
 	//array
 	private int suma;
 	//array casa
-	int[] InsideH = new int[2];
+	float[] InsideH = new float[2];
 
 	private GameObject posC1;
 	private GameObject posC2;
 	private GameObject posC3;
 
-	private int posC1Y;
-	private int posC2Y;
-	private int posC3Y;
+	private float posC1Y;
+	private float posC2Y;
+	private float posC3Y;
 
     IEnumerator Start()
     //void Start()
     {
-        tiempoAContar = 1;
+        tiempoAContar = 0;
         //startedMoving = false;
         buscador = gameObject.GetComponent<Seeker>();
-        wasCommanded = false;
+      
         yield return StartCoroutine(buscarCamino(1));
     }
 	void start()
 	{
-		posC1 = GameObject.FindGameObjectsWithTag("posC1");
-		posC2 = GameObject.FindGameObjectsWithTag("posC2");
-		posC3 = GameObject.FindGameObjectsWithTag("posC3");
+          wasCommanded = false;
+		posC1 = GameObject.FindGameObjectWithTag("posC1");
+		posC2 = GameObject.FindGameObjectWithTag("posC2");
+		posC3 = GameObject.FindGameObjectWithTag("posC3");
 
 		posC1Y = posC1.transform.position.y;
 		posC2Y = posC2.transform.position.y;
@@ -122,7 +123,6 @@ public class ZombieMovement : MonoBehaviour
             {
                 //LlegaAlFinal
                 moving = false;
-                gameObject.GetComponent<ZombieScript>().wasCommanded = false;
                 wasCommanded = false;
 
                 //startedMoving = false;

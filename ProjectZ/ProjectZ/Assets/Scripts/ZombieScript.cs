@@ -10,6 +10,12 @@ public class ZombieScript : MonoBehaviour
     public zombieClass tipo;
     public bool isAlive;
     public bool isSelected;
+    public bool canMove;
+    public bool canAttack;
+    public bool moving;
+    public bool inBuilding;
+    bool confirmAlive;
+    
     public float health;
     public float maxHealth;
     public int attack;
@@ -17,14 +23,11 @@ public class ZombieScript : MonoBehaviour
     public float attackSpeed;
     public float movSpeed;
     public float theAttackRange;
-    bool confirmAlive;
-    public bool canMove;
-    public bool canAttack;
-    public bool moving;
+
+
     public Vector3 targetPosition;
     public Vector3 prevTargetPos;
     public float movementLinearSpeed;
-    public bool wasCommanded;
     VisionRangeZombie laVision;
     AttackRangeZombie elAtaque;
     ZombieMovement elMovimiento;
@@ -55,7 +58,7 @@ public class ZombieScript : MonoBehaviour
         elCirculo = elSprite.gameObject;
 		elCirculo.gameObject.GetComponent<SpriteRenderer> ().color = Color.green;
 
-
+        inBuilding = false;
         canMove = canAttack = true;
         laVision = gameObject.GetComponentInChildren<VisionRangeZombie>();
         elAtaque = gameObject.GetComponentInChildren<AttackRangeZombie>();
@@ -67,7 +70,7 @@ public class ZombieScript : MonoBehaviour
                 attack = 10;
                 defense = 10;
                 attackSpeed = 1f;
-                movSpeed = 2.5f;
+                movSpeed = 5f;
                 theAttackRange = 0.8f;
                 break;
             case zombieClass.runner:
@@ -75,7 +78,7 @@ public class ZombieScript : MonoBehaviour
                 attack = 5;
                 defense = 10;
                 attackSpeed = 1.5f;
-                movSpeed = 4;
+                movSpeed = 6f;
                 theAttackRange = 0.8f;
                 break;
             case zombieClass.mutank:
@@ -83,7 +86,7 @@ public class ZombieScript : MonoBehaviour
                 attack = 20;
                 defense = 10;
                 attackSpeed = 0.5f;
-                movSpeed = 1.5f;
+                movSpeed = 3f;
                 theAttackRange = 1f;
                 break;
         }
@@ -133,8 +136,8 @@ public class ZombieScript : MonoBehaviour
         {
             Destroy(gameObject, 0.3f);
         }
-
-        if (!wasCommanded)
+        
+        if (!elMovimiento.wasCommanded)
         {
             if (laVision.enemyInSight)
             {

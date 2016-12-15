@@ -29,7 +29,7 @@ public class ZombieAttack : MonoBehaviour {
     {
         if (attacking)
         {
-            if (enemyToAttack != null)
+            if (enemyToAttack != null && gameObject.GetComponentInChildren<AttackRangeZombie>().enemyInRange) 
             {
                 if (attackTimer < GetComponent<ZombieScript>().attackSpeed)
                 {

@@ -559,7 +559,6 @@ public class GameLogicScript : MonoBehaviour
             ZombieScript elZombieScript = zombie.GetComponent<ZombieScript>();
             //El booleano wasCommanded se pone en true, ya que se les ha ordenador moverse
             zombieMovement.wasCommanded = true;
-            elZombieScript.wasCommanded = true;
 
             //Función que mueve a los zombies
             zombieMovement.MoveTo(desiredPosition);

@@ -23,6 +23,7 @@ public class VillagerAttack : MonoBehaviour {
         {
             if (aZombie.GetComponent<ZombieScript>().isAlive&&elRango.enemyInRange)
             {
+                Debug.Log("MustAttack");
                 attacking = true;
                 zombieToAttack = aZombie.GetComponent<ZombieScript>();
             }
