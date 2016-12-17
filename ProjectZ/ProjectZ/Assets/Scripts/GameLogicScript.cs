@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class GameLogicScript : MonoBehaviour
 {
+
     /*Este código está pensado para manejar la lógica de selección y movimiento de los zombies, así como el listado de estos 
      y de los villagers en partida*/
     /*Se hace una referencia general al InputHandler
@@ -64,6 +65,19 @@ public class GameLogicScript : MonoBehaviour
     GameObject villager;
     GameObject baseHumana;
 
+    public void SpawnVillager(VillagerScript.humanClass unTipo, Vector3 unaPos) {
+        GameObject villagerToSpawn = GameObject.Instantiate(villager, unaPos, Quaternion.identity) as GameObject;
+        villagerToSpawn.GetComponent<VillagerScript>().tipo = unTipo;
+        _villagers.Add(villagerToSpawn);
+    }
+
+    public void SpawnZombie(ZombieScript.zombieClass unTipo, Vector3 unaPos)
+    {
+        GameObject zombieToSpawn = GameObject.Instantiate(zombie, unaPos, Quaternion.identity) as GameObject;
+        zombieToSpawn.GetComponent<ZombieScript>().tipo = unTipo;
+        _zombies.Add(zombieToSpawn);
+    }
+
     void Start()
     {
         elPathfinder = GameObject.FindGameObjectWithTag("A*");
@@ -92,30 +106,42 @@ public class GameLogicScript : MonoBehaviour
         GameObject base1 = GameObject.Instantiate(baseHumana, posicionBase1, Quaternion.identity) as GameObject;
 
         //Se crea  el primer zombie y se establece el tipo de zombie del que se trata para que luego el zombie haga lo que tenga que hacer
-        GameObject zombie1 = GameObject.Instantiate(zombie, position1, Quaternion.identity) as GameObject;
-        zombie1.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.runner;
+        /*GameObject zombie1 = GameObject.Instantiate(zombie, position1, Quaternion.identity) as GameObject;
+        zombie1.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.runner;*/
+
+        SpawnZombie(ZombieScript.zombieClass.runner, position1);
+
+        SpawnZombie(ZombieScript.zombieClass.mutank, position2);
+
+        SpawnZombie(ZombieScript.zombieClass.walker, position3);
+
 
         //Se crea  el segundo zombie y se establece el tipo de zombie del que se trata para que luego el zombie haga lo que tenga que hacer
-        GameObject zombie2 = GameObject.Instantiate(zombie, position2, Quaternion.identity) as GameObject;
-        zombie2.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.mutank;
-
+        /*   GameObject zombie2 = GameObject.Instantiate(zombie, position2, Quaternion.identity) as GameObject;
+           zombie2.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.mutank;
+           */
         //Se crea  el tercer zombie y se establece el tipo de zombie del que se trata para que luego el zombie haga lo que tenga que hacer
-        GameObject zombie3 = GameObject.Instantiate(zombie, position3, Quaternion.identity) as GameObject;
-        zombie3.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.walker;
+        /*  GameObject zombie3 = GameObject.Instantiate(zombie, position3, Quaternion.identity) as GameObject;
+          zombie3.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.walker;*/
 
         //Se crea un villager y se establece el tipo de villager del que se trata para que haga lo que deba hacer
-        GameObject villager1 = GameObject.Instantiate(villager, new Vector3(2, 0.4f, 13), Quaternion.identity) as GameObject;
-        villager1.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.villager;
-		//soldier
-		GameObject villager2 = GameObject.Instantiate(villager, new Vector3(4, 0.4f, 10), Quaternion.identity) as GameObject;
-		villager2.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.soldier;
-
+        /*  GameObject villager1 = GameObject.Instantiate(villager, new Vector3(2, 0.4f, 13), Quaternion.identity) as GameObject;
+          villager1.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.villager;
+          //soldier
+          GameObject villager2 = GameObject.Instantiate(villager, new Vector3(4, 0.4f, 10), Quaternion.identity) as GameObject;
+          villager2.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.soldier;
+          */
         //Añadimos los zombies a la lista
-        _zombies.Add(zombie1);
-        _zombies.Add(zombie2);
-        _zombies.Add(zombie3);
-        _villagers.Add(villager1);
-		_villagers.Add(villager2);
+        /* _zombies.Add(zombie1);
+         _zombies.Add(zombie2);
+         _zombies.Add(zombie3);*/
+        //    _villagers.Add(villager1);
+        //	_villagers.Add(villager2);
+
+        SpawnVillager(VillagerScript.humanClass.villager, new Vector3(2, 0.4f, 13));
+        SpawnVillager(VillagerScript.humanClass.soldier, new Vector3(4, 0.4f, 10));
+
+
 
         _bases.Add(base1);
 
@@ -327,6 +353,7 @@ public class GameLogicScript : MonoBehaviour
             }
         }
     }
+
 
 
     void UpdateSelection()
