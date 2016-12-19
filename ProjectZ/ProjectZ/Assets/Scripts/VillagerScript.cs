@@ -36,10 +36,14 @@ public class VillagerScript : MonoBehaviour {
     VillagerAttack villagerAttack;
     private float attackTime;
 
+	private GameObject Latas;
+	private bool goCheck = false;
     // Use this for initialization
 
     void Start()
     {
+		Latas = GameObject.FindGameObjectWithTag ("Latas");
+
         freeRoam = true;
         originalPos = transform.position;
         groundPos.y = originalPos.y;
@@ -138,6 +142,12 @@ public class VillagerScript : MonoBehaviour {
     }
     void Update()
     {
+
+		if (GameLogicScript.SLatas == true) 
+		{
+			checkLatas ();
+		}
+
         groundPos.x = transform.position.x;
         groundPos.z = transform.position.z;
         heightCheck();
@@ -179,4 +189,12 @@ public class VillagerScript : MonoBehaviour {
             Destroy(gameObject, 0.3f);
         }
     }
+
+	void checkLatas()
+	{
+		freeRoam = false;
+		goingToPat = false;
+
+		villagerMovement.MoveTo(Latas.transform.localPosition);
+	}
 }

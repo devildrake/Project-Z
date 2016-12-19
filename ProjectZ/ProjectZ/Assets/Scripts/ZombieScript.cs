@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public class ZombieScript : MonoBehaviour
 {
-    public enum zombieClass { walker, runner, mutank }
+
+	public enum zombieClass { walker, runner, mutank }
     private SpriteRenderer elSprite;
     public GameObject elCirculo;
     public zombieClass tipo;
@@ -184,4 +185,14 @@ public class ZombieScript : MonoBehaviour
 
 	
     }
+
+	void OnTriggerEnter(Collider other)
+	{
+		if (other.gameObject.tag == "Latas")
+		{
+			Debug.Log ("No me des la Lata");
+
+			GameLogicScript.SLatas = true;
+		}
+	}
 }

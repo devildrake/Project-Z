@@ -130,6 +130,9 @@ public class VillagerMovement : MonoBehaviour
 }
 
     */
+
+
+
     public bool moving;
     public Vector3 targetPosition;
     private Path camino;
@@ -142,9 +145,11 @@ public class VillagerMovement : MonoBehaviour
     private float distance;
 
 
+
     IEnumerator Start()
     //void Start()
     {
+		
         tiempoAContar = 1;
         //startedMoving = false;
         buscador = gameObject.GetComponent<Seeker>();

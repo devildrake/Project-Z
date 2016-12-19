@@ -9,6 +9,8 @@ public class VillagerAttack : MonoBehaviour {
     public AttackRangeScript elRango;
     public float attackTimer = 0;
 
+	private GameObject Latas;
+
 	// Use this for initialization
 	void Start () {
         

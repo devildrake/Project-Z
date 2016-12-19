@@ -5,6 +5,9 @@ using System.Collections.Generic;
 public class GameLogicScript : MonoBehaviour
 {
 
+	//variable latas
+	public static bool SLatas = false;
+
     /*Este código está pensado para manejar la lógica de selección y movimiento de los zombies, así como el listado de estos 
      y de los villagers en partida*/
     /*Se hace una referencia general al InputHandler
