@@ -16,7 +16,7 @@ public class ZombieScript : MonoBehaviour
     public bool moving;
     public bool inBuilding;
     bool confirmAlive;
-    
+    public bool hasArrived;
     public float health;
     public float maxHealth;
     public int attack;
@@ -24,8 +24,8 @@ public class ZombieScript : MonoBehaviour
     public float attackSpeed;
     public float movSpeed;
     public float theAttackRange;
-
-
+    public bool irCasa;
+    public Vector3 puntoCasa;
     public Vector3 targetPosition;
     public Vector3 prevTargetPos;
     public float movementLinearSpeed;
@@ -49,8 +49,21 @@ public class ZombieScript : MonoBehaviour
         return isAlive;
     }
 
+    public void CasaBehaviour(GameObject laCasa) {
+        irCasa = true;
+        elMovimiento.wasCommanded = true;
+        if (laCasa.GetComponent<CasaDestruidaScript>().CheckTrues() != 12)
+        {
+
+             puntoCasa= laCasa.GetComponent<CasaDestruidaScript>().AssignarSitio();
+        }
+        }
+    
+    
+
     void Start()
     {
+        hasArrived = false;
     originalPos = gameObject.transform.position;
         groundPos.y = originalPos.y;
 
@@ -120,7 +133,14 @@ public class ZombieScript : MonoBehaviour
         confirmAlive = CheckAlive();
         if (confirmAlive)
         {
-            
+            if (irCasa)
+            {
+                elMovimiento.MoveTo(puntoCasa);
+                if (hasArrived) {
+                    irCasa = false;
+                    elMovimiento.wasCommanded = false;
+                }
+            }
             //Código de que hace el zombie normalmente
             if (isSelected)
             {

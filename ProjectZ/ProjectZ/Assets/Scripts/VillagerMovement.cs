@@ -142,7 +142,6 @@ public class VillagerMovement : MonoBehaviour
     public float contador;
     public float tiempoAContar;
     //private bool startedMoving;
-    private float distance;
 
 
 
@@ -203,8 +202,6 @@ public class VillagerMovement : MonoBehaviour
     {
         if (moving)
         {
-
-            distance = (gameObject.transform.position - targetPosition).magnitude;
 
             if (camino == null)
                 return;

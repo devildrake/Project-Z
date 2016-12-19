@@ -15,7 +15,7 @@ public class ZombieMovement : MonoBehaviour
     public float contador;
     public float tiempoAContar;
     //private bool startedMoving;
-    private float distance;
+
 
 	//array
 	private int suma;
@@ -105,8 +105,6 @@ public class ZombieMovement : MonoBehaviour
         if (moving)
         { 
 
-            distance = (gameObject.transform.position-targetPosition).magnitude;
-
             if (!gameObject.GetComponent<ZombieScript>().isSelected)
             {
                 gameObject.GetComponent<ZombieScript>().elCirculo.SetActive(false);
@@ -124,7 +122,7 @@ public class ZombieMovement : MonoBehaviour
                 //LlegaAlFinal
                 moving = false;
                 wasCommanded = false;
-
+                gameObject.GetComponent<ZombieScript>().hasArrived = true;
                 //startedMoving = false;
                 return;
             }

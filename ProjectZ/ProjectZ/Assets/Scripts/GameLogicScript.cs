@@ -7,7 +7,7 @@ public class GameLogicScript : MonoBehaviour
 
 	//variable latas
 	public static bool SLatas = false;
-
+    public GameObject laCasa;
     /*Este código está pensado para manejar la lógica de selección y movimiento de los zombies, así como el listado de estos 
      y de los villagers en partida*/
     /*Se hace una referencia general al InputHandler
@@ -26,12 +26,16 @@ public class GameLogicScript : MonoBehaviour
     //vertical position of the gameobject
     private float yAxis;
 
+    //Las máscaras se indican en el inspector
+
     //Mascara para el suelo
-    public LayerMask mask1 = 8;
+    public LayerMask mask1;
 
     //Mascara para los zombies
-    public LayerMask mask2 = 9;
+    public LayerMask mask2;
 
+
+    public LayerMask mask3;
     //Referenca al script de inputs
 
     InputHandlerScript _input;
@@ -206,10 +210,18 @@ public class GameLogicScript : MonoBehaviour
                 /*		#elif (UNITY_ANDROID || UNITY_IPHONE || UNITY_WP8)
                 ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
                         */
+                if (Physics.Raycast(ray, out hit, 80, mask3)) {
+                    GameObject laCasa = hit.collider.gameObject;
+               
+                    foreach (GameObject z in _keptSelectedZombies) {
+                        z.GetComponent<ZombieScript>().CasaBehaviour(laCasa);
 
+                    }
+
+                }
 
                 //Se comprueba si choca con algun collider, teniendo en cuenta solo los objetos que pertenecen a la mascara mask1 "Ground"
-                if (Physics.Raycast(ray, out hit, 80, mask1))
+                else if (Physics.Raycast(ray, out hit, 80, mask1))
                 {
 
                     //Se guarda la posicion clicada 
@@ -586,7 +598,6 @@ public class GameLogicScript : MonoBehaviour
 
             //Se hace una referencia al script de movimiento de cada zombie a cada iteración
             ZombieMovement zombieMovement = zombie.GetComponent<ZombieMovement>();
-            ZombieScript elZombieScript = zombie.GetComponent<ZombieScript>();
             //El booleano wasCommanded se pone en true, ya que se les ha ordenador moverse
             zombieMovement.wasCommanded = true;
 
