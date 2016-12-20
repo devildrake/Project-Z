@@ -21,6 +21,7 @@ public class VillagerScript : MonoBehaviour {
     public bool canMove;
     public bool goingToPat;
     public bool goingBack;
+    public bool goingToCheck;
 
     bool confirmAlive;
     public humanClass tipo;
@@ -42,9 +43,9 @@ public class VillagerScript : MonoBehaviour {
 
     void Start()
     {
-		Latas = GameObject.FindGameObjectWithTag ("Latas");
 
         freeRoam = true;
+        goingToCheck = false;
         originalPos = transform.position;
         groundPos.y = originalPos.y;
         confirmAlive = isAlive = true;
@@ -143,10 +144,6 @@ public class VillagerScript : MonoBehaviour {
     void Update()
     {
 
-		if (GameLogicScript.SLatas == true) 
-		{
-			checkLatas ();
-		}
 
         groundPos.x = transform.position.x;
         groundPos.z = transform.position.z;
@@ -155,6 +152,7 @@ public class VillagerScript : MonoBehaviour {
         if (confirmAlive) {
             if (laVision.enemyInSight)
             {
+                Debug.Log("Enemy Spotted");
                 freeRoam = false;
 
                 if (canMove&&laVision.closestZombie!=null)
@@ -169,7 +167,7 @@ public class VillagerScript : MonoBehaviour {
                 villagerMovement.moving = false;
                 // AttackEnemy();
             }
-            else if(!laVision.enemyInSight)
+            else if(!laVision.enemyInSight&&!goingToCheck)
             {
                 freeRoam = true;
                 canMove = true;
@@ -178,7 +176,8 @@ public class VillagerScript : MonoBehaviour {
             {
                 canMove = true;
             }
-            if (canMove&&freeRoam) {
+            if (canMove&&freeRoam&&!goingToCheck) {
+                Debug.Log("patrolling");
                 Patrol();
              //   villagerMovement.MoveTo(patrolPoint);
             }
@@ -190,11 +189,13 @@ public class VillagerScript : MonoBehaviour {
         }
     }
 
-	void checkLatas()
+	public void heardSomething(Vector3 somewhere)
 	{
 		freeRoam = false;
 		goingToPat = false;
-
-		villagerMovement.MoveTo(Latas.transform.localPosition);
+        goingBack = false;
+        goingToCheck = true;
+		villagerMovement.MoveTo(somewhere);
+        Debug.Log("I heard something");
 	}
 }

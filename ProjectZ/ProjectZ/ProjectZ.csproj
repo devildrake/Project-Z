@@ -184,6 +184,7 @@
     <Compile Include="Assets\Scripts\ZombieMovement.cs" />
     <Compile Include="Assets\Scripts\ZombieNoBlock.cs" />
     <Compile Include="Assets\Scripts\ZombieScript.cs" />
+    <Compile Include="Assets\lataScript.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AstarPathfindingProject\Editor\EditorAssets\Materials\Navmesh.shader" />

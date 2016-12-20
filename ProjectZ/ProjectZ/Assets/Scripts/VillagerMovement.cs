@@ -209,6 +209,7 @@ public class VillagerMovement : MonoBehaviour
             {
                 //LlegaAlFinal
                 moving = false;
+                gameObject.GetComponent<VillagerScript>().goingToCheck = false;
 
                 //startedMoving = false;
                 return;
