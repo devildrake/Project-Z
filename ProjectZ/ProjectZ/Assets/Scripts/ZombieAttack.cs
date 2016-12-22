@@ -4,11 +4,16 @@ using System.Collections;
 public class ZombieAttack : MonoBehaviour {
 
     public bool attacking;
+    public bool atHuman;
+    public bool atBarricade;
     public VillagerScript enemyToAttack;
+    public GameObject barricade;
     public float attackTimer = 0;
     // Use this for initialization
     void Start()
     {
+        atHuman = false;
+        atBarricade = false;
         enemyToAttack = null;
         attacking = false;
     }
@@ -17,10 +22,22 @@ public class ZombieAttack : MonoBehaviour {
     {
         if (anEnemy != null)
         {
-            if (anEnemy.GetComponent<VillagerScript>().isAlive)
+            if (anEnemy.GetComponent<VillagerScript>() != null)
             {
-                attacking = true;
-                enemyToAttack = anEnemy.GetComponent<VillagerScript>();
+                if (anEnemy.GetComponent<VillagerScript>().isAlive)
+                {
+                    attacking = true;
+                    atHuman = true;
+                    enemyToAttack = anEnemy.GetComponent<VillagerScript>();
+                }
+            }
+            else {
+                if (anEnemy.GetComponent<BarricadaScript>() != null)
+                {
+                    barricade = anEnemy;
+                    attacking = true;
+                    atBarricade = true;
+                }
             }
         }
     }
@@ -29,7 +46,24 @@ public class ZombieAttack : MonoBehaviour {
     {
         if (attacking)
         {
-            if (enemyToAttack != null && gameObject.GetComponentInChildren<AttackRangeZombie>().enemyInRange) 
+            if (atHuman)
+            {
+                if (enemyToAttack != null && gameObject.GetComponentInChildren<AttackRangeZombie>().enemyInRange)
+                {
+                    if (attackTimer < GetComponent<ZombieScript>().attackSpeed)
+                    {
+                        attackTimer += Time.deltaTime;
+                    }
+                    else
+                    {
+                        enemyToAttack.health -= enemyToAttack.attack;
+                        attackTimer = 0;
+                    }
+                }
+            }
+        }
+        else if (atBarricade) {
+            if(barricade !=null && gameObject.GetComponentInParent<ZombieScript>().theAttackRange<(barricade.transform.position-gameObject.transform.position).magnitude)
             {
                 if (attackTimer < GetComponent<ZombieScript>().attackSpeed)
                 {
@@ -37,9 +71,10 @@ public class ZombieAttack : MonoBehaviour {
                 }
                 else
                 {
-                    enemyToAttack.health -= enemyToAttack.attack;
+                    barricade.GetComponent<BarricadaScript>().health -= enemyToAttack.attack;
                     attackTimer = 0;
                 }
+
             }
         }
     }

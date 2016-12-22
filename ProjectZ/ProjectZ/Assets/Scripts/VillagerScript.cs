@@ -38,7 +38,6 @@ public class VillagerScript : MonoBehaviour {
     private float attackTime;
 
 	private GameObject Latas;
-	private bool goCheck = false;
     // Use this for initialization
 
     void Start()

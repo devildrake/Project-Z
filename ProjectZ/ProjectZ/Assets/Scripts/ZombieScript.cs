@@ -14,6 +14,7 @@ public class ZombieScript : MonoBehaviour
     public bool canMove;
     public bool canAttack;
     public bool moving;
+    public bool goBarricade;
     public bool inBuilding;
     bool confirmAlive;
     public bool hasArrived;
@@ -58,11 +59,16 @@ public class ZombieScript : MonoBehaviour
              puntoCasa= laCasa.GetComponent<CasaDestruidaScript>().AssignarSitio();
         }
         }
-    
-    
+
+    public void attackBarricade(GameObject laBarricada) {
+        goBarricade = true;
+        elMovimiento.MoveTo(laBarricada.transform.position);
+
+    }
 
     void Start()
     {
+        goBarricade = false;
         hasArrived = false;
     originalPos = gameObject.transform.position;
         groundPos.y = originalPos.y;

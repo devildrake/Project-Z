@@ -20,7 +20,6 @@ public class ZombieMovement : MonoBehaviour
 	//array
 	private int suma;
 	//array casa
-	float[] InsideH = new float[2];
 
 	private GameObject posC1;
 	private GameObject posC2;

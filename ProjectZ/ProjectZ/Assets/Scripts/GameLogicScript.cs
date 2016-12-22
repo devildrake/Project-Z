@@ -27,15 +27,18 @@ public class GameLogicScript : MonoBehaviour
 
     //Las máscaras se indican en el inspector
 
-    //Mascara para el suelo
-    public LayerMask mask1;
+    //Mascara para el suelo (mask1)
+    public LayerMask mascaraSuelo;
 
-    //Mascara para los zombies
-    public LayerMask mask2;
+    //Mascara para los zombies (mask2)
+    public LayerMask mascaraZombies;
 
 
-    public LayerMask mask3;
+    //Mascara para las casas (mask3)
+    public LayerMask mascaraCasas;
     //Referenca al script de inputs
+
+    public LayerMask mascaraRompible;
 
     InputHandlerScript _input;
 
@@ -209,18 +212,31 @@ public class GameLogicScript : MonoBehaviour
                 /*		#elif (UNITY_ANDROID || UNITY_IPHONE || UNITY_WP8)
                 ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
                         */
-                if (Physics.Raycast(ray, out hit, 80, mask3)) {
+                if (Physics.Raycast(ray, out hit, 80, mascaraCasas))
+                {
                     GameObject laCasa = hit.collider.gameObject;
-               
-                    foreach (GameObject z in _keptSelectedZombies) {
+
+                    foreach (GameObject z in _keptSelectedZombies)
+                    {
                         z.GetComponent<ZombieScript>().CasaBehaviour(laCasa);
+
+                    }
+
+                }
+                else if (Physics.Raycast(ray, out hit, 80, mascaraRompible)) {
+                    GameObject laBarricada = hit.collider.gameObject;
+
+
+                    foreach (GameObject z in _keptSelectedZombies)
+                    {
+                        z.GetComponent<ZombieScript>().attackBarricade(laBarricada);
 
                     }
 
                 }
 
                 //Se comprueba si choca con algun collider, teniendo en cuenta solo los objetos que pertenecen a la mascara mask1 "Ground"
-                else if (Physics.Raycast(ray, out hit, 80, mask1))
+                else if (Physics.Raycast(ray, out hit, 80, mascaraSuelo))
                 {
 
                     //Se guarda la posicion clicada 
