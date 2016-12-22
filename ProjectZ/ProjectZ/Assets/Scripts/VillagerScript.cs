@@ -152,7 +152,6 @@ public class VillagerScript : MonoBehaviour {
         if (confirmAlive) {
             if (laVision.enemyInSight)
             {
-                Debug.Log("Enemy Spotted");
                 freeRoam = false;
 
                 if (canMove&&laVision.closestZombie!=null)
@@ -177,7 +176,6 @@ public class VillagerScript : MonoBehaviour {
                 canMove = true;
             }
             if (canMove&&freeRoam&&!goingToCheck) {
-                Debug.Log("patrolling");
                 Patrol();
              //   villagerMovement.MoveTo(patrolPoint);
             }
@@ -196,6 +194,5 @@ public class VillagerScript : MonoBehaviour {
         goingBack = false;
         goingToCheck = true;
 		villagerMovement.MoveTo(somewhere);
-        Debug.Log("I heard something");
 	}
 }

@@ -42,18 +42,6 @@ public class ZombieMovement : MonoBehaviour
 	void start()
 	{
           wasCommanded = false;
-		posC1 = GameObject.FindGameObjectWithTag("posC1");
-		posC2 = GameObject.FindGameObjectWithTag("posC2");
-		posC3 = GameObject.FindGameObjectWithTag("posC3");
-
-		posC1Y = posC1.transform.position.y;
-		posC2Y = posC2.transform.position.y;
-		posC3Y = posC3.transform.position.y;
-
-
-		InsideH [0] = posC1Y;
-		InsideH [1] = posC2Y;
-		InsideH [2] = posC3Y;
 
 	}
 
