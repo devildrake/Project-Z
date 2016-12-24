@@ -214,18 +214,17 @@ public class GameLogicScript : MonoBehaviour
                         */
                 if (Physics.Raycast(ray, out hit, 80, mascaraCasas))
                 {
-                    GameObject laCasa = hit.collider.gameObject;
-
+                    CasaDestruidaScript laCasa = hit.collider.gameObject.GetComponentInParent<CasaDestruidaScript>();
+                    Debug.Log(laCasa);
                     foreach (GameObject z in _keptSelectedZombies)
                     {
                         z.GetComponent<ZombieScript>().CasaBehaviour(laCasa);
-
+                        Debug.Log("GoingHome");
                     }
 
                 }
                 else if (Physics.Raycast(ray, out hit, 80, mascaraRompible)) {
                     GameObject laBarricada = hit.collider.gameObject;
-
 
                     foreach (GameObject z in _keptSelectedZombies)
                     {
@@ -238,7 +237,6 @@ public class GameLogicScript : MonoBehaviour
                 //Se comprueba si choca con algun collider, teniendo en cuenta solo los objetos que pertenecen a la mascara mask1 "Ground"
                 else if (Physics.Raycast(ray, out hit, 80, mascaraSuelo))
                 {
-
                     //Se guarda la posicion clicada 
                     endPoint = hit.point;
 

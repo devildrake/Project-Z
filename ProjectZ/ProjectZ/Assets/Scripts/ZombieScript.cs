@@ -50,13 +50,12 @@ public class ZombieScript : MonoBehaviour
         return isAlive;
     }
 
-    public void CasaBehaviour(GameObject laCasa) {
+    public void CasaBehaviour(CasaDestruidaScript laCasa) {
         irCasa = true;
         elMovimiento.wasCommanded = true;
-        if (laCasa.GetComponent<CasaDestruidaScript>().CheckTrues() != 12)
+        if (laCasa.CheckTrues() != 12)
         {
-
-             puntoCasa= laCasa.GetComponent<CasaDestruidaScript>().AssignarSitio();
+             puntoCasa= laCasa.AssignarSitio();
         }
         }
 
