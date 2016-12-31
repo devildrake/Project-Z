@@ -6,6 +6,7 @@ public class ZombieScript : MonoBehaviour
 {
 
 	public enum zombieClass { walker, runner, mutank }
+    Animator elAnimator;
     private SpriteRenderer elSprite;
     public GameObject elCirculo;
     public zombieClass tipo;
@@ -19,6 +20,9 @@ public class ZombieScript : MonoBehaviour
     bool confirmAlive;
     public bool hasArrived;
     public float health;
+    float prevHealth;
+    float healthCounter;
+    float defenseTime;
     public float maxHealth;
     public int attack;
     public int defense;
@@ -30,6 +34,7 @@ public class ZombieScript : MonoBehaviour
     public Vector3 targetPosition;
     public Vector3 prevTargetPos;
     public float movementLinearSpeed;
+    public bool defenseMode;
     VisionRangeZombie laVision;
     AttackRangeZombie elAtaque;
     ZombieMovement elMovimiento;
@@ -67,6 +72,11 @@ public class ZombieScript : MonoBehaviour
 
     void Start()
     {
+        defenseMode = false;
+        defenseTime = 2f;
+        elAnimator = gameObject.GetComponent<Animator>();
+        elAnimator.SetBool("moviendose", false);
+
         goBarricade = false;
         hasArrived = false;
     originalPos = gameObject.transform.position;
@@ -101,6 +111,7 @@ public class ZombieScript : MonoBehaviour
                 theAttackRange = 0.8f;
                 break;
             case zombieClass.mutank:
+                elAnimator.SetBool("ModoDefensa", false);
                 health = 300;
                 attack = 20;
                 defense = 10;
@@ -132,6 +143,44 @@ public class ZombieScript : MonoBehaviour
 
     void Update()
     {
+        #region comportamiento Mutank
+        if (tipo == zombieClass.mutank) {
+            //Comportamiento especifico de mutank
+
+            if (prevHealth != health)
+            {
+                defenseMode = false;
+            }
+            else {
+                healthCounter += Time.deltaTime;
+                if (healthCounter > defenseTime) {
+                    defenseMode = false;
+                }
+            }
+            if (defenseMode)
+            {
+                elAnimator.SetBool("ModoDefensa", true);
+                defense = 30;
+            }
+            else {
+                elAnimator.SetBool("ModoDefensa", false);
+                defense = 15;
+                healthCounter = 0;
+            }
+            prevHealth = health;
+
+        }
+        #endregion
+
+
+        if (elMovimiento.moving) //Codigo que pone true el booleano del animador "moviendose" cuando moving es true
+        {
+            elAnimator.SetBool("moviendose", true);
+        }
+        else {
+            elAnimator.SetBool("moviendose", false);
+        }
+
         groundPos.x = gameObject.transform.position.x;
         groundPos.z = gameObject.transform.position.z;
         heightCheck();

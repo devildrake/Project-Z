@@ -71,6 +71,10 @@ public class GameLogicScript : MonoBehaviour
     public Vector3 posicionBase1;
 
     GameObject zombie;
+    GameObject walker;
+    GameObject mutank;
+    GameObject runner; //por ahora los runner usarán el modelo que estaba ya
+
     GameObject villager;
     GameObject baseHumana;
 
@@ -86,6 +90,22 @@ public class GameLogicScript : MonoBehaviour
         zombieToSpawn.GetComponent<ZombieScript>().tipo = unTipo;
         _zombies.Add(zombieToSpawn);
     }
+
+    public void SpawnWalker(Vector3 unaPos) {
+        GameObject zombieToSpawn = GameObject.Instantiate(walker, unaPos, Quaternion.identity) as GameObject;
+        _zombies.Add(zombieToSpawn);
+    }
+
+    public void SpawnMutank(Vector3 unaPos) {
+        GameObject zombieToSpawn = GameObject.Instantiate(mutank, unaPos, Quaternion.identity) as GameObject; 
+        _zombies.Add(zombieToSpawn);
+    }
+
+    public void SpawnRunner(Vector3 unaPos) {
+        GameObject zombieToSpawn = GameObject.Instantiate(runner, unaPos, Quaternion.identity) as GameObject;
+        _zombies.Add(zombieToSpawn);
+    }
+
 
     void Start()
     {
@@ -109,6 +129,10 @@ public class GameLogicScript : MonoBehaviour
 
         //Cargando los prefabs
         zombie = Resources.Load("ZombieObject") as GameObject;
+        walker = Resources.Load("WalkerObject") as GameObject;
+        runner = zombie;
+        mutank = Resources.Load("MutankObject") as GameObject;
+
         villager = Resources.Load("VillagerObject") as GameObject;
         baseHumana = Resources.Load("OriginadorSoldados") as GameObject;
 
@@ -118,9 +142,11 @@ public class GameLogicScript : MonoBehaviour
         /*GameObject zombie1 = GameObject.Instantiate(zombie, position1, Quaternion.identity) as GameObject;
         zombie1.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.runner;*/
 
-        SpawnZombie(ZombieScript.zombieClass.runner, position1);
+        SpawnWalker(position1);
 
-        SpawnZombie(ZombieScript.zombieClass.mutank, position2);
+        //SpawnZombie(ZombieScript.zombieClass.mutank, position2);
+
+        SpawnMutank(position2);
 
         SpawnZombie(ZombieScript.zombieClass.walker, position3);
 
