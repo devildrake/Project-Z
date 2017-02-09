@@ -1,29 +1,33 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class VillagerAttack : MonoBehaviour {
-    
+public class VillagerAttack : MonoBehaviour
+{
+
     public bool attacking = false;
     public ZombieScript zombieToAttack;
     public VillagerScript theVillager;
     public AttackRangeScript elRango;
     public float attackTimer = 0;
+    public GameLogicScript gameLogic;
 
-	private GameObject Latas;
+    private GameObject Latas;
 
-	// Use this for initialization
-	void Start () {
-        
+    // Use this for initialization
+    void Start()
+    {
+        gameLogic = FindObjectOfType<GameLogicScript>();
+
         zombieToAttack = null;
         theVillager = GetComponent<VillagerScript>();
         elRango = gameObject.GetComponentInChildren<AttackRangeScript>();
-	}
+    }
 
     public void Attack(GameObject aZombie)
     {
         if (aZombie != null)
         {
-            if (aZombie.GetComponent<ZombieScript>().isAlive&&elRango.enemyInRange)
+            if (aZombie.GetComponent<ZombieScript>().isAlive && elRango.enemyInRange)
             {
                 Debug.Log("MustAttack");
                 attacking = true;
@@ -36,7 +40,8 @@ public class VillagerAttack : MonoBehaviour {
         }
     }
     // Update is called once per frame
-    void takeDamageColor() {
+    void takeDamageColor()
+    {
         Component[] renders = zombieToAttack.GetComponentsInChildren(typeof(Renderer));
         foreach (Renderer render in renders)
         {
@@ -44,7 +49,8 @@ public class VillagerAttack : MonoBehaviour {
         }
     }
 
-    void noRed() {
+    void noRed()
+    {
         Component[] renders = zombieToAttack.GetComponentsInChildren(typeof(Renderer));
         foreach (Renderer render in renders)
         {
@@ -53,26 +59,31 @@ public class VillagerAttack : MonoBehaviour {
         }
     }
 
-    void Update() {
-        if (attacking)
+    void Update()
+    {
+        if (!gameLogic.isPaused)
         {
-            if (zombieToAttack != null)
+            if (attacking)
             {
-                if (attackTimer < theVillager.attackSpeed)
+                if (zombieToAttack != null)
                 {
-                    attackTimer += Time.deltaTime;
-                }
-                else
-                {
-                    zombieToAttack.health -= theVillager.attack;
-                    attackTimer = 0;
+                    if (attackTimer < theVillager.attackSpeed)
+                    {
+                        attackTimer += Time.deltaTime;
+                    }
+                    else
+                    {
+                        zombieToAttack.health -= theVillager.attack;
+                        attackTimer = 0;
 
+                    }
                 }
             }
-        }
 
-        if (!elRango.enemyInRange) {
-            attacking = false;
+            if (!elRango.enemyInRange)
+            {
+                attacking = false;
+            }
         }
-	}
+    }
 }

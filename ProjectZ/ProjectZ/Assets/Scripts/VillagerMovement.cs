@@ -132,6 +132,8 @@ public class VillagerMovement : MonoBehaviour
     */
 
 
+    GameLogicScript gameLogic;
+
 
     public bool moving;
     public Vector3 targetPosition;
@@ -148,7 +150,8 @@ public class VillagerMovement : MonoBehaviour
     IEnumerator Start()
     //void Start()
     {
-		
+        gameLogic = FindObjectOfType<GameLogicScript>();
+
         tiempoAContar = 1;
         //startedMoving = false;
         buscador = gameObject.GetComponent<Seeker>();
@@ -200,40 +203,42 @@ public class VillagerMovement : MonoBehaviour
 
     void Update()
     {
-        if (moving)
-        {
+        if (!gameLogic.isPaused){
 
-            if (camino == null)
-                return;
-            if (puntoActual >= camino.vectorPath.Count)
-            {
-                //LlegaAlFinal
-                moving = false;
-                gameObject.GetComponent<VillagerScript>().goingToCheck = false;
-
-                //startedMoving = false;
-                return;
-            }
-
-            Vector3 direccion = (camino.vectorPath[puntoActual] - gameObject.transform.position).normalized;
-
-            direccion *= gameObject.GetComponent<VillagerScript>().movSpeed * Time.fixedDeltaTime;
-
-            gameObject.transform.position += direccion * 0.5f;
-
-            if (Vector3.Distance(transform.position, camino.vectorPath[puntoActual]) < distanciaSiguientePunto)
-            {
-                puntoActual++;
-                return;
-            }
-            else
+            if (moving)
             {
 
-            }
+                if (camino == null)
+                    return;
+                if (puntoActual >= camino.vectorPath.Count)
+                {
+                    //LlegaAlFinal
+                    moving = false;
+                    gameObject.GetComponent<VillagerScript>().goingToCheck = false;
 
+                    //startedMoving = false;
+                    return;
+                }
+
+                Vector3 direccion = (camino.vectorPath[puntoActual] - gameObject.transform.position).normalized;
+
+                direccion *= gameObject.GetComponent<VillagerScript>().movSpeed * Time.fixedDeltaTime;
+
+                gameObject.transform.position += direccion * 0.5f;
+
+                if (Vector3.Distance(transform.position, camino.vectorPath[puntoActual]) < distanciaSiguientePunto)
+                {
+                    puntoActual++;
+                    return;
+                }
+                else
+                {
+
+                }
+
+            }
         }
-    }
-}
+    } }
 
 /*
 public bool moving;

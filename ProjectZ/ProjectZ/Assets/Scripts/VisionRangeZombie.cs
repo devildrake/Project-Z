@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class VisionRangeZombie : MonoBehaviour
 {
+    GameLogicScript gameLogic;
 
     public bool enemyInSight = false;
     public GameObject anEnemyToAdd;
@@ -13,6 +14,7 @@ public class VisionRangeZombie : MonoBehaviour
 
     void Start()
     {
+        gameLogic = FindObjectOfType<GameLogicScript>();
         _enemiesInRange = new List<GameObject>();
     }
 
@@ -60,7 +62,8 @@ public class VisionRangeZombie : MonoBehaviour
             }
             return tMin;
         }
-        else {
+        else
+        {
             return null;
         }
     }
@@ -73,18 +76,22 @@ public class VisionRangeZombie : MonoBehaviour
     void CheckEnemyAlive()
     {
         _enemiesInRange.RemoveAll(IsNotAlive);
-       
+
     }
     void Update()
     {
-        if (_enemiesInRange.Count > 0)
+        if (!gameLogic.isPaused)
         {
-            CheckEnemyAlive();
-            closestEnemy = GetClosestEnemy(_enemiesInRange);
-        }
-        else {
-            hasCheckedFirst = false;
-            closestEnemy = null;
+            if (_enemiesInRange.Count > 0)
+            {
+                CheckEnemyAlive();
+                closestEnemy = GetClosestEnemy(_enemiesInRange);
+            }
+            else
+            {
+                hasCheckedFirst = false;
+                closestEnemy = null;
+            }
         }
     }
 }

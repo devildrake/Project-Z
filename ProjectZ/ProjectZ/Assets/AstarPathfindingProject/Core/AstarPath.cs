@@ -29,7 +29,7 @@ public class AstarPath : MonoBehaviour {
 	 */
 	public static System.Version Version {
 		get {
-			return new System.Version(3, 8, 7);
+			return new System.Version(3, 8, 8, 1);
 		}
 	}
 
@@ -848,7 +848,7 @@ public class AstarPath : MonoBehaviour {
 		if (logPathResults == PathLog.InGame) {
 			inGameDebugPath = debug;
 		} else {
-			//Debug.Log(debug);
+			Debug.Log(debug);
 		}
 	}
 

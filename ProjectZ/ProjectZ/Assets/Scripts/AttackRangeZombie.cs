@@ -7,10 +7,13 @@ public class AttackRangeZombie : MonoBehaviour
     public bool enemyInRange = false;
     private float attackRange;
     private VisionRangeZombie laVision;
+    GameLogicScript gameLogic;
 
     void Start()
     {
-        laVision = gameObject.GetComponentInParent<VisionRangeZombie>();
+        gameLogic = FindObjectOfType<GameLogicScript>();
+        
+            laVision = gameObject.GetComponentInParent<VisionRangeZombie>();
     }
     // Update is called once per frame
 
@@ -30,11 +33,14 @@ public class AttackRangeZombie : MonoBehaviour
     }
     void Update()
     {
-        attackRange = gameObject.GetComponentInParent<ZombieScript>().theAttackRange;
-        enemyInRange = CheckAttack();
-        if (enemyInRange && gameObject.GetComponentInParent<ZombieScript>().canAttack)
+        if (!gameLogic.isPaused)
         {
-            gameObject.GetComponentInParent<ZombieAttack>().Attack(laVision.closestEnemy);
+            attackRange = gameObject.GetComponentInParent<ZombieScript>().theAttackRange;
+            enemyInRange = CheckAttack();
+            if (enemyInRange && gameObject.GetComponentInParent<ZombieScript>().canAttack)
+            {
+                gameObject.GetComponentInParent<ZombieAttack>().Attack(laVision.closestEnemy);
+            }
         }
     }
 }

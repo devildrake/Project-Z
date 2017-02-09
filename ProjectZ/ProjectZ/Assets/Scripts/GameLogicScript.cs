@@ -4,8 +4,11 @@ using System.Collections.Generic;
 
 public class GameLogicScript : MonoBehaviour
 {
-
-
+/*
+    GameLogicScript gameLogic;
+    gameLogic = FindObjectOfType<GameLogicScript>();
+        if(!gameLogic.isPaused){
+        */
     public GameObject laCasa;
     /*Este código está pensado para manejar la lógica de selección y movimiento de los zombies, así como el listado de estos 
      y de los villagers en partida*/
@@ -111,7 +114,7 @@ public class GameLogicScript : MonoBehaviour
     {
         elPathfinder = GameObject.FindGameObjectWithTag("A*");
         isPaused = false;
-        elPausaScript = GameObject.FindObjectOfType<PausaCanvasScript>();   
+        elPausaScript = FindObjectOfType<PausaCanvasScript>();   
         posicionBase1 = new Vector3(0.69f,0.05f,13.72f);
 
         yAxis = gameObject.transform.position.y;
@@ -148,7 +151,10 @@ public class GameLogicScript : MonoBehaviour
 
         SpawnMutank(position2);
 
-        SpawnZombie(ZombieScript.zombieClass.walker, position3);
+        SpawnWalker(position3);
+
+
+        //SpawnZombie(ZombieScript.zombieClass.walker, position3);
 
 
         //Se crea  el segundo zombie y se establece el tipo de zombie del que se trata para que luego el zombie haga lo que tenga que hacer
@@ -303,7 +309,6 @@ public class GameLogicScript : MonoBehaviour
         }
         else
         {
-            Time.timeScale = 0;
             Debug.Log("Pause");
         }
 

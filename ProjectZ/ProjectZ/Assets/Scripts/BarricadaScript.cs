@@ -10,10 +10,12 @@ public class BarricadaScript : MonoBehaviour {
     public List<GameObject> _atacantes;
     public float contador;
     public float tiempoAContar;
+    GameLogicScript gameLogic;
 
 	// Use this for initialization
 	void Start () {
-        circuloSprite = GetComponentInChildren<SpriteRenderer>();
+        gameLogic = FindObjectOfType<GameLogicScript>();
+            circuloSprite = GetComponentInChildren<SpriteRenderer>();
         circulo = circuloSprite.gameObject;
         circulo.SetActive(false);
         circulo.gameObject.GetComponent<SpriteRenderer>().color = Color.green;
@@ -29,22 +31,23 @@ public class BarricadaScript : MonoBehaviour {
     void loseHp() {
         health -= 5;
     }
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update() {
+        if (!gameLogic.isPaused){
 
-        foreach (GameObject p in _atacantes) {
-            contador += Time.deltaTime;
-        }
+            foreach (GameObject p in _atacantes) {
+                contador += Time.deltaTime;
+            }
 
-        if (contador > tiempoAContar) {
-            contador = 0;
-            loseHp();
-        }
+            if (contador > tiempoAContar) {
+                contador = 0;
+                loseHp();
+            }
 
-        if (health <= 0) {
-            Destroy(gameObject);
-        }
-	}
+            if (health <= 0) {
+                Destroy(gameObject);
+            }
+        } }
     private void OnDestroy()
     {
         elPathfinder.Scan();

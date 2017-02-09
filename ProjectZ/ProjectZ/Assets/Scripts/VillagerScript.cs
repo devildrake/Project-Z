@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class VillagerScript : MonoBehaviour {
+    GameLogicScript gameLogic;
+
     public enum humanClass { villager, soldier }
     VisionRangeScript laVision;
     AttackRangeScript elAtaque;
@@ -42,8 +44,9 @@ public class VillagerScript : MonoBehaviour {
 
     void Start()
     {
+        gameLogic = FindObjectOfType<GameLogicScript>();
 
-        freeRoam = true;
+            freeRoam = true;
         goingToCheck = false;
         originalPos = transform.position;
         groundPos.y = originalPos.y;
@@ -143,46 +146,50 @@ public class VillagerScript : MonoBehaviour {
     void Update()
     {
 
-
-        groundPos.x = transform.position.x;
-        groundPos.z = transform.position.z;
-        heightCheck();
-        confirmAlive = CheckAlive();
-        if (confirmAlive) {
-            if (laVision.enemyInSight)
+        if (!gameLogic.isPaused)
+        {
+            groundPos.x = transform.position.x;
+            groundPos.z = transform.position.z;
+            heightCheck();
+            confirmAlive = CheckAlive();
+            if (confirmAlive)
             {
-                freeRoam = false;
-
-                if (canMove&&laVision.closestZombie!=null)
+                if (laVision.enemyInSight)
                 {
-                    villagerMovement.MoveTo(laVision.closestZombie.transform.position);
+                    freeRoam = false;
+
+                    if (canMove && laVision.closestZombie != null)
+                    {
+                        villagerMovement.MoveTo(laVision.closestZombie.transform.position);
+                    }
                 }
-            }
-            if (elAtaque.enemyInRange)
-            {
-                canMove = false;
-                villagerAttack.Attack(laVision.closestZombie);
-                villagerMovement.moving = false;
-                // AttackEnemy();
-            }
-            else if(!laVision.enemyInSight&&!goingToCheck)
-            {
-                freeRoam = true;
-                canMove = true;
+                if (elAtaque.enemyInRange)
+                {
+                    canMove = false;
+                    villagerAttack.Attack(laVision.closestZombie);
+                    villagerMovement.moving = false;
+                    // AttackEnemy();
+                }
+                else if (!laVision.enemyInSight && !goingToCheck)
+                {
+                    freeRoam = true;
+                    canMove = true;
+                }
+                else
+                {
+                    canMove = true;
+                }
+                if (canMove && freeRoam && !goingToCheck)
+                {
+                    Patrol();
+                    //   villagerMovement.MoveTo(patrolPoint);
+                }
             }
             else
             {
-                canMove = true;
+                gameObject.SetActive(false);
+                Destroy(gameObject, 0.3f);
             }
-            if (canMove&&freeRoam&&!goingToCheck) {
-                Patrol();
-             //   villagerMovement.MoveTo(patrolPoint);
-            }
-        }
-        else
-        {
-            gameObject.SetActive(false);
-            Destroy(gameObject, 0.3f);
         }
     }
 

@@ -3,14 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class AttackRangeScript : MonoBehaviour {
-
-    
     public bool enemyInRange = false;
     public float attackRange;
     public VisionRangeScript laVision;
+    GameLogicScript gameLogic;
 
     void Start()
     {
+        gameLogic = FindObjectOfType<GameLogicScript>();
+
         laVision = gameObject.GetComponentInParent<VisionRangeScript>();
     }
     // Update is called once per frame
@@ -31,8 +32,11 @@ public class AttackRangeScript : MonoBehaviour {
     }
     void Update()
     {
-        attackRange = gameObject.GetComponentInParent<VillagerScript>().theAttackRange;
-        enemyInRange = CheckAttack();
+        if (!gameLogic.isPaused)
+        {
+            attackRange = gameObject.GetComponentInParent<VillagerScript>().theAttackRange;
+            enemyInRange = CheckAttack();
+        }
     }
 }
   

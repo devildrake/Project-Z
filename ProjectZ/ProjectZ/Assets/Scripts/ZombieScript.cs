@@ -17,6 +17,7 @@ public class ZombieScript : MonoBehaviour
     public bool moving;
     public bool goBarricade;
     public bool inBuilding;
+    private GameLogicScript gameLogic;
     bool confirmAlive;
     public bool hasArrived;
     public float health;
@@ -30,6 +31,7 @@ public class ZombieScript : MonoBehaviour
     public float movSpeed;
     public float theAttackRange;
     public bool irCasa;
+    float initSpeedAn;
     public Vector3 puntoCasa;
     public Vector3 targetPosition;
     public Vector3 prevTargetPos;
@@ -72,6 +74,7 @@ public class ZombieScript : MonoBehaviour
 
     void Start()
     {
+        gameLogic = FindObjectOfType<GameLogicScript>();
         defenseMode = false;
         defenseTime = 2f;
         elAnimator = gameObject.GetComponent<Animator>();
@@ -92,6 +95,7 @@ public class ZombieScript : MonoBehaviour
         laVision = gameObject.GetComponentInChildren<VisionRangeZombie>();
         elAtaque = gameObject.GetComponentInChildren<AttackRangeZombie>();
         confirmAlive = isAlive = true;
+        initSpeedAn = elAnimator.speed;
 
         switch (tipo) {
             case zombieClass.walker:
@@ -143,122 +147,141 @@ public class ZombieScript : MonoBehaviour
 
     void Update()
     {
-        #region comportamiento Mutank
-        if (tipo == zombieClass.mutank) {
-            //Comportamiento especifico de mutank
-
-            if (prevHealth != health)
-            {
-                defenseMode = false;
+        if (!gameLogic.isPaused)
+        {
+            if (elAnimator.speed == 0) {
+                elAnimator.speed = initSpeedAn;
             }
-            else {
-                healthCounter += Time.deltaTime;
-                if (healthCounter > defenseTime) {
+
+            #region comportamiento Mutank
+            if (tipo == zombieClass.mutank)
+            {
+                //Comportamiento especifico de mutank
+
+                if (prevHealth != health)
+                {
                     defenseMode = false;
                 }
-            }
-            if (defenseMode)
-            {
-                elAnimator.SetBool("ModoDefensa", true);
-                defense = 30;
-            }
-            else {
-                elAnimator.SetBool("ModoDefensa", false);
-                defense = 15;
-                healthCounter = 0;
-            }
-            prevHealth = health;
-
-        }
-        #endregion
-
-
-        if (elMovimiento.moving) //Codigo que pone true el booleano del animador "moviendose" cuando moving es true
-        {
-            elAnimator.SetBool("moviendose", true);
-        }
-        else {
-            elAnimator.SetBool("moviendose", false);
-        }
-
-        groundPos.x = gameObject.transform.position.x;
-        groundPos.z = gameObject.transform.position.z;
-        heightCheck();
-        confirmAlive = CheckAlive();
-        if (confirmAlive)
-        {
-            if (irCasa)
-            {
-                elMovimiento.MoveTo(puntoCasa);
-                if (hasArrived) {
-                    irCasa = false;
-                    elMovimiento.wasCommanded = false;
+                else
+                {
+                    healthCounter += Time.deltaTime;
+                    if (healthCounter > defenseTime)
+                    {
+                        defenseMode = false;
+                    }
                 }
+                if (defenseMode)
+                {
+                    elAnimator.SetBool("ModoDefensa", true);
+                    defense = 30;
+                }
+                else
+                {
+                    elAnimator.SetBool("ModoDefensa", false);
+                    defense = 15;
+                    healthCounter = 0;
+                }
+                prevHealth = health;
+
             }
-            //Código de que hace el zombie normalmente
-            if (isSelected)
+            #endregion
+
+
+            if (elMovimiento.moving) //Codigo que pone true el booleano del animador "moviendose" cuando moving es true
             {
-                /*Renderer theRenderer = gameObject.GetComponentInChildren<Renderer>();
-                theRenderer.material.color = Color.yellow;*/
-                elCirculo.SetActive(true);
+                elAnimator.SetBool("moviendose", true);
             }
             else
             {
-                elCirculo.SetActive(false);
+                elAnimator.SetBool("moviendose", false);
             }
-        }
-        else
-        {
-            Destroy(gameObject, 0.3f);
-        }
-        
-        if (!elMovimiento.wasCommanded)
-        {
-            if (laVision.enemyInSight)
-            {
 
-                if (!elAtaque.enemyInRange)
+            groundPos.x = gameObject.transform.position.x;
+            groundPos.z = gameObject.transform.position.z;
+            heightCheck();
+            confirmAlive = CheckAlive();
+            if (confirmAlive)
+            {
+                if (irCasa)
+                {
+                    elMovimiento.MoveTo(puntoCasa);
+                    if (hasArrived)
+                    {
+                        irCasa = false;
+                        elMovimiento.wasCommanded = false;
+                    }
+                }
+                //Código de que hace el zombie normalmente
+                if (isSelected)
+                {
+                    /*Renderer theRenderer = gameObject.GetComponentInChildren<Renderer>();
+                    theRenderer.material.color = Color.yellow;*/
+                    elCirculo.SetActive(true);
+                }
+                else
+                {
+                    elCirculo.SetActive(false);
+                }
+            }
+            else
+            {
+                Destroy(gameObject, 0.3f);
+            }
+
+            if (!elMovimiento.wasCommanded)
+            {
+                if (laVision.enemyInSight)
                 {
 
-                    if (canAttack) {
+                    if (!elAtaque.enemyInRange)
+                    {
+
+                        if (canAttack)
+                        {
 
 
-                        if (canMove) { 
-
-
-                            if (laVision.closestEnemy != null)
+                            if (canMove)
                             {
 
-                                if (laVision.closestEnemy.transform.position != prevTargetPos) {
-                                    movingToEnemy = false;
-                                }
-                                    prevTargetPos = laVision.closestEnemy.transform.position;
-                                if (!movingToEnemy)
+
+                                if (laVision.closestEnemy != null)
                                 {
-                                    
-                                    movingToEnemy = true;
-                                    elMovimiento.MoveTo(laVision.closestEnemy.transform.position);
+
+                                    if (laVision.closestEnemy.transform.position != prevTargetPos)
+                                    {
+                                        movingToEnemy = false;
+                                    }
+                                    prevTargetPos = laVision.closestEnemy.transform.position;
+                                    if (!movingToEnemy)
+                                    {
+
+                                        movingToEnemy = true;
+                                        elMovimiento.MoveTo(laVision.closestEnemy.transform.position);
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+            //color vida
+            if (health / maxHealth * 100 <= 20)
+            {
+
+                elCirculo.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+            }
+            else if (health / maxHealth * 100 <= 50)
+            {
+
+                elCirculo.gameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
+            }
+
+
+
         }
-        //color vida
-        if (health / maxHealth * 100 <= 20)
-        {
-
-            elCirculo.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+        else {
+            elAnimator.speed = 0;
         }
-        else if (health/maxHealth*100 <= 50) {
-
-			elCirculo.gameObject.GetComponent<SpriteRenderer> ().color = Color.yellow;
-		}
-
-
-	
     }
-
 	
 }

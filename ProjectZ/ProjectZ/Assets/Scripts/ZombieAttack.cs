@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ZombieAttack : MonoBehaviour {
+public class ZombieAttack : MonoBehaviour
+{
+    GameLogicScript gameLogic;
 
     public bool attacking;
     public bool atHuman;
@@ -12,6 +14,8 @@ public class ZombieAttack : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        gameLogic = FindObjectOfType<GameLogicScript>();
+
         atHuman = false;
         atBarricade = false;
         enemyToAttack = null;
@@ -31,7 +35,8 @@ public class ZombieAttack : MonoBehaviour {
                     enemyToAttack = anEnemy.GetComponent<VillagerScript>();
                 }
             }
-            else {
+            else
+            {
                 if (anEnemy.GetComponent<BarricadaScript>() != null)
                 {
                     barricade = anEnemy;
@@ -44,11 +49,29 @@ public class ZombieAttack : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (attacking)
+        if (!gameLogic.isPaused)
         {
-            if (atHuman)
+            if (attacking)
             {
-                if (enemyToAttack != null && gameObject.GetComponentInChildren<AttackRangeZombie>().enemyInRange)
+                if (atHuman)
+                {
+                    if (enemyToAttack != null && gameObject.GetComponentInChildren<AttackRangeZombie>().enemyInRange)
+                    {
+                        if (attackTimer < GetComponent<ZombieScript>().attackSpeed)
+                        {
+                            attackTimer += Time.deltaTime;
+                        }
+                        else
+                        {
+                            enemyToAttack.health -= enemyToAttack.attack;
+                            attackTimer = 0;
+                        }
+                    }
+                }
+            }
+            else if (atBarricade)
+            {
+                if (barricade != null && gameObject.GetComponentInParent<ZombieScript>().theAttackRange < (barricade.transform.position - gameObject.transform.position).magnitude)
                 {
                     if (attackTimer < GetComponent<ZombieScript>().attackSpeed)
                     {
@@ -56,25 +79,11 @@ public class ZombieAttack : MonoBehaviour {
                     }
                     else
                     {
-                        enemyToAttack.health -= enemyToAttack.attack;
+                        barricade.GetComponent<BarricadaScript>().health -= enemyToAttack.attack;
                         attackTimer = 0;
                     }
-                }
-            }
-        }
-        else if (atBarricade) {
-            if(barricade !=null && gameObject.GetComponentInParent<ZombieScript>().theAttackRange<(barricade.transform.position-gameObject.transform.position).magnitude)
-            {
-                if (attackTimer < GetComponent<ZombieScript>().attackSpeed)
-                {
-                    attackTimer += Time.deltaTime;
-                }
-                else
-                {
-                    barricade.GetComponent<BarricadaScript>().health -= enemyToAttack.attack;
-                    attackTimer = 0;
-                }
 
+                }
             }
         }
     }

@@ -5,6 +5,7 @@ using Pathfinding.RVO;
 
 public class ZombieMovement : MonoBehaviour
 {
+    GameLogicScript gameLogic;
     public bool moving;
     public Vector3 targetPosition;
     public bool wasCommanded;
@@ -32,6 +33,8 @@ public class ZombieMovement : MonoBehaviour
     IEnumerator Start()
     //void Start()
     {
+        gameLogic = FindObjectOfType<GameLogicScript>();
+
         tiempoAContar = 0;
         //startedMoving = false;
         buscador = gameObject.GetComponent<Seeker>();
@@ -83,67 +86,69 @@ public class ZombieMovement : MonoBehaviour
     }
 
 
-        
+
 
     void Update()
     {
-        
-
-        if (moving)
-        { 
-
-            if (!gameObject.GetComponent<ZombieScript>().isSelected)
+        if (!gameLogic.isPaused)
+        {
+            if (moving)
             {
-                gameObject.GetComponent<ZombieScript>().elCirculo.SetActive(false);
-            }
-            else {
-                gameObject.GetComponent<ZombieScript>().elCirculo.SetActive(true);
-            }
-           
+
+                if (!gameObject.GetComponent<ZombieScript>().isSelected)
+                {
+                    gameObject.GetComponent<ZombieScript>().elCirculo.SetActive(false);
+                }
+                else
+                {
+                    gameObject.GetComponent<ZombieScript>().elCirculo.SetActive(true);
+                }
 
 
-            if (camino == null)
-                return;
-            if (puntoActual >= camino.vectorPath.Count)
+
+                if (camino == null)
+                    return;
+                if (puntoActual >= camino.vectorPath.Count)
+                {
+                    //LlegaAlFinal
+                    moving = false;
+                    wasCommanded = false;
+                    gameObject.GetComponent<ZombieScript>().hasArrived = true;
+                    //startedMoving = false;
+                    return;
+                }
+
+                Vector3 direccion = (camino.vectorPath[puntoActual] - gameObject.transform.position).normalized;
+
+                direccion *= gameObject.GetComponent<ZombieScript>().movSpeed * Time.fixedDeltaTime;
+
+                gameObject.transform.position += direccion * 0.5f;
+
+                if (Vector3.Distance(transform.position, camino.vectorPath[puntoActual]) < distanciaSiguientePunto)
+                {
+                    puntoActual++;
+                    return;
+                }
+
+
+
+                else
+                {
+
+                }
+
+            }
+
+            //array limite
+
+            if (suma > 3)
             {
-                //LlegaAlFinal
-                moving = false;
-                wasCommanded = false;
-                gameObject.GetComponent<ZombieScript>().hasArrived = true;
-                //startedMoving = false;
-                return;
+                suma = 3;
             }
 
-            Vector3 direccion = (camino.vectorPath[puntoActual] - gameObject.transform.position).normalized;
-
-            direccion *= gameObject.GetComponent<ZombieScript>().movSpeed * Time.fixedDeltaTime;
-
-            gameObject.transform.position += direccion * 0.5f;
-
-            if (Vector3.Distance(transform.position, camino.vectorPath[puntoActual]) < distanciaSiguientePunto)
-            {
-                puntoActual++;
-                return;
-            }
-
-
-
-            else {
-                
-            }
 
         }
-
-		//array limite
-
-		if (suma > 3) 
-		{
-			suma = 3;
-		}
-
-
     }
-
 	void IntriggerEnter(Collision other)
 	{
 

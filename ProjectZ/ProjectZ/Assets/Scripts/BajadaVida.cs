@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BajadaVida : MonoBehaviour {
     public BarricadaScript laBarricada;
+
 	// Use this for initialization
 	void Start () {
         laBarricada = GetComponentInParent<BarricadaScript>();

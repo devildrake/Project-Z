@@ -9,12 +9,15 @@ public class PausaCanvasScript : MonoBehaviour {
     public GameObject confirmacionB;
     // Use this for initialization
     void Start() {
-        gameLogic = GameObject.FindObjectOfType<GameLogicScript>();
+        gameLogic = FindObjectOfType<GameLogicScript>();
         menuPausa = GameObject.FindGameObjectWithTag("Pause");
         menuPausa.SetActive(false);
 
     }
 
+    public void UnPause() {
+        gameLogic.isPaused = false;
+    }
 
 	// Update is called once per frame
 	void Update () {
