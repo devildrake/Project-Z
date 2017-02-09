@@ -331,6 +331,9 @@ public class GameLogicScript : MonoBehaviour
         }
     }
 
+    public float CalcularDistancia(GameObject a,GameObject b) { 
+        return (a.transform.position - b.transform.position).magnitude;
+    }
     //El codigo adicional que modifica las listas de zombies y villagers en funcion de una funcion que comprueba si estan vivos o no
     void UpdateSelection2()
     {
@@ -339,22 +342,19 @@ public class GameLogicScript : MonoBehaviour
         _keptSelectedZombies.RemoveAll(IsNotAlive);
         foreach (GameObject v in _villagers) {
             if (!v.GetComponent<VillagerScript>().isAlive && !v.GetComponent<VillagerScript>().hasTransformed) {
-                GameObject aZombie = GameObject.Instantiate(zombie, v.transform.position, Quaternion.identity) as GameObject;
                 int que = Random.Range(0, 20);
 
                 if (que < 10)
                 {
-                    aZombie.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.runner;
+                    SpawnWalker(v.transform.position);
                 }
                 else if (que < 16)
                 {
-                    aZombie.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.walker;
+                    SpawnWalker(v.transform.position);
                 }
                 else {
-                    aZombie.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.mutank;
+                    SpawnMutank(v.transform.position);
                 }
-
-                _zombies.Add(aZombie);
             }
             
         }
@@ -646,8 +646,9 @@ public class GameLogicScript : MonoBehaviour
             zombieMovement.wasCommanded = true;
 
             //Función que mueve a los zombies
+            zombie.GetComponent<ZombieScript>().goBarricade = false;
             zombieMovement.MoveTo(desiredPosition);
-
+            
         }
 
     }

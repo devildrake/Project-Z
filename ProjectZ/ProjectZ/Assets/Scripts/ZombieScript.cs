@@ -18,12 +18,14 @@ public class ZombieScript : MonoBehaviour
     public bool goBarricade;
     public bool inBuilding;
     private GameLogicScript gameLogic;
+    public BarricadaScript barricada;
     bool confirmAlive;
     public bool hasArrived;
     public float health;
     float prevHealth;
     float healthCounter;
     float defenseTime;
+    float contadorAtk;
     public float maxHealth;
     public int attack;
     public int defense;
@@ -67,9 +69,10 @@ public class ZombieScript : MonoBehaviour
         }
 
     public void attackBarricade(GameObject laBarricada) {
+        Debug.Log("AttackBarricade");
+        Debug.Log(laBarricada);
         goBarricade = true;
-        elMovimiento.MoveTo(laBarricada.transform.position);
-
+        barricada = laBarricada.GetComponentInParent<BarricadaScript>();        
     }
 
     void Start()
@@ -211,6 +214,29 @@ public class ZombieScript : MonoBehaviour
                         elMovimiento.wasCommanded = false;
                     }
                 }
+                else if (goBarricade)
+                {
+                    if (barricada != null) { 
+                        if (gameLogic.CalcularDistancia(barricada.gameObject, gameObject) > theAttackRange)
+                        {
+                            elMovimiento.MoveTo(barricada.gameObject.transform.position);
+                        }
+                        else
+                        {
+                            moving = false;
+                            elMovimiento.moving = false;
+                            {
+                                contadorAtk += Time.deltaTime;
+                            }
+
+                            if (contadorAtk > attackSpeed)
+                            {
+                                contadorAtk = 0;
+                                barricada.loseHp();
+                            }
+                        }
+                }
+            }
                 //Código de que hace el zombie normalmente
                 if (isSelected)
                 {

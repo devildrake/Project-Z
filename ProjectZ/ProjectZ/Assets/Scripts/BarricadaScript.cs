@@ -28,21 +28,12 @@ public class BarricadaScript : MonoBehaviour {
         circulo.SetActive(false);
     }
 
-    void loseHp() {
+    public void loseHp() {
         health -= 5;
     }
     // Update is called once per frame
     void Update() {
         if (!gameLogic.isPaused){
-
-            foreach (GameObject p in _atacantes) {
-                contador += Time.deltaTime;
-            }
-
-            if (contador > tiempoAContar) {
-                contador = 0;
-                loseHp();
-            }
 
             if (health <= 0) {
                 Destroy(gameObject);

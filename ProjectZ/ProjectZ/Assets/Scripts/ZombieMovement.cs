@@ -44,7 +44,6 @@ public class ZombieMovement : MonoBehaviour
 	void start()
 	{
           wasCommanded = false;
-
 	}
 
     public void MoveTo(Vector3 newTargetPosition)
