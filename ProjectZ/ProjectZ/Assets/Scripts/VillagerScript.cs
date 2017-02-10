@@ -6,7 +6,7 @@ public class VillagerScript : MonoBehaviour {
     GameLogicScript gameLogic;
 
     public enum humanClass { villager, soldier }
-    VisionRangeScript laVision;
+    public VisionRangeScript laVision;
     AttackRangeScript elAtaque;
     public bool moving = false;
     public Vector3 targetPosition;
@@ -17,6 +17,7 @@ public class VillagerScript : MonoBehaviour {
     public float movSpeed;
     public float attackSpeed;
     public float theAttackRange;
+    public float distanciaAlerta;
 
     public bool isAlive;
     public bool hasTransformed;
@@ -34,6 +35,10 @@ public class VillagerScript : MonoBehaviour {
     public Vector3 patrolPoint;
     public bool freeRoam;
     public int patrolType;
+    public bool hasAlerted;
+    public bool alerted;
+
+    List<GameObject> _nearbyPartners;
 
     VillagerMovement villagerMovement;
     VillagerAttack villagerAttack;
@@ -44,8 +49,9 @@ public class VillagerScript : MonoBehaviour {
 
     void Start()
     {
+        distanciaAlerta = 20;
         gameLogic = FindObjectOfType<GameLogicScript>();
-
+        hasAlerted = alerted = false;
             freeRoam = true;
         goingToCheck = false;
         originalPos = transform.position;
@@ -154,8 +160,10 @@ public class VillagerScript : MonoBehaviour {
             confirmAlive = CheckAlive();
             if (confirmAlive)
             {
+
                 if (laVision.enemyInSight)
                 {
+                    alerted = true;
                     freeRoam = false;
 
                     if (canMove && laVision.closestZombie != null)
@@ -183,6 +191,15 @@ public class VillagerScript : MonoBehaviour {
                 {
                     Patrol();
                     //   villagerMovement.MoveTo(patrolPoint);
+                }
+
+                foreach (GameObject t in gameLogic._villagers)
+                {
+                    if (gameLogic.CalcularDistancia(gameObject, t) < distanciaAlerta && alerted&&!hasAlerted)
+                    {
+                        t.GetComponent<VillagerScript>().heardSomething(gameObject.transform.position);
+                        hasAlerted = true;
+                    }
                 }
             }
             else

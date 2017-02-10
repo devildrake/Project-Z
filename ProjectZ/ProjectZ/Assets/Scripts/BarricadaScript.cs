@@ -19,13 +19,14 @@ public class BarricadaScript : MonoBehaviour {
         circulo = circuloSprite.gameObject;
         circulo.SetActive(false);
         circulo.gameObject.GetComponent<SpriteRenderer>().color = Color.green;
-        elPathfinder = GameObject.FindObjectOfType<AstarPath>();
+        elPathfinder = FindObjectOfType<AstarPath>();
         health = 100;
         tiempoAContar = 0.5f;
+        gameLogic._barricadas.Add(gameObject);
 	}
 
-    void HideCircle() {
-        circulo.SetActive(false);
+    public void ShowCircle(bool whot) {
+        circulo.SetActive(whot);
     }
 
     public void loseHp() {
@@ -41,6 +42,9 @@ public class BarricadaScript : MonoBehaviour {
         } }
     private void OnDestroy()
     {
+        if(gameLogic._barricadas.Contains(gameObject))
+        gameLogic._barricadas.Remove(gameObject);
+
         elPathfinder.Scan();
     }
 }

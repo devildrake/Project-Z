@@ -50,6 +50,7 @@ public class GameLogicScript : MonoBehaviour
     public List<GameObject> _selectedZombies;
     public List<GameObject> _keptSelectedZombies;
     public List<GameObject> _bases;
+    public List<GameObject> _barricadas;
 
     //Lista de villagers
 
@@ -81,11 +82,17 @@ public class GameLogicScript : MonoBehaviour
     GameObject villager;
     GameObject baseHumana;
 
-    public void SpawnVillager(VillagerScript.humanClass unTipo, Vector3 unaPos) {
-        GameObject villagerToSpawn = GameObject.Instantiate(villager, unaPos, Quaternion.identity) as GameObject;
-        villagerToSpawn.GetComponent<VillagerScript>().tipo = unTipo;
+    public void SpawnVillager(Vector3 unaPos) {
+        GameObject villagerToSpawn = Instantiate(villager, unaPos, Quaternion.identity) as GameObject;
+        villagerToSpawn.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.villager;
         _villagers.Add(villagerToSpawn);
     }
+    public void SpawnSoldier(Vector3 unaPos) {
+        GameObject villagerToSpawn = Instantiate(villager, unaPos, Quaternion.identity) as GameObject;
+        villagerToSpawn.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.soldier;
+        _villagers.Add(villagerToSpawn);
+    }
+
 
     public void SpawnZombie(ZombieScript.zombieClass unTipo, Vector3 unaPos)
     {
@@ -179,12 +186,8 @@ public class GameLogicScript : MonoBehaviour
         //    _villagers.Add(villager1);
         //	_villagers.Add(villager2);
 
-        SpawnVillager(VillagerScript.humanClass.villager, new Vector3(2, 0.4f, 13));
-        SpawnVillager(VillagerScript.humanClass.soldier, new Vector3(4, 0.4f, 10));
-
-
-
-        _bases.Add(base1);
+        SpawnVillager(new Vector3(2, 0.4f, 13));
+        SpawnSoldier(new Vector3(4, 0.4f, 10));
 
         elPathfinder.GetComponent<AstarPath>().Scan();
     }
@@ -253,10 +256,10 @@ public class GameLogicScript : MonoBehaviour
                         z.GetComponent<ZombieScript>().CasaBehaviour(laCasa);
                         Debug.Log("GoingHome");
                     }
-
                 }
                 else if (Physics.Raycast(ray, out hit, 80, mascaraRompible)) {
                     GameObject laBarricada = hit.collider.gameObject;
+                    laBarricada.GetComponentInParent<BarricadaScript>().ShowCircle(true);
 
                     foreach (GameObject z in _keptSelectedZombies)
                     {
@@ -356,7 +359,6 @@ public class GameLogicScript : MonoBehaviour
                     SpawnMutank(v.transform.position);
                 }
             }
-            
         }
         _villagers.RemoveAll(IsNotAlive);
     }
@@ -634,6 +636,7 @@ public class GameLogicScript : MonoBehaviour
     #region movimiento
     void MoveZombies(GameObject zombie, Vector3 desiredPosition)
     {
+        Debug.Log(_keptSelectedZombies);
         //En caso de que existan zombies en la lista de _keptSelectedZombies
         if (_keptSelectedZombies.Contains(zombie))
         {
@@ -644,11 +647,9 @@ public class GameLogicScript : MonoBehaviour
             ZombieMovement zombieMovement = zombie.GetComponent<ZombieMovement>();
             //El booleano wasCommanded se pone en true, ya que se les ha ordenador moverse
             zombieMovement.wasCommanded = true;
-
             //Función que mueve a los zombies
             zombie.GetComponent<ZombieScript>().goBarricade = false;
-            zombieMovement.MoveTo(desiredPosition);
-            
+            zombieMovement.MoveTo(desiredPosition);            
         }
 
     }

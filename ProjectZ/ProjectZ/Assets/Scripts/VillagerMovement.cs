@@ -165,11 +165,24 @@ public class VillagerMovement : MonoBehaviour
             //  startedMoving = true;
             if (targetPosition != newTargetPosition)
             {
-                contador += Time.deltaTime;
-                if (contador > tiempoAContar)
+                if (gameObject.GetComponent<VillagerScript>().laVision.enemyInSight)
                 {
-                    buscador.StartPath(transform.position, newTargetPosition, MetodoCamino);
-                    contador = 0;
+                    contador += Time.deltaTime;
+                    if (contador > tiempoAContar)
+                    {
+                        if (buscador != null)
+                        {
+                            buscador.StartPath(transform.position, newTargetPosition, MetodoCamino);
+                            contador = 0;
+                        }
+                    }
+                }
+                else {
+                    if (buscador != null)
+                    {
+                        buscador.StartPath(transform.position, newTargetPosition, MetodoCamino);
+                        contador = 0;
+                    }
                 }
             }
             targetPosition = newTargetPosition;

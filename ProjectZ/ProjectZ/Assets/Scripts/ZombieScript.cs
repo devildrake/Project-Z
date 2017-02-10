@@ -42,7 +42,7 @@ public class ZombieScript : MonoBehaviour
     VisionRangeZombie laVision;
     AttackRangeZombie elAtaque;
     ZombieMovement elMovimiento;
-    bool movingToEnemy = false;
+    public bool movingToEnemy = false;
     Vector3 originalPos;
     Vector3 groundPos;
 

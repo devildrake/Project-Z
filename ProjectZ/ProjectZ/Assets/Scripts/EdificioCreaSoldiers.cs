@@ -41,25 +41,32 @@ public class EdificioCreaSoldiers : MonoBehaviour {
         alert = false;
         elGameLogic = GameObject.FindWithTag("GameLogic");
         elGameLogicScript = elGameLogic.GetComponent<GameLogicScript>();
+        if (!elGameLogicScript._bases.Contains(gameObject)) {
+            elGameLogicScript._bases.Add(gameObject);
+        }
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
-       /*if (blocker == null)
+        if (!elGameLogicScript.isPaused)
         {
-            isBlocked = false;
-        }
-        else {
-            isBlocked = true;
-        }*/
+            /*if (blocker == null)
+             {
+                 isBlocked = false;
+             }
+             else {
+                 isBlocked = true;
+             }*/
 
-        if (alert && amount > 0&&!isBlocked) {
-            spawnTimer += Time.deltaTime;
-            if (spawnTime <= spawnTimer) {
-                spawn(Random.Range(0, 1));
-                amount--;
-                spawnTimer = 0;
+            if (alert && amount > 0 && !isBlocked)
+            {
+                spawnTimer += Time.deltaTime;
+                if (spawnTime <= spawnTimer)
+                {
+                    spawn(Random.Range(0, 1));
+                    amount--;
+                    spawnTimer = 0;
+                }
             }
         }
 	}

@@ -9,7 +9,7 @@ public class lataScript : MonoBehaviour {
     List<GameObject> closeHumans;
 	// Use this for initialization
 	void Start () {
-        gameLogic = GameObject.FindObjectOfType<GameLogicScript>();
+        gameLogic = FindObjectOfType<GameLogicScript>();
         noise = false;
         ondaSonora = 15;
 	}

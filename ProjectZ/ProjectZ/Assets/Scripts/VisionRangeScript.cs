@@ -93,6 +93,7 @@ public class VisionRangeScript : MonoBehaviour {
         if (enemyInSight) {
             foreach (GameObject unaBase in gameLogic._bases)
             {
+                if((unaBase.transform.position-gameObject.transform.position).magnitude<gameObject.GetComponentInParent<VillagerScript>().distanciaAlerta)
                 unaBase.GetComponent<EdificioCreaSoldiers>().alert = true;
             }
         }

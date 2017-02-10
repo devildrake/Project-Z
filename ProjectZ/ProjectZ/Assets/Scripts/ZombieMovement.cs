@@ -35,7 +35,7 @@ public class ZombieMovement : MonoBehaviour
     {
         gameLogic = FindObjectOfType<GameLogicScript>();
 
-        tiempoAContar = 0;
+        tiempoAContar = 1f;
         //startedMoving = false;
         buscador = gameObject.GetComponent<Seeker>();
       
@@ -53,9 +53,16 @@ public class ZombieMovement : MonoBehaviour
             //  startedMoving = true;
             if (targetPosition != newTargetPosition)
             {
-                contador += Time.deltaTime;
-                if (contador > tiempoAContar)
+                if (gameObject.GetComponent<ZombieScript>().movingToEnemy)
                 {
+                    contador += Time.deltaTime;
+                    if (contador > tiempoAContar)
+                    {
+                        buscador.StartPath(transform.position, newTargetPosition, MetodoCamino);
+                        contador = 0;
+                    }
+                }
+                else {
                     buscador.StartPath(transform.position, newTargetPosition, MetodoCamino);
                     contador = 0;
                 }
@@ -63,6 +70,7 @@ public class ZombieMovement : MonoBehaviour
             targetPosition = newTargetPosition;
             
         }
+        Debug.Log("moving is now true");
         moving = true;
     }
 
