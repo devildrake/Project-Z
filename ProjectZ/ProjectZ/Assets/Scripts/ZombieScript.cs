@@ -64,7 +64,7 @@ public class ZombieScript : MonoBehaviour
         elMovimiento.wasCommanded = true;
         if (laCasa.CheckTrues() != 12)
         {
-             puntoCasa= laCasa.AssignarSitio();
+             puntoCasa = laCasa.AssignarSitio();
         }
         }
 
@@ -78,13 +78,11 @@ public class ZombieScript : MonoBehaviour
     void Start()
     {
         gameLogic = FindObjectOfType<GameLogicScript>();
-        defenseMode = false;
-        defenseTime = 2f;
+        defenseMode = goBarricade = hasArrived = inBuilding = false;
+        defenseTime = 1.5f;
         elAnimator = gameObject.GetComponent<Animator>();
         elAnimator.SetBool("moviendose", false);
 
-        goBarricade = false;
-        hasArrived = false;
     originalPos = gameObject.transform.position;
         groundPos.y = originalPos.y;
 
@@ -92,8 +90,6 @@ public class ZombieScript : MonoBehaviour
         elSprite = GetComponentInChildren<SpriteRenderer>();
         elCirculo = elSprite.gameObject;
 		elCirculo.gameObject.GetComponent<SpriteRenderer> ().color = Color.green;
-
-        inBuilding = false;
         canMove = canAttack = true;
         laVision = gameObject.GetComponentInChildren<VisionRangeZombie>();
         elAtaque = gameObject.GetComponentInChildren<AttackRangeZombie>();
@@ -225,6 +221,7 @@ public class ZombieScript : MonoBehaviour
                         {
                             moving = false;
                             elMovimiento.moving = false;
+                            Debug.Log("barricadaStopMoving", gameObject);
                             {
                                 contadorAtk += Time.deltaTime;
                             }
@@ -289,6 +286,9 @@ public class ZombieScript : MonoBehaviour
                         }
                     }
                 }
+            }
+            else {
+                movingToEnemy = false;
             }
             //color vida
             if (health / maxHealth * 100 <= 20)

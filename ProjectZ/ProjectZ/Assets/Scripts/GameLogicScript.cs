@@ -23,7 +23,7 @@ public class GameLogicScript : MonoBehaviour
     public PausaCanvasScript elPausaScript;
     //Vector que en su momento representara el punto destino de los zombies que se mueven
     private Vector3 endPoint;
-
+    
 
     //vertical position of the gameobject
     private float yAxis;
@@ -636,7 +636,6 @@ public class GameLogicScript : MonoBehaviour
     #region movimiento
     void MoveZombies(GameObject zombie, Vector3 desiredPosition)
     {
-        Debug.Log(_keptSelectedZombies);
         //En caso de que existan zombies en la lista de _keptSelectedZombies
         if (_keptSelectedZombies.Contains(zombie))
         {
@@ -649,7 +648,8 @@ public class GameLogicScript : MonoBehaviour
             zombieMovement.wasCommanded = true;
             //Función que mueve a los zombies
             zombie.GetComponent<ZombieScript>().goBarricade = false;
-            zombieMovement.MoveTo(desiredPosition);            
+            
+            zombieMovement.MoveTo(desiredPosition);
         }
 
     }

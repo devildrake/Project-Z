@@ -39,7 +39,7 @@ public class ZombieMovement : MonoBehaviour
         //startedMoving = false;
         buscador = gameObject.GetComponent<Seeker>();
       
-        yield return StartCoroutine(buscarCamino(1));
+        yield return StartCoroutine(buscarCamino(2f));
     }
 	void start()
 	{
@@ -66,12 +66,14 @@ public class ZombieMovement : MonoBehaviour
                     buscador.StartPath(transform.position, newTargetPosition, MetodoCamino);
                     contador = 0;
                 }
+                gameObject.transform.LookAt(newTargetPosition);
+                gameObject.transform.eulerAngles = new Vector3(0, gameObject.transform.eulerAngles.y, gameObject.transform.eulerAngles.z);
             }
             targetPosition = newTargetPosition;
             
         }
-        Debug.Log("moving is now true");
         moving = true;
+
     }
 
     void MetodoCamino(Path path)
