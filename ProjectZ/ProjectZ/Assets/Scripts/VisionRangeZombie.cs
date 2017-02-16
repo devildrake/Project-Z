@@ -89,6 +89,7 @@ public class VisionRangeZombie : MonoBehaviour
             }
             else
             {
+                gameObject.GetComponentInParent<ZombieScript>().ResetStuff("noEnemies");
                 hasCheckedFirst = false;
                 closestEnemy = null;
             }

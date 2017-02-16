@@ -4,12 +4,7 @@ using System.Collections.Generic;
 
 public class GameLogicScript : MonoBehaviour
 {
-/*
-    GameLogicScript gameLogic;
-    gameLogic = FindObjectOfType<GameLogicScript>();
-        if(!gameLogic.isPaused){
-        */
-    public GameObject laCasa;
+
     /*Este código está pensado para manejar la lógica de selección y movimiento de los zombies, así como el listado de estos 
      y de los villagers en partida*/
     /*Se hace una referencia general al InputHandler
@@ -19,6 +14,7 @@ public class GameLogicScript : MonoBehaviour
                                *Que genera el movimiento
                                */
 
+    
     public bool isPaused;
     public PausaCanvasScript elPausaScript;
     //Vector que en su momento representara el punto destino de los zombies que se mueven
@@ -51,7 +47,6 @@ public class GameLogicScript : MonoBehaviour
     public List<GameObject> _keptSelectedZombies;
     public List<GameObject> _bases;
     public List<GameObject> _barricadas;
-
     //Lista de villagers
 
     public List<GameObject> _villagers;
@@ -78,10 +73,12 @@ public class GameLogicScript : MonoBehaviour
     GameObject walker;
     GameObject mutank;
     GameObject runner; //por ahora los runner usarán el modelo que estaba ya
-
+    GameObject selectedBarricade;
     GameObject villager;
     GameObject baseHumana;
 
+
+    #region MetodosDeAparicion
     public void SpawnVillager(Vector3 unaPos) {
         GameObject villagerToSpawn = Instantiate(villager, unaPos, Quaternion.identity) as GameObject;
         villagerToSpawn.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.villager;
@@ -115,16 +112,20 @@ public class GameLogicScript : MonoBehaviour
         GameObject zombieToSpawn = GameObject.Instantiate(runner, unaPos, Quaternion.identity) as GameObject;
         _zombies.Add(zombieToSpawn);
     }
-
+    #endregion
 
     void Start()
     {
         elPathfinder = GameObject.FindGameObjectWithTag("A*");
+
         isPaused = false;
-        elPausaScript = FindObjectOfType<PausaCanvasScript>();   
+
+        elPausaScript = FindObjectOfType<PausaCanvasScript>();
+           
         posicionBase1 = new Vector3(0.69f,0.05f,13.72f);
 
         yAxis = gameObject.transform.position.y;
+
         //Guardamos la referencia al input en nuestra clase
         _input = this.GetComponent<InputHandlerScript>();
 
@@ -134,10 +135,7 @@ public class GameLogicScript : MonoBehaviour
         _keptSelectedZombies = new List<GameObject>();
         _villagers = new List<GameObject>();
 
-
-        //Se crean 3 zombies y un villager
-
-        //Cargando los prefabs
+        //Se cargan los prefabs
         zombie = Resources.Load("ZombieObject") as GameObject;
         walker = Resources.Load("WalkerObject") as GameObject;
         runner = zombie;
@@ -146,58 +144,30 @@ public class GameLogicScript : MonoBehaviour
         villager = Resources.Load("VillagerObject") as GameObject;
         baseHumana = Resources.Load("OriginadorSoldados") as GameObject;
 
-        GameObject base1 = GameObject.Instantiate(baseHumana, posicionBase1, Quaternion.identity) as GameObject;
-
-        //Se crea  el primer zombie y se establece el tipo de zombie del que se trata para que luego el zombie haga lo que tenga que hacer
-        /*GameObject zombie1 = GameObject.Instantiate(zombie, position1, Quaternion.identity) as GameObject;
-        zombie1.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.runner;*/
+        GameObject base1 = Instantiate(baseHumana, posicionBase1, Quaternion.identity) as GameObject;
 
         SpawnWalker(position1);
-
-        //SpawnZombie(ZombieScript.zombieClass.mutank, position2);
 
         SpawnMutank(position2);
 
         SpawnWalker(position3);
 
-
-        //SpawnZombie(ZombieScript.zombieClass.walker, position3);
-
-
-        //Se crea  el segundo zombie y se establece el tipo de zombie del que se trata para que luego el zombie haga lo que tenga que hacer
-        /*   GameObject zombie2 = GameObject.Instantiate(zombie, position2, Quaternion.identity) as GameObject;
-           zombie2.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.mutank;
-           */
-        //Se crea  el tercer zombie y se establece el tipo de zombie del que se trata para que luego el zombie haga lo que tenga que hacer
-        /*  GameObject zombie3 = GameObject.Instantiate(zombie, position3, Quaternion.identity) as GameObject;
-          zombie3.GetComponent<ZombieScript>().tipo = ZombieScript.zombieClass.walker;*/
-
-        //Se crea un villager y se establece el tipo de villager del que se trata para que haga lo que deba hacer
-        /*  GameObject villager1 = GameObject.Instantiate(villager, new Vector3(2, 0.4f, 13), Quaternion.identity) as GameObject;
-          villager1.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.villager;
-          //soldier
-          GameObject villager2 = GameObject.Instantiate(villager, new Vector3(4, 0.4f, 10), Quaternion.identity) as GameObject;
-          villager2.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.soldier;
-          */
-        //Añadimos los zombies a la lista
-        /* _zombies.Add(zombie1);
-         _zombies.Add(zombie2);
-         _zombies.Add(zombie3);*/
-        //    _villagers.Add(villager1);
-        //	_villagers.Add(villager2);
-
         SpawnVillager(new Vector3(2, 0.4f, 13));
         SpawnSoldier(new Vector3(4, 0.4f, 10));
 
+        //Se oblga al pathfinder a hacer un escaneo inicial del mapa tras inicializar los elementos
         elPathfinder.GetComponent<AstarPath>().Scan();
     }
 
 
     void Update()
     {
+        //Por encima de todo lo demás se maneja el booleano del pausado
         if (Input.GetKeyDown(KeyCode.Escape)) {
             changePause();
         }
+
+
         if (!isPaused)
         {
 
@@ -229,6 +199,34 @@ public class GameLogicScript : MonoBehaviour
 
             //Al pulsar el boton derecho del ratón, se genera un rayo en el mundo
 
+            if ((Input.GetMouseButtonDown(0)))
+            {
+                RaycastHit hit;
+
+                //Se crea la variable de rayo
+                Ray ray;
+
+                //Al ser el editor de unity se utiliza esta funcion para el Rayo
+
+#if UNITY_EDITOR
+                ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+#endif
+
+                if (Physics.Raycast(ray, out hit, 80, mascaraRompible))
+                {
+                    selectedBarricade = hit.collider.gameObject;
+                    selectedBarricade.GetComponentInParent<BarricadaScript>().ShowCircle(true);
+
+                }
+                else {
+                    if (selectedBarricade != null)
+                    {
+                        selectedBarricade.GetComponentInParent<BarricadaScript>().ShowCircle(false);
+                        selectedBarricade = null;
+                    }
+                }
+            }
+
             if ((Input.GetMouseButtonDown(1)))
             {
                 //Se declara una variable del struct RayCastHit
@@ -243,28 +241,11 @@ public class GameLogicScript : MonoBehaviour
                 ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 #endif
 
-                //Esto sería en caso de que estuveiramos hablando de un aparato tactil (smartphone)
-                /*		#elif (UNITY_ANDROID || UNITY_IPHONE || UNITY_WP8)
-                ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-                        */
-                if (Physics.Raycast(ray, out hit, 80, mascaraCasas))
-                {
-                    CasaDestruidaScript laCasa = hit.collider.gameObject.GetComponentInParent<CasaDestruidaScript>();
-                    Debug.Log(laCasa);
-                    foreach (GameObject z in _keptSelectedZombies)
-                    {
-                        z.GetComponent<ZombieScript>().CasaBehaviour(laCasa);
-                        Debug.Log("GoingHome");
-                    }
-                }
-                else if (Physics.Raycast(ray, out hit, 80, mascaraRompible)) {
+                    if (Physics.Raycast(ray, out hit, 80, mascaraRompible)) {
                     GameObject laBarricada = hit.collider.gameObject;
-                    laBarricada.GetComponentInParent<BarricadaScript>().ShowCircle(true);
-
                     foreach (GameObject z in _keptSelectedZombies)
                     {
                         z.GetComponent<ZombieScript>().attackBarricade(laBarricada);
-
                     }
 
                 }
@@ -297,7 +278,9 @@ public class GameLogicScript : MonoBehaviour
                                 Quaternion rotacion = Quaternion.AngleAxis(angle, Vector3.up);
                                 Vector3 distancia = Vector3.right * (1f * (1 + ((i - 1) / 8)));
                                 desplazamientoFinal = rotacion * distancia;
-
+                                if (zombie.GetComponent<ZombieScript>().barricada._atacantes.Contains(zombie))
+                                    zombie.GetComponent<ZombieScript>().barricada.VaciarSitio(zombie.GetComponent<ZombieScript>().barricadaSpot);
+                                zombie.GetComponent<ZombieScript>().barricada._atacantes.Remove(zombie);
                             }
 
                             //Esta funcion hace a los zombies moverse hacia el punto deseado pero teniendo en cuenta el desplazamiento final 
@@ -317,11 +300,12 @@ public class GameLogicScript : MonoBehaviour
 
     }
 
+    //Método que cambia el booleano de pausado
     public void changePause() {
             isPaused = !isPaused;  
     }
 
-    //Una funcion booleana ineficiente para no tener que escribir todo el codigo de negación
+    //Un método que devuelve un booleano de forma ineficiente para no tener que escribir todo el codigo de negación
     bool IsNotAlive(GameObject z)
     {
         if (z.GetComponent<ZombieScript>() != null)
@@ -334,6 +318,7 @@ public class GameLogicScript : MonoBehaviour
         }
     }
 
+    //Método que calcula la distancia entre dos GameObjects
     public float CalcularDistancia(GameObject a,GameObject b) { 
         return (a.transform.position - b.transform.position).magnitude;
     }
@@ -362,6 +347,7 @@ public class GameLogicScript : MonoBehaviour
         }
         _villagers.RemoveAll(IsNotAlive);
     }
+
     //Funcion que dibuja la caja de seleccion
     void DrawSelectionBox()
     {
@@ -415,8 +401,7 @@ public class GameLogicScript : MonoBehaviour
         }
     }
 
-
-
+    //Método que actualiza la selección
     void UpdateSelection()
     {
         if (!_selecting)
@@ -605,15 +590,11 @@ public class GameLogicScript : MonoBehaviour
             _selectedZombies.Add(zombie);
 
             foreach (GameObject z in _selectedZombies) {
+
+                //Se pone en true el booleano de selección
                 z.GetComponent<ZombieScript>().isSelected = true;
 
             }
-            //Marcamos el zombie de color amarillo
-            /*Component[] renders = zombie.GetComponentsInChildren(typeof(Renderer));
-            foreach (Renderer render in renders)
-            {
-                render.material.color += Color.yellow;
-            }*/
         }
     }
 
@@ -623,13 +604,8 @@ public class GameLogicScript : MonoBehaviour
     {
         if (_selectedZombies.Contains(zombie))
         {
-            //Removemos el zombie de la lista
+            //Quitamos al zombie de la lista
             _selectedZombies.Remove(zombie);
-            //Desmarcamos el zombie
-            /*Component[] renders = zombie.GetComponentsInChildren(typeof(Renderer));
-            foreach (Renderer render in renders)
-                render.material.color -= Color.yellow;
-                */
         }
     }
     //Función del movimiento

@@ -5,64 +5,85 @@ using Pathfinding.RVO;
 
 public class ZombieMovement : MonoBehaviour
 {
-    GameLogicScript gameLogic;
-    public bool moving;
-    public Vector3 targetPosition;
-    public bool wasCommanded;
-    private Path camino;
-    private Seeker buscador;
-    public float distanciaSiguientePunto = 0.5f;
+    #region variables
+    
+    //Variable que maneja en que punto del camino se encuentra el zombie
     private int puntoActual = 0;
+
+    //Distancia entre puntos
+    public float distanciaSiguientePunto = 0.5f;
+
+    //Variable que maneja el tiempo que ha pasado desde que el zombie ha empezado a moverse hacia el enemigo más cercano
     public float contador;
+
+    //Tiempo que ha de pasar para que el zombie inicie un camino hacia el enemigo más cercano
     public float tiempoAContar;
-    //private bool startedMoving;
 
 
-	//array
-	private int suma;
-	//array casa
+    //Booleano que hace al zombie moverse, se maneja en función de si el usuario ha dado una orden (GameLogicScript) y desde ZombieScript
+    public bool moving;
 
-	private GameObject posC1;
-	private GameObject posC2;
-	private GameObject posC3;
+    //Variable que indicia que el jugador ha dado una orden, este hace que todo lo demás se detenga
+    public bool wasCommanded;
 
-	private float posC1Y;
-	private float posC2Y;
-	private float posC3Y;
+    //Variable que maneja que el zombie empiece a aumentar el contador unicamente después de haber establecido un camino inicial hacia un enemigo
+    public bool countedOnce;
 
-    IEnumerator Start()
-    //void Start()
+    //Objeto de lógica de juego
+    GameLogicScript gameLogic;
+
+    //Variable (x,y,z) que guarda la posición a la que se va a mover el zombie
+    public Vector3 targetPosition;
+
+    //Componente de pathfinding que establece los caminos
+    private Seeker buscador;
+
+    //Component de pathfinding que guarda el camino a seguir
+    private Path camino;
+
+    #endregion
+
+
+    //La funcion start inicializa los componentes gameLogic y targetPosition así como los booleanos en false y el tiempo de contador
+    #region start
+    void Start()
     {
         gameLogic = FindObjectOfType<GameLogicScript>();
-
-        tiempoAContar = 1f;
-        //startedMoving = false;
         buscador = gameObject.GetComponent<Seeker>();
-      
-        yield return StartCoroutine(buscarCamino(2f));
+        tiempoAContar = 0.5f;
+        moving = wasCommanded = countedOnce = false;
     }
-	void start()
-	{
-          wasCommanded = false;
-	}
+    #endregion
 
+
+    //Método que recibe un camino y en caso de no producir errores se asigna a la variable camino
+    void MetodoCamino(Path path)
+    {
+        if (!path.error)
+        {
+            camino = path;
+        }
+    }
+
+    /*Método llamado desde gameLogic cuando se da ordenes a los zombies y desde zombieScript cuando hay enemigos cerca y pueden atacarles
+    Este comprueba si ha habido cambio en la posición objetivo del zombie y en caso de haberlo habido, establece el nuevo camino, a la par que 
+    varia el comportamiento en función de si es una orden del jugador o si lo hace el zombie por "voluntad propia" y activa el booleano moving*/
     public void MoveTo(Vector3 newTargetPosition)
     {
-        //if (!startedMoving)
-        {
-            //  startedMoving = true;
+        { 
             if (targetPosition != newTargetPosition)
             {
                 if (gameObject.GetComponent<ZombieScript>().movingToEnemy)
                 {
-                    contador += Time.deltaTime;
                     if (contador > tiempoAContar)
                     {
+                        puntoActual = 0;
                         buscador.StartPath(transform.position, newTargetPosition, MetodoCamino);
                         contador = 0;
                     }
                 }
                 else {
+                    puntoActual = 0;
                     buscador.StartPath(transform.position, newTargetPosition, MetodoCamino);
                     contador = 0;
                 }
@@ -76,34 +97,31 @@ public class ZombieMovement : MonoBehaviour
 
     }
 
-    void MetodoCamino(Path path)
-    {
-        if (!path.error)
-        {
-            camino = path;
-            puntoActual = 0;
-        }
-    }
-
-    
-    IEnumerator buscarCamino(float tiempo) {
-        while (true) {
-            yield return new WaitForSeconds(tiempo);
-            buscador.StartPath(transform.position, targetPosition, MetodoCamino);
-        }
-
-    }
-
-
-
-
+    /*La función update se llama una vez por frame, y todo lo sucedido en ella depende del booleano isPaused de gameLogic
+     Maneja el contador de forma independiente al resto de la función, el cuenta siempre que haya enemigos en rango y el zombie
+     se este moviendo hacia ellos, tambien se dedica a mover al zombie y aumentar el contador de puntos (pasos) del camino
+         */
     void Update()
     {
         if (!gameLogic.isPaused)
         {
+
+            if (gameObject.GetComponent<ZombieScript>().movingToEnemy && !gameObject.GetComponentInChildren<AttackRangeZombie>().enemyInRange)
+            {
+                if (!countedOnce)
+                {
+                    contador = tiempoAContar;
+                    countedOnce = true;
+                }
+                else {
+                    tiempoAContar = 0.5f;
+                    contador += Time.deltaTime;
+                }
+            }
             if (moving)
             {
-
+                //El circulo de selección se debe poder manejar tambien cuando el zombie este en movimiento
+                #region CirculoDeSelección
                 if (!gameObject.GetComponent<ZombieScript>().isSelected)
                 {
                     gameObject.GetComponent<ZombieScript>().elCirculo.SetActive(false);
@@ -113,99 +131,36 @@ public class ZombieMovement : MonoBehaviour
                     gameObject.GetComponent<ZombieScript>().elCirculo.SetActive(true);
                 }
 
-
+                #endregion
 
                 if (camino == null)
                     return;
+
+                //Si llega al final se cambian algunos booleanos
                 if (puntoActual >= camino.vectorPath.Count)
                 {
-                    //LlegaAlFinal
                     moving = false;
                     wasCommanded = false;
                     gameObject.GetComponent<ZombieScript>().hasArrived = true;
-                    //startedMoving = false;
                     return;
                 }
 
+                //La dirección depende de la posición y el siguiente punto
                 Vector3 direccion = (camino.vectorPath[puntoActual] - gameObject.transform.position).normalized;
-
+                
+                //Se amplifica en función de la velocidad de movimeinto y el tiempo
                 direccion *= gameObject.GetComponent<ZombieScript>().movSpeed * Time.fixedDeltaTime;
 
+                //Se mueve el zombie
                 gameObject.transform.position += direccion * 0.5f;
 
+                //Se aumenta el contador de pasos
                 if (Vector3.Distance(transform.position, camino.vectorPath[puntoActual]) < distanciaSiguientePunto)
                 {
                     puntoActual++;
                     return;
                 }
-
-
-
-                else
-                {
-
-                }
-
             }
-
-            //array limite
-
-            if (suma > 3)
-            {
-                suma = 3;
-            }
-
-
         }
     }
-	void IntriggerEnter(Collision other)
-	{
-
-		if (this.gameObject.tag == "EntradaCasaZ") 
-		{
-			suma++;
-		}
-	}
 }
-
-   /* void Update()
-    {
-        movementLinearSpeed = gameObject.GetComponent<ZombieScript>().movSpeed;
-        if (moving)
-        {
-            //Debug.DrawLine(targetPosition,targetPosition+Vector3.up*10);
-            buscador.StartPath(gameObject.transform.position, targetPosition, MetodoCamino);
-
-            Vector3 currentGroundPosition = transform.position;
-            currentGroundPosition.y = 0;
-
-            Vector3 groundTargetPosition = targetPosition;
-            groundTargetPosition.y = 0;
-
-            Vector3 direction = groundTargetPosition - currentGroundPosition;
-            float remainingDistance = direction.magnitude;
-
-            direction.Normalize();
-
-            Vector3 nextMovement = direction * movementLinearSpeed * Time.deltaTime;
-            float movementDistance = nextMovement.magnitude;
-
-            if (movementDistance < remainingDistance)
-            {
-                transform.position += nextMovement;
-            }
-            else
-            {
-                //float oldY = transform.position.y;
-                targetPosition.y = transform.position.y;
-                transform.position = targetPosition;
-             //   transform.position += Vector3.up * oldY;
-                moving = false;
-                wasCommanded = false;
-                gameObject.GetComponent<ZombieScript>().wasCommanded = false;
-            }
-        }
-	}   
-    }
-    */
-  //  }
