@@ -37,7 +37,7 @@ public class AttackRangeZombie : MonoBehaviour
         {
             attackRange = gameObject.GetComponentInParent<ZombieScript>().theAttackRange;
             enemyInRange = CheckAttack();
-            if (enemyInRange && gameObject.GetComponentInParent<ZombieScript>().canAttack)
+            if (enemyInRange && gameObject.GetComponentInParent<ZombieScript>().canAttack&&gameObject.GetComponentInParent<ZombieScript>().attackToggle)
             {
                 gameObject.GetComponentInParent<ZombieAttack>().Attack(laVision.closestEnemy);
             }

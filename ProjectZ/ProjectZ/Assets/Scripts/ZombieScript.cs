@@ -14,6 +14,7 @@ public class ZombieScript : MonoBehaviour
     public bool isSelected;
     public bool canMove;
     public bool canAttack;
+    public bool attackToggle;
     public bool goBarricade;
     public bool wasGoingBarricade;
     public bool inBuilding;
@@ -43,7 +44,7 @@ public class ZombieScript : MonoBehaviour
     public Vector3 prevTargetPos;
     public float movementLinearSpeed;
     VisionRangeZombie laVision;
-    AttackRangeZombie elAtaque;
+    AttackRangeZombie elAtaqueRange;
     ZombieMovement elMovimiento;
     Vector3 originalPos;
     Vector3 groundPos;
@@ -81,6 +82,7 @@ public class ZombieScript : MonoBehaviour
 
     void Start()
     {
+        attackToggle = true;
         gameLogic = FindObjectOfType<GameLogicScript>();
         defenseMode = goBarricade = hasArrived = inBuilding = false;
         defenseTime = 1.5f;
@@ -96,7 +98,7 @@ public class ZombieScript : MonoBehaviour
 		elCirculo.gameObject.GetComponent<SpriteRenderer> ().color = Color.green;
         canMove = canAttack = true;
         laVision = gameObject.GetComponentInChildren<VisionRangeZombie>();
-        elAtaque = gameObject.GetComponentInChildren<AttackRangeZombie>();
+        elAtaqueRange = gameObject.GetComponentInChildren<AttackRangeZombie>();
         confirmAlive = isAlive = true;
         initSpeedAn = elAnimator.speed;
 
@@ -147,11 +149,11 @@ public class ZombieScript : MonoBehaviour
     {
         if (orden == "command")
         {
-            GetComponent<ZombieAttack>().attacking = hasArrived = movingToEnemy = elMovimiento.countedOnce = false ;
+            GetComponent<ZombieAttack>().attacking = hasArrived = movingToEnemy = elMovimiento.countedOnce = gameObject.GetComponent<ZombieAttack>().atBarricade = gameObject.GetComponent<ZombieAttack>().atHuman = canAttack =  false ;
         }
         else if (orden == "NoEnemies")
         {
-            GetComponent<ZombieAttack>().attacking = movingToEnemy = elMovimiento.countedOnce = false;
+            GetComponent<ZombieAttack>().attacking = movingToEnemy = elMovimiento.countedOnce = elMovimiento.moving = gameObject.GetComponent<ZombieAttack>().atBarricade = gameObject.GetComponent<ZombieAttack>().atHuman = canAttack = false ;
             hasArrived = true;
         }
     }
@@ -224,7 +226,6 @@ public class ZombieScript : MonoBehaviour
                     if (hasArrived)
                     {
                         irCasa = false;
-                        elMovimiento.wasCommanded = false;
                     }
                 }
                 else if (goBarricade)
@@ -234,10 +235,8 @@ public class ZombieScript : MonoBehaviour
                         {
                             if (!barricada._atacantes.Contains(gameObject))
                             {
-                                Debug.Log(targetPosition);
                                 barricadePlace = barricada.AsignarSitio(gameObject);
                                 barricadaSpot = barricada.aPlaceToAssign;
-                                Debug.Log(barricadePlace);
                                 barricada._atacantes.Add(gameObject);
                             }
                             elMovimiento.MoveTo(barricadePlace);
@@ -245,7 +244,6 @@ public class ZombieScript : MonoBehaviour
                         else
                         {
                             elMovimiento.moving = false;
-                            Debug.Log("barricadaStopMoving", gameObject);
                             {
                                 contadorAtk += Time.deltaTime;
                             }
@@ -280,11 +278,11 @@ public class ZombieScript : MonoBehaviour
                 canMove = true;
                 if (laVision.enemyInSight)
                 {
-                    if (!elAtaque.enemyInRange)
+                    if (!elAtaqueRange.enemyInRange)
                     {
                         if (canAttack)
                         {
-                            if (canMove)
+                            if (canMove&&attackToggle)
                             {
                                 if (laVision.closestEnemy != null)
                                 {

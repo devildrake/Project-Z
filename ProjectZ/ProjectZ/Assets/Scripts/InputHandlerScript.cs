@@ -31,8 +31,8 @@ public class InputHandlerScript : MonoBehaviour
     public bool _cameraLeft;
     public bool _cameraRight;*/
 
-    public bool _mustNotAttack;
     public bool _mustAttack;
+    public bool _attackToggle;
     public bool _selectingBegins;
     public bool _selectingEnds;
     public bool _keepSelection;
@@ -41,7 +41,7 @@ public class InputHandlerScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        _attackToggle = true;
     }
 
     // Update is called once per frame
@@ -138,13 +138,11 @@ public class InputHandlerScript : MonoBehaviour
 
         else if (Input.GetKeyDown(_Attack))
         {
-            _mustNotAttack = false;
-            _mustAttack = true;
+            _attackToggle = true;
             
         }
         else if (Input.GetKeyDown(_dontAttack)) {
-            _mustAttack = false;
-            _mustNotAttack = true;
+            _attackToggle = false;
             
         }
         #endregion

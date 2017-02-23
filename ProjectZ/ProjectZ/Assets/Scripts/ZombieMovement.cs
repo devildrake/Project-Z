@@ -19,7 +19,6 @@ public class ZombieMovement : MonoBehaviour
     //Tiempo que ha de pasar para que el zombie inicie un camino hacia el enemigo más cercano
     public float tiempoAContar;
 
-
     //Booleano que hace al zombie moverse, se maneja en función de si el usuario ha dado una orden (GameLogicScript) y desde ZombieScript
     public bool moving;
 
@@ -50,7 +49,7 @@ public class ZombieMovement : MonoBehaviour
     {
         gameLogic = FindObjectOfType<GameLogicScript>();
         buscador = gameObject.GetComponent<Seeker>();
-        tiempoAContar = 0.5f;
+        tiempoAContar = 0.3f;
         moving = wasCommanded = countedOnce = false;
     }
     #endregion
@@ -70,32 +69,42 @@ public class ZombieMovement : MonoBehaviour
     varia el comportamiento en función de si es una orden del jugador o si lo hace el zombie por "voluntad propia" y activa el booleano moving*/
     public void MoveTo(Vector3 newTargetPosition)
     {
-        { 
-            if (targetPosition != newTargetPosition)
+        if (wasCommanded)
+        {
+            buscador.StartPath(transform.position, newTargetPosition, MetodoCamino);
+            puntoActual = 0;
+            contador = 0;
+            LookTowards(newTargetPosition);
+        }
+        else if (targetPosition != newTargetPosition)
             {
                 if (gameObject.GetComponent<ZombieScript>().movingToEnemy)
                 {
                     if (contador > tiempoAContar)
                     {
-                        puntoActual = 0;
                         buscador.StartPath(transform.position, newTargetPosition, MetodoCamino);
+                        puntoActual = 0;
                         contador = 0;
                     }
                 }
                 else {
-                    puntoActual = 0;
                     buscador.StartPath(transform.position, newTargetPosition, MetodoCamino);
+                    puntoActual = 0;
                     contador = 0;
                 }
-                gameObject.transform.LookAt(newTargetPosition);
-                gameObject.transform.eulerAngles = new Vector3(0, gameObject.transform.eulerAngles.y, gameObject.transform.eulerAngles.z);
+                LookTowards(newTargetPosition);
             }
             targetPosition = newTargetPosition;
             
-        }
+        
         moving = true;
 
     }
+
+    public void LookTowards(Vector3 where) {
+        gameObject.transform.LookAt(where);
+        gameObject.transform.eulerAngles = new Vector3(0, gameObject.transform.eulerAngles.y, gameObject.transform.eulerAngles.z);
+    } 
 
     /*La función update se llama una vez por frame, y todo lo sucedido en ella depende del booleano isPaused de gameLogic
      Maneja el contador de forma independiente al resto de la función, el cuenta siempre que haya enemigos en rango y el zombie
@@ -106,6 +115,7 @@ public class ZombieMovement : MonoBehaviour
         if (!gameLogic.isPaused)
         {
 
+                
             if (gameObject.GetComponent<ZombieScript>().movingToEnemy && !gameObject.GetComponentInChildren<AttackRangeZombie>().enemyInRange)
             {
                 if (!countedOnce)
@@ -140,8 +150,13 @@ public class ZombieMovement : MonoBehaviour
                 if (puntoActual >= camino.vectorPath.Count)
                 {
                     moving = false;
+                    Debug.Log("NotCommanded"); 
                     wasCommanded = false;
                     gameObject.GetComponent<ZombieScript>().hasArrived = true;
+
+                    if (gameObject.GetComponent<ZombieScript>().goBarricade)
+                        LookTowards(gameObject.GetComponent<ZombieScript>().barricada.transform.position);
+                    gameObject.GetComponent<ZombieScript>().canAttack = true;
                     return;
                 }
 

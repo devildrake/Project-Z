@@ -67,6 +67,7 @@ public class GameLogicScript : MonoBehaviour
 
     public GameObject elPathfinder;
 
+
     public Vector3 posicionBase1;
 
     GameObject zombie;
@@ -171,21 +172,21 @@ public class GameLogicScript : MonoBehaviour
         if (!isPaused)
         {
 
-            //Se hace true el booleano canAtack en cada zombie seleccionado al pulsar la tecla A
-            if (_input._mustAttack && _keptSelectedZombies.Count > 0)
+            //Se hace true el booleano attackToggle en cada zombie seleccionado al pulsar la tecla A
+            if (_input._attackToggle && _keptSelectedZombies.Count > 0)
             {
                 foreach (GameObject t in _keptSelectedZombies)
                 {
-                    t.GetComponent<ZombieScript>().canAttack = true;
+                    t.GetComponent<ZombieScript>().attackToggle = true;
                 }
             }
 
             //O Se hace false en los zombies seleccionados al pulsar la tecla S
-            else if (_input._mustNotAttack && _keptSelectedZombies.Count > 0)
+            else if (!_input._attackToggle && _keptSelectedZombies.Count > 0)
             {
                 foreach (GameObject t in _keptSelectedZombies)
                 {
-                    t.GetComponent<ZombieScript>().canAttack = false;
+                    t.GetComponent<ZombieScript>().attackToggle = false;
                 }
             }
             //Funcion que dibuja la caja de seleccion
@@ -278,11 +279,13 @@ public class GameLogicScript : MonoBehaviour
                                 Quaternion rotacion = Quaternion.AngleAxis(angle, Vector3.up);
                                 Vector3 distancia = Vector3.right * (1f * (1 + ((i - 1) / 8)));
                                 desplazamientoFinal = rotacion * distancia;
-                                if (zombie.GetComponent<ZombieScript>().barricada._atacantes.Contains(zombie))
-                                    zombie.GetComponent<ZombieScript>().barricada.VaciarSitio(zombie.GetComponent<ZombieScript>().barricadaSpot);
-                                zombie.GetComponent<ZombieScript>().barricada._atacantes.Remove(zombie);
+                                if (zombie.GetComponent<ZombieScript>().barricada != null)
+                                {
+                                    if (zombie.GetComponent<ZombieScript>().barricada._atacantes.Contains(zombie))
+                                        zombie.GetComponent<ZombieScript>().barricada.VaciarSitio(zombie.GetComponent<ZombieScript>().barricadaSpot);
+                                    zombie.GetComponent<ZombieScript>().barricada._atacantes.Remove(zombie);
+                                }
                             }
-
                             //Esta funcion hace a los zombies moverse hacia el punto deseado pero teniendo en cuenta el desplazamiento final 
                             //Para cada zombie
                             MoveZombies(zombie, endPoint + desplazamientoFinal);
@@ -622,6 +625,7 @@ public class GameLogicScript : MonoBehaviour
             ZombieMovement zombieMovement = zombie.GetComponent<ZombieMovement>();
             //El booleano wasCommanded se pone en true, ya que se les ha ordenador moverse
             zombieMovement.wasCommanded = true;
+
             //Función que mueve a los zombies
             zombie.GetComponent<ZombieScript>().goBarricade = false;
             

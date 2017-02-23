@@ -22,8 +22,7 @@ public class BarricadaScript : MonoBehaviour {
     //Listado de atacantes
     public List<GameObject> _atacantes;
 
-    sitios [] _posiciones;
-    sitios[] _posicionesOrdenadas;
+    public sitios [] _posiciones;
 
     GameLogicScript gameLogic;
 
@@ -37,14 +36,14 @@ public class BarricadaScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        gameLogic = FindObjectOfType<GameLogicScript>();
-            circuloSprite = GetComponentInChildren<SpriteRenderer>();
+        gameLogic = FindObjectOfType<GameLogicScript>();   
+        gameLogic._barricadas.Add(gameObject);
+        circuloSprite = GetComponentInChildren<SpriteRenderer>();
         circulo = circuloSprite.gameObject;
         circulo.SetActive(false);
         circulo.gameObject.GetComponent<SpriteRenderer>().color = Color.green;
         elPathfinder = FindObjectOfType<AstarPath>();
         maxHealth = health = 100;
-        gameLogic._barricadas.Add(gameObject);
         _posiciones = new sitios[10];
         _posiciones[0].posicion = (gameObject.transform.position) + new Vector3(0.716f, -0.2f, -0.591f);
         _posiciones[1].posicion = (gameObject.transform.position) + new Vector3(0.319f, -0.2f, -0.591f);
@@ -52,10 +51,10 @@ public class BarricadaScript : MonoBehaviour {
         _posiciones[3].posicion = (gameObject.transform.position) + new Vector3(-0.434f, -0.2f, -0.591f);
         _posiciones[4].posicion = (gameObject.transform.position) + new Vector3(-0.792f, -0.2f, -0.591f);
         _posiciones[5].posicion = (gameObject.transform.position) + new Vector3(0.716f, -0.2f, 0.428f);
-        _posiciones[6].posicion = (gameObject.transform.position) + new Vector3(0.319f, -0.2f, -0.428f);
-        _posiciones[7].posicion = (gameObject.transform.position) + new Vector3(-0.064f, -0.2f, -0.428f);
-        _posiciones[8].posicion = (gameObject.transform.position) + new Vector3(-0.434f, -0.2f, -0.428f);
-        _posiciones[9].posicion = (gameObject.transform.position) + new Vector3(-0.792f, -0.2f, -0.428f);
+        _posiciones[6].posicion = (gameObject.transform.position) + new Vector3(0.319f, -0.2f, 0.428f);
+        _posiciones[7].posicion = (gameObject.transform.position) + new Vector3(-0.064f, -0.2f, 0.428f);
+        _posiciones[8].posicion = (gameObject.transform.position) + new Vector3(-0.434f, -0.2f, 0.428f);
+        _posiciones[9].posicion = (gameObject.transform.position) + new Vector3(-0.792f, -0.2f, 0.428f);
 
     }
 
