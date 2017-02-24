@@ -160,7 +160,7 @@ public class ZombieScript : MonoBehaviour
 
     void Update()
     {
-        if (!gameLogic.isPaused)
+        if (!gameLogic.isPaused&&!gameLogic.eventManager.onEvent)
         {
 
             if (elMovimiento.wasCommanded) {

@@ -114,7 +114,7 @@ public class BarricadaScript : MonoBehaviour {
     }
     // Update is called once per frame
     void Update() {
-        if (!gameLogic.isPaused){
+        if (!gameLogic.isPaused&&!gameLogic.eventManager.onEvent){
             if (health / maxHealth * 100 <= 20)
             {
                 circulo.gameObject.GetComponent<SpriteRenderer>().color = Color.red;

@@ -48,7 +48,7 @@ public class EdificioCreaSoldiers : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (!elGameLogicScript.isPaused)
+        if (!elGameLogicScript.isPaused&&!elGameLogicScript.eventManager.onEvent)
         {
             /*if (blocker == null)
              {

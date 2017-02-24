@@ -78,6 +78,7 @@ public class GameLogicScript : MonoBehaviour
     GameObject villager;
     GameObject baseHumana;
 
+    public EventManager eventManager;
 
     #region MetodosDeAparicion
     public void SpawnVillager(Vector3 unaPos) {
@@ -117,6 +118,8 @@ public class GameLogicScript : MonoBehaviour
 
     void Start()
     {
+        eventManager = GameObject.Find("EventManager");
+
         elPathfinder = GameObject.FindGameObjectWithTag("A*");
 
         isPaused = false;
@@ -171,6 +174,8 @@ public class GameLogicScript : MonoBehaviour
 
         if (!isPaused)
         {
+
+            if (!eventManager.onEvent) { 
 
             //Se hace true el booleano attackToggle en cada zombie seleccionado al pulsar la tecla A
             if (_input._attackToggle && _keptSelectedZombies.Count > 0)
@@ -242,7 +247,7 @@ public class GameLogicScript : MonoBehaviour
                 ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 #endif
 
-                    if (Physics.Raycast(ray, out hit, 80, mascaraRompible)) {
+                if (Physics.Raycast(ray, out hit, 80, mascaraRompible)) {
                     GameObject laBarricada = hit.collider.gameObject;
                     foreach (GameObject z in _keptSelectedZombies)
                     {
@@ -295,6 +300,7 @@ public class GameLogicScript : MonoBehaviour
                 }
 
             }
+        }
         }
         else
         {

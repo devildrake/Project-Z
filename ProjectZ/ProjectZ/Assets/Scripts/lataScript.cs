@@ -13,19 +13,20 @@ public class lataScript : MonoBehaviour {
         noise = false;
         ondaSonora = 15;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-        if (noise) {
-            foreach (GameObject v in gameLogic._villagers) {
-                if ((v.transform.position - gameObject.transform.position).magnitude < ondaSonora) {
-                    
-                    v.GetComponent<VillagerScript>().heardSomething(gameObject.transform.position);
 
+    // Update is called once per frame
+    void Update() {
+        if(!gameLogic.isPaused && !gameLogic.eventManager.onEvent){
+            if (noise) {
+                foreach (GameObject v in gameLogic._villagers) {
+                    if ((v.transform.position - gameObject.transform.position).magnitude < ondaSonora) {
+
+                        v.GetComponent<VillagerScript>().heardSomething(gameObject.transform.position);
+
+                    }
                 }
             }
-        }
-	}
+        } }
 
     void OnTriggerEnter(Collider other)
     {

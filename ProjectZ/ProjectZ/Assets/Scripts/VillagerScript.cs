@@ -152,7 +152,7 @@ public class VillagerScript : MonoBehaviour {
     void Update()
     {
 
-        if (!gameLogic.isPaused)
+        if (!gameLogic.isPaused&&!gameLogic.eventManager.onEvent)
         {
             groundPos.x = transform.position.x;
             groundPos.z = transform.position.z;

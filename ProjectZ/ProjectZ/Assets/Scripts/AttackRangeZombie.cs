@@ -33,7 +33,7 @@ public class AttackRangeZombie : MonoBehaviour
     }
     void Update()
     {
-        if (!gameLogic.isPaused)
+        if (!gameLogic.isPaused && !gameLogic.eventManager.onEvent)
         {
             attackRange = gameObject.GetComponentInParent<ZombieScript>().theAttackRange;
             enemyInRange = CheckAttack();

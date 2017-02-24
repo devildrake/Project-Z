@@ -5,16 +5,17 @@ public class InputHandlerScript : MonoBehaviour
 {
     //ACCESOS DE TECLADO
     //Camera
-   /* KeyCode _cameraUpKey1 = KeyCode.UpArrow;
-    KeyCode _cameraUpKey2 = KeyCode.W;
-    KeyCode _cameraDownKey1 = KeyCode.DownArrow;
-    KeyCode _cameraDownKey2 = KeyCode.S;
-    KeyCode _cameraLeftKey1 = KeyCode.LeftArrow;
-    KeyCode _cameraLeftKey2 = KeyCode.A;
-    KeyCode _cameraRightKey1 = KeyCode.RightArrow;
-    KeyCode _cameraRightKey2 = KeyCode.D;
-    */
+    /* KeyCode _cameraUpKey1 = KeyCode.UpArrow;
+     KeyCode _cameraUpKey2 = KeyCode.W;
+     KeyCode _cameraDownKey1 = KeyCode.DownArrow;
+     KeyCode _cameraDownKey2 = KeyCode.S;
+     KeyCode _cameraLeftKey1 = KeyCode.LeftArrow;
+     KeyCode _cameraLeftKey2 = KeyCode.A;
+     KeyCode _cameraRightKey1 = KeyCode.RightArrow;
+     KeyCode _cameraRightKey2 = KeyCode.D;
+     */
     //Control
+    KeyCode _continueInteract = KeyCode.E;
     KeyCode _selectionKey1 = KeyCode.Mouse0;
     KeyCode _selectionKey2 = KeyCode.Return;
     KeyCode _keepSelectionKey1 = KeyCode.LeftShift;
@@ -37,11 +38,13 @@ public class InputHandlerScript : MonoBehaviour
     public bool _selectingEnds;
     public bool _keepSelection;
     public bool _invertSelection;
+    public bool _continue;
 
     // Use this for initialization
     void Start()
     {
         _attackToggle = true;
+        _continue = false;
     }
 
     // Update is called once per frame
@@ -144,6 +147,10 @@ public class InputHandlerScript : MonoBehaviour
         else if (Input.GetKeyDown(_dontAttack)) {
             _attackToggle = false;
             
+        }
+        if (Input.GetKeyDown(_continueInteract))
+        {
+            _continue = true;
         }
         #endregion
     }

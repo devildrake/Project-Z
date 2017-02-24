@@ -80,7 +80,7 @@ public class VisionRangeZombie : MonoBehaviour
     }
     void Update()
     {
-        if (!gameLogic.isPaused)
+        if (!gameLogic.isPaused && !gameLogic.eventManager.onEvent)
         {
             if (_enemiesInRange.Count > 0)
             {

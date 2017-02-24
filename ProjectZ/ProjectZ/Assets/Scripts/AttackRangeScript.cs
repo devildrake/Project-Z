@@ -32,7 +32,7 @@ public class AttackRangeScript : MonoBehaviour {
     }
     void Update()
     {
-        if (!gameLogic.isPaused)
+        if (!gameLogic.isPaused && !gameLogic.eventManager.onEvent)
         {
             attackRange = gameObject.GetComponentInParent<VillagerScript>().theAttackRange;
             enemyInRange = CheckAttack();

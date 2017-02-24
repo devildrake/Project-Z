@@ -60,7 +60,7 @@ public class VillagerAttack : MonoBehaviour
 
     void Update()
     {
-        if (!gameLogic.isPaused)
+        if (!gameLogic.isPaused && !gameLogic.eventManager.onEvent)
         {
             if (attacking)
             {

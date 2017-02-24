@@ -3,134 +3,6 @@ using System.Collections;
 using Pathfinding;
 public class VillagerMovement : MonoBehaviour
 {
-    /*public bool moving;
-    public Vector3 targetPosition;
-    public Vector3 prevTargetPos;
-    public bool wasCommanded;
-    private Path camino;
-    private Seeker buscador;
-    public float distanciaSiguientePunto = 0.5f;
-    private int puntoActual = 0;
-    private bool startedMoving;
-    public float lindarDistancia;
-    public float temporizador;
-    public float tiempoParaBuscar;
-    public bool hasToCharge = false;
-    private bool hasChanged = false;
-
-    IEnumerator Start()
-   // void Start()
-    {
-        temporizador = 0;
-        lindarDistancia = 3.3f;
-        startedMoving = false;
-        buscador = gameObject.GetComponent<Seeker>();
-        wasCommanded = false;
-        yield return StartCoroutine(buscarCamino(1));
-    }
-
-    public void MoveTo(Vector3 newTargetPosition)
-    {
-
-        if (!gameObject.GetComponent<VillagerScript>().freeRoam&&gameObject.GetComponent<VillagerScript>().canMove) {
-
-            if (!hasToCharge)
-            {
-                hasToCharge = true;
-                startedMoving = false;
-            }
-            else hasToCharge = false;
-        }
-
-        if (!startedMoving)
-        {
-            startedMoving = true;
-
-            if (targetPosition != newTargetPosition)
-            {
-                //if (temporizador > tiempoParaBuscar)
-                {
-                    buscador.StartPath(transform.position, newTargetPosition, MetodoCamino);
-                    targetPosition = newTargetPosition;
-                }
-            }
-        }
-        moving = true;
-    }
-
-    void MetodoCamino(Path path)
-    {
-        if (!path.error)
-        {
-            camino = path;
-            puntoActual = 0;
-        }
-    }
-
-    IEnumerator buscarCamino(float tiempo) {
-        while (true) {
-            yield return new WaitForSeconds(tiempo);
-            buscador.StartPath(transform.position, targetPosition, MetodoCamino);
-        }
-
-    }
-
-    void Change() {
-        hasChanged = false;
-        buscador.StartPath(transform.position, targetPosition, MetodoCamino);
-    }
-
-    void Update()
-    {
-
-        if (moving)
-        {
-
-            if (targetPosition != prevTargetPos) {
-                hasChanged = true;
-            }
-
-            if (hasChanged) {
-                Invoke("Change", 1);
-            }
-
-            if (camino == null)
-                return;
-            if (puntoActual >= camino.vectorPath.Count)
-            {
-                startedMoving = false;
-                moving = false;
-
-                return;
-            }
-
-            Vector3 direccion = (camino.vectorPath[puntoActual] - gameObject.transform.position).normalized;
-
-            direccion *= gameObject.GetComponent<VillagerScript>().movSpeed * Time.fixedDeltaTime;
-
-            gameObject.transform.position += direccion * 0.5f;
-
-            if (Vector3.Distance(transform.position, camino.vectorPath[puntoActual]) < distanciaSiguientePunto)
-            {
-                puntoActual++;
-                return;
-            }
-            else
-            {
-                
-            }
-
-        }
-
-        if (targetPosition != null)
-        {
-            prevTargetPos = targetPosition;
-        }
-    }
-}
-
-    */
-
 
     GameLogicScript gameLogic;
 
@@ -216,7 +88,7 @@ public class VillagerMovement : MonoBehaviour
 
     void Update()
     {
-        if (!gameLogic.isPaused){
+        if (!gameLogic.isPaused&&!gameLogic.eventManager.onEvent){
 
             if (moving)
             {

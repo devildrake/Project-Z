@@ -49,7 +49,7 @@ public class ZombieAttack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!gameLogic.isPaused)
+        if (!gameLogic.isPaused&&!gameLogic.eventManager.onEvent)
         {
             if (attacking)
             {

@@ -88,23 +88,28 @@ public class VisionRangeScript : MonoBehaviour {
             }
         }
     }
-    void Update() {
-
-        if (enemyInSight) {
-            foreach (GameObject unaBase in gameLogic._bases)
+    void Update()
+    {
+        if (!gameLogic.isPaused && !gameLogic.eventManager.onEvent)
+        {
+            if (enemyInSight)
             {
-                if((unaBase.transform.position-gameObject.transform.position).magnitude<gameObject.GetComponentInParent<VillagerScript>().distanciaAlerta)
-                unaBase.GetComponent<EdificioCreaSoldiers>().alert = true;
+                foreach (GameObject unaBase in gameLogic._bases)
+                {
+                    if ((unaBase.transform.position - gameObject.transform.position).magnitude < gameObject.GetComponentInParent<VillagerScript>().distanciaAlerta)
+                        unaBase.GetComponent<EdificioCreaSoldiers>().alert = true;
+                }
+            }
+
+            if (_zombiesInRange.Count > 0)
+            {
+                CheckZombieAlive();
+                closestZombie = GetClosestZombie(_zombiesInRange);
+            }
+            else
+            {
+                closestZombie = null;
             }
         }
-
-        if (_zombiesInRange.Count >0)
-        {
-            CheckZombieAlive();
-            closestZombie = GetClosestZombie(_zombiesInRange);
-        }
-        else {
-            closestZombie = null;
-        }
-	}
+    }
 }
