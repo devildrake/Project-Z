@@ -118,7 +118,7 @@ public class GameLogicScript : MonoBehaviour
 
     void Start()
     {
-        eventManager = GameObject.Find("EventManager");
+        eventManager = GameObject.Find("EventManager").GetComponent<EventManager>();
 
         elPathfinder = GameObject.FindGameObjectWithTag("A*");
 
