@@ -298,7 +298,7 @@ public class GameLogicScript : MonoBehaviour
         }
         else
         {
-            Debug.Log("Pause");
+
         }
 
     }
