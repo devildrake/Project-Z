@@ -11,9 +11,9 @@ public class AttackRangeZombie : MonoBehaviour
 
     void Start()
     {
-        gameLogic = FindObjectOfType<GameLogicScript>();
-        
-            laVision = gameObject.GetComponentInParent<VisionRangeZombie>();
+        gameLogic = GameLogicScript.gameLogic;
+
+        laVision = gameObject.GetComponentInParent<VisionRangeZombie>();
     }
     // Update is called once per frame
 

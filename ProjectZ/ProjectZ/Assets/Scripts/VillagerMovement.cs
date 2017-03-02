@@ -22,7 +22,7 @@ public class VillagerMovement : MonoBehaviour
     IEnumerator Start()
     //void Start()
     {
-        gameLogic = FindObjectOfType<GameLogicScript>();
+        gameLogic = GameLogicScript.gameLogic;
 
         tiempoAContar = 1;
         //startedMoving = false;

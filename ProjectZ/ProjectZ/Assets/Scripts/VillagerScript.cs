@@ -50,7 +50,7 @@ public class VillagerScript : MonoBehaviour {
     void Start()
     {
         distanciaAlerta = 20;
-        gameLogic = FindObjectOfType<GameLogicScript>();
+        gameLogic = GameLogicScript.gameLogic;
         hasAlerted = alerted = false;
             freeRoam = true;
         goingToCheck = false;

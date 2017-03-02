@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class GameLogicScript : MonoBehaviour
 {
+    public static GameLogicScript gameLogic;
 
     /*Este código está pensado para manejar la lógica de selección y movimiento de los zombies, así como el listado de estos 
      y de los villagers en partida*/
@@ -14,7 +15,6 @@ public class GameLogicScript : MonoBehaviour
                                *Que genera el movimiento
                                */
 
-    
     public bool isPaused;
     public PausaCanvasScript elPausaScript;
     //Vector que en su momento representara el punto destino de los zombies que se mueven
@@ -116,9 +116,22 @@ public class GameLogicScript : MonoBehaviour
     }
     #endregion
 
+    void Awake()
+    {
+        if (gameLogic == null)
+        {
+            DontDestroyOnLoad(gameObject);
+            gameLogic = this;
+        }
+        else if (gameLogic != this) {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
-        eventManager = GameObject.Find("EventManager").GetComponent<EventManager>();
+
+        eventManager = FindObjectOfType<EventManager>();
 
         elPathfinder = GameObject.FindGameObjectWithTag("A*");
 
@@ -150,14 +163,14 @@ public class GameLogicScript : MonoBehaviour
 
         GameObject base1 = Instantiate(baseHumana, posicionBase1, Quaternion.identity) as GameObject;
 
-        SpawnWalker(position1);
+      //  SpawnWalker(position1);
 
-        SpawnMutank(position2);
+      //  SpawnMutank(position2);
 
-        SpawnWalker(position3);
+      //  SpawnWalker(position3);
 
-        SpawnVillager(new Vector3(2, 0.4f, 13));
-        SpawnSoldier(new Vector3(4, 0.4f, 10));
+      //  SpawnVillager(new Vector3(2, 0.4f, 13));
+      //  SpawnSoldier(new Vector3(4, 0.4f, 10));
 
         //Se oblga al pathfinder a hacer un escaneo inicial del mapa tras inicializar los elementos
         elPathfinder.GetComponent<AstarPath>().Scan();

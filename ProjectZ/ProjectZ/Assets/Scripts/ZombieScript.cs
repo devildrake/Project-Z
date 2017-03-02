@@ -23,7 +23,6 @@ public class ZombieScript : MonoBehaviour
     public bool defenseMode;
     public bool hasArrived;
     public int barricadaSpot;
-
     private GameLogicScript gameLogic;
     public BarricadaScript barricada;
     bool confirmAlive;
@@ -82,8 +81,12 @@ public class ZombieScript : MonoBehaviour
 
     void Start()
     {
+        if (!gameLogic._zombies.Contains(gameObject)) {
+            gameLogic._zombies.Add(gameObject);
+        }
+
         attackToggle = true;
-        gameLogic = FindObjectOfType<GameLogicScript>();
+        gameLogic = GameLogicScript.gameLogic;
         defenseMode = goBarricade = hasArrived = inBuilding = false;
         defenseTime = 1.5f;
         elAnimator = gameObject.GetComponent<Animator>();

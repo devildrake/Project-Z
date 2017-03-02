@@ -9,7 +9,7 @@ public class PausaCanvasScript : MonoBehaviour {
     public GameObject confirmacionB;
     // Use this for initialization
     void Start() {
-        gameLogic = FindObjectOfType<GameLogicScript>();
+        gameLogic = GameLogicScript.gameLogic;
         menuPausa = GameObject.FindGameObjectWithTag("Pause");
         menuPausa.SetActive(false);
 

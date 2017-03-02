@@ -47,7 +47,7 @@ public class ZombieMovement : MonoBehaviour
     #region start
     void Start()
     {
-        gameLogic = FindObjectOfType<GameLogicScript>();
+        gameLogic = GameLogicScript.gameLogic;
         buscador = gameObject.GetComponent<Seeker>();
         tiempoAContar = 0.3f;
         moving = wasCommanded = countedOnce = false;

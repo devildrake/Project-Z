@@ -10,8 +10,7 @@ public class AttackRangeScript : MonoBehaviour {
 
     void Start()
     {
-        gameLogic = FindObjectOfType<GameLogicScript>();
-
+        gameLogic = GameLogicScript.gameLogic;
         laVision = gameObject.GetComponentInParent<VisionRangeScript>();
     }
     // Update is called once per frame

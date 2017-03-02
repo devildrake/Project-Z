@@ -13,8 +13,8 @@ public class VisionRangeScript : MonoBehaviour {
 
     void Start () {
         _zombiesInRange = new List<GameObject>();
-        gameLogic = GameObject.FindObjectOfType<GameLogicScript>();
-        
+        gameLogic = GameLogicScript.gameLogic;
+
 
     }
 

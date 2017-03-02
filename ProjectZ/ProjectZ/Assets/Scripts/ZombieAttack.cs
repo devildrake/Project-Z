@@ -14,7 +14,7 @@ public class ZombieAttack : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        gameLogic = FindObjectOfType<GameLogicScript>();
+        gameLogic = GameLogicScript.gameLogic;
 
         atHuman = false;
         atBarricade = false;

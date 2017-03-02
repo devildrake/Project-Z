@@ -16,7 +16,7 @@ public class VillagerAttack : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        gameLogic = FindObjectOfType<GameLogicScript>();
+        gameLogic = GameLogicScript.gameLogic;
 
         zombieToAttack = null;
         theVillager = GetComponent<VillagerScript>();

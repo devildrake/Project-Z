@@ -14,7 +14,7 @@ public class VisionRangeZombie : MonoBehaviour
 
     void Start()
     {
-        gameLogic = FindObjectOfType<GameLogicScript>();
+        gameLogic = GameLogicScript.gameLogic;
         _enemiesInRange = new List<GameObject>();
     }
 

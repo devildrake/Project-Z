@@ -91,7 +91,7 @@ public class EventManager : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        _input = GameObject.Find("GameLogic").GetComponent<InputHandlerScript>();
+        _input = FindObjectOfType<InputHandlerScript>();
         canvasChild = gameObject.GetComponentInChildren<Canvas>();
         blancoTrans = gameObject.GetComponentInChildren<RawImage>();
         currentText = gameObject.GetComponentInChildren<Text>();

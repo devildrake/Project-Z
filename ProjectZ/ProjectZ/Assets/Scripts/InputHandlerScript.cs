@@ -5,15 +5,16 @@ public class InputHandlerScript : MonoBehaviour
 {
     //ACCESOS DE TECLADO
     //Camera
-    /* KeyCode _cameraUpKey1 = KeyCode.UpArrow;
-     KeyCode _cameraUpKey2 = KeyCode.W;
+     KeyCode _cameraUpKey1 = KeyCode.UpArrow;
+     //KeyCode _cameraUpKey2 = KeyCode.W;
      KeyCode _cameraDownKey1 = KeyCode.DownArrow;
-     KeyCode _cameraDownKey2 = KeyCode.S;
+     //KeyCode _cameraDownKey2 = KeyCode.S;
      KeyCode _cameraLeftKey1 = KeyCode.LeftArrow;
-     KeyCode _cameraLeftKey2 = KeyCode.A;
+     //KeyCode _cameraLeftKey2 = KeyCode.A;
      KeyCode _cameraRightKey1 = KeyCode.RightArrow;
-     KeyCode _cameraRightKey2 = KeyCode.D;
-     */
+    //KeyCode _cameraRightKey2 = KeyCode.D;
+    KeyCode _centerCameraKey = KeyCode.Space;
+
     //Control
     KeyCode _continueInteract = KeyCode.E;
     KeyCode _selectionKey1 = KeyCode.Mouse0;
@@ -26,11 +27,12 @@ public class InputHandlerScript : MonoBehaviour
     KeyCode _Attack = KeyCode.A;
     //Input State
     public Vector3 _mousePosition;
-    /*
+    
     public bool _cameraUp;
     public bool _cameraDown;
     public bool _cameraLeft;
-    public bool _cameraRight;*/
+    public bool _cameraRight;
+    public bool _centerCamera;
 
     public bool _mustAttack;
     public bool _attackToggle;
@@ -61,10 +63,11 @@ public class InputHandlerScript : MonoBehaviour
         //Guardamos la posición del ratón, por si alguien hace uso de ella
         this._mousePosition = Input.mousePosition;
 
-        /*this._cameraUp = false;
+        this._cameraUp = false;
         this._cameraRight = false;
         this._cameraDown = false;
-        this._cameraLeft = false;*/
+        this._cameraLeft = false;
+        _centerCamera = false;
 
         this._selectingBegins = false;
         this._selectingEnds = false;
@@ -76,30 +79,34 @@ public class InputHandlerScript : MonoBehaviour
     void CheckInput()
     {
         #region Camera
-        /*
-        if (Input.GetKey(_cameraUpKey1)
-            || Input.GetKey(_cameraUpKey2))
+
+        if (Input.GetKeyDown(_centerCameraKey)) {
+            _centerCamera = true;
+        }
+
+        if (Input.GetKey(_cameraUpKey1))
+            //|| Input.GetKey(_cameraUpKey2))
         {
             this._cameraUp = true;
         }
 
-        if (Input.GetKey(_cameraDownKey1)
-            || Input.GetKey(_cameraDownKey2))
+        if (Input.GetKey(_cameraDownKey1))
+        //|| Input.GetKey(_cameraDownKey2))
         {
             this._cameraDown = true;
         }
 
-        if (Input.GetKey(_cameraLeftKey1)
-            || Input.GetKey(_cameraLeftKey2))
+        if (Input.GetKey(_cameraLeftKey1))
+        //|| Input.GetKey(_cameraLeftKey2))
         {
             this._cameraLeft = true;
         }
 
-        if (Input.GetKey(_cameraRightKey1)
-                  || Input.GetKey(_cameraRightKey2))
+        if (Input.GetKey(_cameraRightKey1))
+        //|| Input.GetKey(_cameraRightKey2))
         {
             this._cameraRight = true;
-        }*/
+        }
         #endregion
 
         #region Control

@@ -36,7 +36,7 @@ public class BarricadaScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        gameLogic = FindObjectOfType<GameLogicScript>();   
+        gameLogic = GameLogicScript.gameLogic;
         gameLogic._barricadas.Add(gameObject);
         circuloSprite = GetComponentInChildren<SpriteRenderer>();
         circulo = circuloSprite.gameObject;
