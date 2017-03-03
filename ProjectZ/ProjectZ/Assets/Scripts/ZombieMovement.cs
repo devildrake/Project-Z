@@ -150,10 +150,9 @@ public class ZombieMovement : MonoBehaviour
                 if (puntoActual >= camino.vectorPath.Count)
                 {
                     moving = false;
-                    Debug.Log("NotCommanded"); 
                     wasCommanded = false;
                     gameObject.GetComponent<ZombieScript>().hasArrived = true;
-
+                    Debug.Log("ArrivedAtDestination");
                     if (gameObject.GetComponent<ZombieScript>().goBarricade)
                         LookTowards(gameObject.GetComponent<ZombieScript>().barricada.transform.position);
                     gameObject.GetComponent<ZombieScript>().canAttack = true;

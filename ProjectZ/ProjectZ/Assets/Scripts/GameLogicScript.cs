@@ -77,8 +77,9 @@ public class GameLogicScript : MonoBehaviour
     GameObject selectedBarricade;
     GameObject villager;
     GameObject baseHumana;
+    public bool[] eventos;
 
-    public EventManager eventManager;
+    public Assets.Scripts.EventManager eventManager;
 
     #region MetodosDeAparicion
     public void SpawnVillager(Vector3 unaPos) {
@@ -95,23 +96,23 @@ public class GameLogicScript : MonoBehaviour
 
     public void SpawnZombie(ZombieScript.zombieClass unTipo, Vector3 unaPos)
     {
-        GameObject zombieToSpawn = GameObject.Instantiate(zombie, unaPos, Quaternion.identity) as GameObject;
+        GameObject zombieToSpawn = Instantiate(zombie, unaPos, Quaternion.identity) as GameObject;
         zombieToSpawn.GetComponent<ZombieScript>().tipo = unTipo;
         _zombies.Add(zombieToSpawn);
     }
 
     public void SpawnWalker(Vector3 unaPos) {
-        GameObject zombieToSpawn = GameObject.Instantiate(walker, unaPos, Quaternion.identity) as GameObject;
+        GameObject zombieToSpawn = Instantiate(walker, unaPos, Quaternion.identity) as GameObject;
         _zombies.Add(zombieToSpawn);
     }
 
     public void SpawnMutank(Vector3 unaPos) {
-        GameObject zombieToSpawn = GameObject.Instantiate(mutank, unaPos, Quaternion.identity) as GameObject; 
+        GameObject zombieToSpawn = Instantiate(mutank, unaPos, Quaternion.identity) as GameObject; 
         _zombies.Add(zombieToSpawn);
     }
 
     public void SpawnRunner(Vector3 unaPos) {
-        GameObject zombieToSpawn = GameObject.Instantiate(runner, unaPos, Quaternion.identity) as GameObject;
+        GameObject zombieToSpawn = Instantiate(runner, unaPos, Quaternion.identity) as GameObject;
         _zombies.Add(zombieToSpawn);
     }
     #endregion
@@ -130,8 +131,15 @@ public class GameLogicScript : MonoBehaviour
 
     void Start()
     {
+        eventos = new bool[10];
+        
+        for(int i = 0; i < 10; i++) {
+            eventos[i] = false;
+        }
 
-        eventManager = FindObjectOfType<EventManager>();
+        eventManager = FindObjectOfType<Assets.Scripts.EventManager>();
+
+        eventManager.SetEvents(eventos,10);
 
         elPathfinder = GameObject.FindGameObjectWithTag("A*");
 
@@ -161,7 +169,7 @@ public class GameLogicScript : MonoBehaviour
         villager = Resources.Load("VillagerObject") as GameObject;
         baseHumana = Resources.Load("OriginadorSoldados") as GameObject;
 
-        GameObject base1 = Instantiate(baseHumana, posicionBase1, Quaternion.identity) as GameObject;
+        //GameObject base1 = Instantiate(baseHumana, posicionBase1, Quaternion.identity) as GameObject;
 
       //  SpawnWalker(position1);
 
@@ -179,6 +187,18 @@ public class GameLogicScript : MonoBehaviour
 
     void Update()
     {
+        if (eventManager == null)
+        {
+            eventManager = FindObjectOfType<Assets.Scripts.EventManager>();
+
+        }
+        else {
+            for (int i = 0; i < 10; i++)
+            {
+                eventos[i] = eventManager.eventList[i].hasHappened;
+            }
+        }
+
         //Por encima de todo lo demás se maneja el booleano del pausado
         if (Input.GetKeyDown(KeyCode.Escape)) {
             changePause();
@@ -642,9 +662,9 @@ public class GameLogicScript : MonoBehaviour
 
             //Se hace una referencia al script de movimiento de cada zombie a cada iteración
             ZombieMovement zombieMovement = zombie.GetComponent<ZombieMovement>();
+
             //El booleano wasCommanded se pone en true, ya que se les ha ordenador moverse
             zombieMovement.wasCommanded = true;
-
             //Función que mueve a los zombies
             zombie.GetComponent<ZombieScript>().goBarricade = false;
             

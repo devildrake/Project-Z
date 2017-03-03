@@ -81,12 +81,12 @@ public class ZombieScript : MonoBehaviour
 
     void Start()
     {
+        gameLogic = GameLogicScript.gameLogic;
         if (!gameLogic._zombies.Contains(gameObject)) {
             gameLogic._zombies.Add(gameObject);
         }
 
         attackToggle = true;
-        gameLogic = GameLogicScript.gameLogic;
         defenseMode = goBarricade = hasArrived = inBuilding = false;
         defenseTime = 1.5f;
         elAnimator = gameObject.GetComponent<Animator>();
@@ -158,11 +158,18 @@ public class ZombieScript : MonoBehaviour
         {
             GetComponent<ZombieAttack>().attacking = movingToEnemy = elMovimiento.countedOnce = elMovimiento.moving = gameObject.GetComponent<ZombieAttack>().atBarricade = gameObject.GetComponent<ZombieAttack>().atHuman = canAttack = false ;
             hasArrived = true;
+            Debug.Log("NoEnemies");
         }
     }
 
     void Update()
     {
+        if (!gameLogic._zombies.Contains(gameObject) && isAlive)
+        {
+            gameLogic._zombies.Add(gameObject);
+
+        }
+
         if (!gameLogic.isPaused&&!gameLogic.eventManager.onEvent)
         {
 

@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class EdificioCreaSoldiers : MonoBehaviour {
+    public bool isSpecial;
     GameObject elGameLogic;
     GameObject villager;
     public bool alert;
@@ -20,9 +21,9 @@ public class EdificioCreaSoldiers : MonoBehaviour {
     void Start () {
 
         isBlocked = false;
+        amount = 4;
         posiciones = new Vector3[amount];
         counter = 0;
-        amount = 4;
         posiciones[3] = gameObject.transform.position + new Vector3(1,0,-2);
         posiciones[2] = gameObject.transform.position + new Vector3(0,0,-1);
         posiciones[1] = gameObject.transform.position + new Vector3(1,0,0);
@@ -45,32 +46,38 @@ public class EdificioCreaSoldiers : MonoBehaviour {
             elGameLogicScript._bases.Add(gameObject);
         }
 	}
-	
-	// Update is called once per frame
-	void Update () {
-        if (!elGameLogicScript.isPaused&&!elGameLogicScript.eventManager.onEvent)
-        {
-            /*if (blocker == null)
-             {
-                 isBlocked = false;
-             }
-             else {
-                 isBlocked = true;
-             }*/
 
-            if (alert && amount > 0 && !isBlocked)
+    // Update is called once per frame
+    void Update()
+    {
+        if (elGameLogicScript == null) {
+            elGameLogicScript = GameLogicScript.gameLogic;
+            }
+        if (!elGameLogicScript.isPaused && !elGameLogicScript.eventManager.onEvent)
+        {
+            if (!isSpecial)
             {
-                spawnTimer += Time.deltaTime;
-                if (spawnTime <= spawnTimer)
+                /*if (blocker == null)
+                 {
+                     isBlocked = false;
+                 }
+                 else {
+                     isBlocked = true;
+                 }*/
+
+                if (alert && amount > 0 && !isBlocked)
                 {
-                    spawn(Random.Range(0, 1));
-                    amount--;
-                    spawnTimer = 0;
+                    spawnTimer += Time.deltaTime;
+                    if (spawnTime <= spawnTimer)
+                    {
+                        spawn(Random.Range(0, 1));
+                        amount--;
+                        spawnTimer = 0;
+                    }
                 }
             }
         }
-	}
-
+    }
     void spawn(int tipo) {
         switch (tipo) {
             case 0: //VILLAGER
