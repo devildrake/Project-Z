@@ -107,7 +107,7 @@ namespace Assets.Scripts
             eventList[0] = CrearEvento(5);
             eventList[1] = CrearEvento(2);
             eventList[2] = CrearEvento(2);
-            eventList[3] = CrearEvento(5);
+            eventList[3] = CrearEvento(2);
             eventList[4] = CrearEvento(5);
             eventList[5] = CrearEvento(5);
             eventList[6] = CrearEvento(2);
@@ -129,7 +129,8 @@ namespace Assets.Scripts
                 eventList[2].messages[0] = "Heh heh heh.. no tenía ninguna posibilidad.. y ahora tengo dos..";
                 eventList[2].messages[1] = "Ahora toca probar contra un soldadito";
 
-
+                eventList[3].messages[0] = "Bueno.. parece que todo esta en orden..";
+                eventList[3].messages[1] = "Hora de salir de aquí..";
 
             }
             else

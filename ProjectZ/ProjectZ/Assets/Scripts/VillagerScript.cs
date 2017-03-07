@@ -39,7 +39,7 @@ public class VillagerScript : MonoBehaviour {
     public bool alerted;
 
     List<GameObject> _nearbyPartners;
-
+    public GameObject patrolPointObject;
     VillagerMovement villagerMovement;
     VillagerAttack villagerAttack;
     private float attackTime;
@@ -52,7 +52,7 @@ public class VillagerScript : MonoBehaviour {
         distanciaAlerta = 20;
         gameLogic = GameLogicScript.gameLogic;
         hasAlerted = alerted = false;
-            freeRoam = true;
+        freeRoam = true;
         goingToCheck = false;
         originalPos = transform.position;
         groundPos.y = originalPos.y;
@@ -63,10 +63,11 @@ public class VillagerScript : MonoBehaviour {
         villagerAttack = GetComponent<VillagerAttack>();
         hasTransformed = false;
 
-         Renderer render = this.gameObject.GetComponentInChildren<Renderer>();
-                
+        Renderer render = this.gameObject.GetComponentInChildren<Renderer>();
 
-        switch (tipo){
+
+        switch (tipo)
+        {
             case humanClass.villager:
                 theAttackRange = 1;
                 health = 100;
@@ -86,19 +87,23 @@ public class VillagerScript : MonoBehaviour {
                 render.material.color += Color.green;
                 break;
         }
-
-        switch (patrolType)
+        if (patrolPointObject == null)
         {
-            case 0:
-                patrolPoint = originalPos + new Vector3(3,0,0);
-                break;
-            case 1:
-                patrolPoint = originalPos + new Vector3(0, 3, 0);
-                break;
+            switch (patrolType)
+            {
+                case 0:
+                    patrolPoint = originalPos + new Vector3(3, 0, 0);
+                    break;
+                case 1:
+                    patrolPoint = originalPos + new Vector3(0, 3, 0);
+                    break;
+            }
+
         }
-
+        else {
+            patrolPoint = patrolPointObject.gameObject.transform.position;
+        }
     }
-
     bool CheckAlive() {
         if (isAlive)
         {
@@ -160,6 +165,9 @@ public class VillagerScript : MonoBehaviour {
             confirmAlive = CheckAlive();
             if (confirmAlive)
             {
+                if (patrolPointObject != null && patrolPoint != patrolPointObject.transform.position)
+                    patrolPoint = patrolPointObject.transform.position;
+
 
                 if (laVision.enemyInSight)
                 {

@@ -61,14 +61,14 @@ public class GameLogicScript : MonoBehaviour
     public bool _selecting;
 
     //Estas variables son las posiciones de los 3 zombies que se crean por codigo más abajo
-    public Vector3 position1;
-    public Vector3 position2;
-    public Vector3 position3;
+    //public Vector3 position1;
+   // public Vector3 position2;
+   // public Vector3 position3;
 
     public GameObject elPathfinder;
 
 
-    public Vector3 posicionBase1;
+    //public Vector3 posicionBase1;
 
     GameObject zombie;
     GameObject walker;
@@ -82,11 +82,22 @@ public class GameLogicScript : MonoBehaviour
     public Assets.Scripts.EventManager eventManager;
 
     #region MetodosDeAparicion
+
+    public void SpawnVillager(Vector3 unaPos, Vector3 patrolPos) {
+        GameObject villagerToSpawn = Instantiate(villager, unaPos, Quaternion.identity) as GameObject;
+        GameObject anEmptyGameObject = new GameObject();
+        villagerToSpawn.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.villager;
+        anEmptyGameObject.transform.position = patrolPos;
+        _villagers.Add(villagerToSpawn);
+        villagerToSpawn.GetComponent<VillagerScript>().patrolPointObject = anEmptyGameObject;
+    }
+
     public void SpawnVillager(Vector3 unaPos) {
         GameObject villagerToSpawn = Instantiate(villager, unaPos, Quaternion.identity) as GameObject;
         villagerToSpawn.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.villager;
         _villagers.Add(villagerToSpawn);
     }
+
     public void SpawnSoldier(Vector3 unaPos) {
         GameObject villagerToSpawn = Instantiate(villager, unaPos, Quaternion.identity) as GameObject;
         villagerToSpawn.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.soldier;
@@ -147,7 +158,7 @@ public class GameLogicScript : MonoBehaviour
 
         elPausaScript = FindObjectOfType<PausaCanvasScript>();
            
-        posicionBase1 = new Vector3(0.69f,0.05f,13.72f);
+        //posicionBase1 = new Vector3(0.69f,0.05f,13.72f);
 
         yAxis = gameObject.transform.position.y;
 
@@ -200,7 +211,7 @@ public class GameLogicScript : MonoBehaviour
         }
 
         //Por encima de todo lo demás se maneja el booleano del pausado
-        if (Input.GetKeyDown(KeyCode.Escape)) {
+        if (!eventManager.onEvent&&Input.GetKeyDown(KeyCode.Escape)) {
             changePause();
         }
 

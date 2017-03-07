@@ -9,7 +9,7 @@ public class EdificioCreaSoldiers : MonoBehaviour {
     public float spawnTimer;
     public float spawnTime;
     public GameLogicScript elGameLogicScript;
-    public GameObject spawnPointObject;
+    public GameObject specialPatrolPoint;
     public Vector3 spawnPoint;
     public int amount;
     public int counter;
@@ -19,7 +19,7 @@ public class EdificioCreaSoldiers : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-
+        
         isBlocked = false;
         amount = 4;
         posiciones = new Vector3[amount];
@@ -34,7 +34,7 @@ public class EdificioCreaSoldiers : MonoBehaviour {
         posiciones[1].y = 0.3859999f;
         posiciones[0].y = 0.3859999f;
 
-        spawnPoint.y = 0.3859999f;
+        spawnPoint = new Vector3(-0.05f, 0.5390003f, 2.081f);
 
         villager = Resources.Load("VillagerObject") as GameObject;
         spawnTimer = 0f;
@@ -81,13 +81,13 @@ public class EdificioCreaSoldiers : MonoBehaviour {
     void spawn(int tipo) {
         switch (tipo) {
             case 0: //VILLAGER
-                GameObject villager2 = GameObject.Instantiate(villager, posiciones[counter], Quaternion.identity) as GameObject;
+                GameObject villager2 = Instantiate(villager, posiciones[counter], Quaternion.identity) as GameObject;
                 villager2.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.villager;
                 elGameLogicScript._villagers.Add(villager2);
                 counter++;
                 break;
             case 1: //SOLDADO
-                GameObject soldier = GameObject.Instantiate(villager, posiciones[counter], Quaternion.identity) as GameObject;
+                GameObject soldier = Instantiate(villager, posiciones[counter], Quaternion.identity) as GameObject;
                 soldier.GetComponent<VillagerScript>().tipo = VillagerScript.humanClass.soldier;
                 elGameLogicScript._villagers.Add(soldier);
                 counter++;
